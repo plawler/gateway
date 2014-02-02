@@ -20,8 +20,6 @@
         </sec:authentication-provider>
     </sec:authentication-manager>
 
-    <!--<bean id="gatewayDataRepository" name="gatewayData" init-method="initializeData" class="com.sample.oauth.repository.GatewayDataRepository" lazy-init="false" />-->
-
     <context:component-scan base-package="com.sample.oauth.repository"/>
 
 </beans>

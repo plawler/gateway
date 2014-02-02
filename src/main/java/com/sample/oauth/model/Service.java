@@ -9,14 +9,16 @@ import java.util.UUID;
  * Time: 2:05 PM
  * To change this template use File | Settings | File Templates.
  */
-public abstract class Service {
+public class Service {
 
     private final UUID identifier;
     private final String url;
+    private final String uniqueRealmIdentifier;
 
-    public Service(UUID identifier, String url) {
+    public Service(UUID identifier, String url, String uniqueRealmIdentifier) {
         this.identifier = identifier;
         this.url = url;
+        this.uniqueRealmIdentifier = uniqueRealmIdentifier;
     }
 
     public UUID getIdentifier() {
@@ -25,6 +27,10 @@ public abstract class Service {
 
     public String getUrl() {
         return url;
+    }
+
+    public String getUniqueRealmIdentifier() {
+        return uniqueRealmIdentifier;
     }
 
 }

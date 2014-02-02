@@ -2,8 +2,6 @@ package com.sample.oauth.repository;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.sample.oauth.model.APIService;
-import com.sample.oauth.model.IdPService;
 import com.sample.oauth.model.Realm;
 import com.sample.oauth.model.Service;
 import org.slf4j.Logger;
@@ -33,21 +31,18 @@ public class CentralAppRegistry {
     @PostConstruct
     public void initializeData() {
         log.info("initializing data");
-        realms.add(new Realm(UUID.randomUUID(), "inBloom"));
-//        realms.add(new Realm(UUID.randomUUID(), "Daybreak School District 4529"));
 
-        for (Realm realm : realms) {
-//            services.put(realm, new IdPService(UUID.randomUUID(), "http://localhost:9000"));
-            services.put(realm, new APIService(UUID.randomUUID(), "https://api.sandbox.inbloom.org/"));
-        }
+        Realm realm1 = new Realm(UUID.randomUUID(), "Illinois Daybreak School District 4529");
+        realms.add(realm1);
+        services.put(realm1, new Service(UUID.randomUUID(), "http://local.slidev.org:8080/", "IL-Daybreak"));
+
+        Realm realm2 = new Realm(UUID.randomUUID(), "Illinois Sunset School District 4526");
+        realms.add(realm2);
+        services.put(realm2, new Service(UUID.randomUUID(), "https://api.sandbox.inbloom.org/", "IL-Sunset"));
     }
 
     public List<Realm> getRealms() {
         return realms;
-    }
-
-    public Service findIdPByRealm(String realmId) {
-        return null;
     }
 
     public Service findDataServiceByRealm(String realmId) {
@@ -64,7 +59,4 @@ public class CentralAppRegistry {
         return null;
     }
 
-    public Service findDataServiceByRealmAndApplication() {
-        return null;
-    }
 }

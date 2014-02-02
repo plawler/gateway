@@ -13,18 +13,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * Created with IntelliJ IDEA.
  * User: paullawler
  * Date: 1/28/14
- * Time: 1:47 PM
+ * Time: 1:46 PM
  * To change this template use File | Settings | File Templates.
  */
 @Controller
-public class IdPServiceController {
+public class DataServiceController {
 
     @Autowired
-    private CentralAppRegistry repo;
+    private CentralAppRegistry registry;
 
-    @RequestMapping(value = "/identityproviders/{realmId}", method = RequestMethod.GET)
-    public @ResponseBody Service getEndPoint(@PathVariable String realmId) {
-        return repo.findIdPByRealm(realmId);
+    @RequestMapping(value = "/dataservices/{realmId}", method = RequestMethod.GET)
+    public @ResponseBody Service getApiEndpoints(@PathVariable String realmId) {
+        Service service = registry.findDataServiceByRealm(realmId);
+        return service;
     }
-
 }

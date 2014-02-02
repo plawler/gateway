@@ -2,10 +2,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.springapp</groupId>
-    <artifactId>oauth_sample</artifactId>
+    <artifactId>gatewaypoc</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>oauth_sample</name>
+    <name>gatewaypoc</name>
 
     <properties>
         <spring.version>3.2.0.RELEASE</spring.version>
@@ -120,7 +120,7 @@
                 <configuration>
                     <connectors>
                         <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
-                            <port>8082</port>
+                            <port>9001</port>
                         </connector>
                     </connectors>
                 </configuration>
