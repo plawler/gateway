@@ -34,11 +34,11 @@ public class CentralAppRegistry {
 
         Realm realm1 = new Realm(UUID.randomUUID(), "Illinois Daybreak School District 4529");
         realms.add(realm1);
-        services.put(realm1, new Service(UUID.randomUUID(), "http://local.slidev.org:8080/", "IL-Daybreak"));
+        services.put(realm1, new Service(UUID.randomUUID(), "http://paul.slidev.org:8080/", "IL-Daybreak"));
 
         Realm realm2 = new Realm(UUID.randomUUID(), "Illinois Sunset School District 4526");
         realms.add(realm2);
-        services.put(realm2, new Service(UUID.randomUUID(), "https://api.sandbox.inbloom.org/", "IL-Sunset"));
+        services.put(realm2, new Service(UUID.randomUUID(), "http://lloyd.slidev.org:8080/", "IL-Sunset"));
     }
 
     public List<Realm> getRealms() {
@@ -52,7 +52,7 @@ public class CentralAppRegistry {
 
     private Realm findRealmById(String realmId) {
         for (Realm realm : realms) {
-            if (realm.getIdentifier().toString().equals(realmId)) {
+            if (realm.getIdentifier().equals(UUID.fromString(realmId))) {
                 return realm;
             }
         }
