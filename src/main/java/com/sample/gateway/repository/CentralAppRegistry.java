@@ -1,9 +1,9 @@
-package com.sample.oauth.repository;
+package com.sample.gateway.repository;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.sample.oauth.model.Realm;
-import com.sample.oauth.model.Service;
+import com.sample.gateway.model.Realm;
+import com.sample.gateway.model.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

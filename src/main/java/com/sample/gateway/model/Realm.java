@@ -1,4 +1,4 @@
-package com.sample.oauth.model;
+package com.sample.gateway.model;
 
 import java.io.Serializable;
 import java.util.UUID;
