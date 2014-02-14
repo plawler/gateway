@@ -1,7 +1,7 @@
 package com.sample.gateway.controller;
 
 import com.sample.gateway.model.Service;
-import com.sample.gateway.repository.CentralAppRegistry;
+import com.sample.gateway.persistence.repository.CentralAppRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -1,4 +1,4 @@
-package com.sample.gateway.repository;
+package com.sample.gateway.persistence.repository;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;

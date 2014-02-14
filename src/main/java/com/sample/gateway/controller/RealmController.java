@@ -1,7 +1,7 @@
 package com.sample.gateway.controller;
 
 import com.sample.gateway.model.Realm;
-import com.sample.gateway.repository.CentralAppRegistry;
+import com.sample.gateway.persistence.repository.CentralAppRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
