@@ -1,6 +1,7 @@
 package com.sample.gateway.configuration;
 
 import com.sample.gateway.persistence.repository.ApplicationRepository;
+import com.sample.gateway.persistence.repository.OperatorRepository;
 import org.hibernate.cfg.ImprovedNamingStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -30,7 +31,7 @@ import java.util.Properties;
  */
 @Configuration
 @EnableJpaRepositories(basePackages = "com.sample.gateway.persistence.repository",
-        includeFilters = @ComponentScan.Filter(value = {ApplicationRepository.class}, type = FilterType.ASSIGNABLE_TYPE))
+        includeFilters = @ComponentScan.Filter(value = {ApplicationRepository.class, OperatorRepository.class}, type = FilterType.ASSIGNABLE_TYPE))
 @EnableTransactionManagement
 public class JPAConfiguration {
 

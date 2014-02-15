@@ -1,5 +1,7 @@
 package com.sample.gateway.persistence.domain;
 
+import com.sample.gateway.persistence.BaseEntity;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -11,7 +13,7 @@ import java.util.Date;
  * To change this template use File | Settings | File Templates.
  */
 @Entity(name = "applications")
-public class Application {
+public class Application extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,11 +32,6 @@ public class Application {
     private Byte isBulkExtract;
     private Date registeredOn;
     private Date approvedOn;
-    private Date createdAt;
-    private String createdBy;
-    private Date updatedAt;
-    private String updatedBy;
-
 //    @ManyToOne
 //    @JoinColumn(name = "application_provider_id", referencedColumnName = "application_provider_id", nullable = false)
 //    private ApplicationProvidersEntity applicationProvidersByApplicationProviderId;
@@ -150,38 +147,6 @@ public class Application {
 
     public void setApprovedOn(Date approvedOn) {
         this.approvedOn = approvedOn;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public String getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(String updatedBy) {
-        this.updatedBy = updatedBy;
     }
 
 //    public ApplicationProvidersEntity getApplicationProvidersByApplicationProviderId() {
