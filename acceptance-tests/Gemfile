@@ -1,0 +1,10 @@
+source 'http://rubygems.org'
+
+gem 'dotenv'        # config
+gem 'foreman'       # process management
+gem 'thor'          # command-line interfaces
+gem 'cucumber'      # feature specification
+gem 'rspec'         # test assertions
+gem 'capybara'      # web testing
+gem 'rest-client'   # REST calls
+gem 'webmock'       # mocking external web calls
