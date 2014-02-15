@@ -7,6 +7,7 @@ class Test < Thor
   end
 
   private
+
   def cucumber_command
     "cd #{APP_ROOT} && cucumber --color"
   end
