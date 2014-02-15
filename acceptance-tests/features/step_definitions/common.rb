@@ -1,9 +1,9 @@
 # Examples to be deleted
-Given /^I want to use Cucumber$/ do
+Given /^I am using Cucumber with RSpec$/ do
   true.should be_true
 end
 
-Given /^I want to use (.*)$/ do |component|
+When /^I exercise (.*)$/ do |component|
   example_url = ENV['EXAMPLE_URL']
   case component
   when /capybara/i
@@ -16,10 +16,5 @@ Given /^I want to use (.*)$/ do |component|
   end
 end
 
-When(/^I run this feature$/) do
-  true.should be_true
-end
-
 Then(/^all is green$/) do
-  true.should be_true
 end

@@ -4,8 +4,8 @@ Feature:
   I want to execute a simple cucumber feature
 
 Scenario: Verify testing components
-  Given I want to use Capybara
-    And I want to use Rest-Client
-    And I want to use WebMock
-   When I run this feature
+  Given I am using Cucumber with RSpec
+   When I exercise Capybara
+    And I exercise Rest-Client
+    And I exercise WebMock
    Then all is green
