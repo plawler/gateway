@@ -1,6 +1,7 @@
 package com.sample.gateway.configuration;
 
 import com.sample.gateway.persistence.repository.ApplicationRepository;
+import org.hibernate.cfg.ImprovedNamingStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.sql.SQLException;
+import java.util.Properties;
 
 /**
  * Created with IntelliJ IDEA.
@@ -53,6 +55,7 @@ public class JPAConfiguration {
         factory.setJpaVendorAdapter(vendorAdapter);
         factory.setPackagesToScan("com.sample.gateway.persistence.domain");
         factory.setDataSource(dataSource());
+        factory.setJpaProperties(getProperties());
         factory.afterPropertiesSet();
 
         return factory.getObject();
@@ -73,6 +76,12 @@ public class JPAConfiguration {
     @Bean
     HibernateExceptionTranslator hibernateExceptionTranslator() {
         return new HibernateExceptionTranslator();
+    }
+
+    private Properties getProperties() {
+        Properties properties = new Properties();
+        properties.setProperty("hibernate.ejb.naming_strategy", "org.hibernate.cfg.ImprovedNamingStrategy");
+        return properties;
     }
 
 }

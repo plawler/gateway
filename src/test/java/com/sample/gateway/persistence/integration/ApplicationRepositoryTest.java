@@ -39,7 +39,7 @@ public class ApplicationRepositoryTest {
         application.setApplicationName("Lloyd and Paul's Crazy Edu App");
         application.setClientId("123456");
         application.setSharedSecret("asdjhgsdfjgsadjfgkjhgasdjfgjksadghfkjhg");
-        application.setCreateDt(new Date());
+        application.setCreatedAt(new Date());
         application.setCreatedBy("plawler");
 
         repository.save(application);

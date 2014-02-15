@@ -15,58 +15,24 @@ public class Application {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "application_id")
     private int applicationId;
 
-    @Column(name = "client_id")
     private String clientId;
-
-    @Column(name = "shared_secret")
     private String sharedSecret;
-
-    @Column(name = "application_name")
     private String applicationName;
-
-    @Column(name = "description")
     private String description;
-
-    @Column(name = "app_uri")
     private String appUri;
-
-    @Column(name = "redirect_uri")
     private String redirectUri;
-
-    @Column(name = "admin_uri")
     private String adminUri;
-
-    @Column(name = "image_uri")
     private String imageUri;
-
-    @Column(name = "is_approved")
     private Byte isApproved;
-
-    @Column(name = "is_admin")
     private Byte isAdmin;
-
-    @Column(name = "is_bulk_extract")
     private Byte isBulkExtract;
-
-    @Column(name = "registered_on")
-    private Date registrationDt;
-
-    @Column(name = "approved_on")
-    private Date approvalDt;
-
-    @Column(name = "created_at")
-    private Date createDt;
-
-    @Column(name = "created_by")
+    private Date registeredOn;
+    private Date approvedOn;
+    private Date createdAt;
     private String createdBy;
-
-    @Column(name = "updated_at")
-    private Date updateDt;
-
-    @Column(name = "updated_by")
+    private Date updatedAt;
     private String updatedBy;
 
 //    @ManyToOne
@@ -170,28 +136,28 @@ public class Application {
         this.isBulkExtract = isBulkExtract;
     }
 
-    public Date getRegistrationDt() {
-        return registrationDt;
+    public Date getRegisteredOn() {
+        return registeredOn;
     }
 
-    public void setRegistrationDt(Date registrationDt) {
-        this.registrationDt = registrationDt;
+    public void setRegisteredOn(Date registeredOn) {
+        this.registeredOn = registeredOn;
     }
 
-    public Date getApprovalDt() {
-        return approvalDt;
+    public Date getApprovedOn() {
+        return approvedOn;
     }
 
-    public void setApprovalDt(Date approvalDt) {
-        this.approvalDt = approvalDt;
+    public void setApprovedOn(Date approvedOn) {
+        this.approvedOn = approvedOn;
     }
 
-    public Date getCreateDt() {
-        return createDt;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreateDt(Date createDt) {
-        this.createDt = createDt;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     public String getCreatedBy() {
@@ -202,12 +168,12 @@ public class Application {
         this.createdBy = createdBy;
     }
 
-    public Date getUpdateDt() {
-        return updateDt;
+    public Date getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpdateDt(Date updateDt) {
-        this.updateDt = updateDt;
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public String getUpdatedBy() {
