@@ -18,3 +18,11 @@ end
 
 Then(/^all is green$/) do
 end
+
+When /^I GET the (.*)/ do |resource|
+  @response = Resource.new(resource).get
+end
+
+Then /^the response contains a list of realms/ do
+  @response.should be_a_kind_of Array
+end
