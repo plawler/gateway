@@ -2,7 +2,6 @@ ruby '2.0.0'
 source 'http://rubygems.org'
 
 gem 'dotenv'             # config
-gem 'foreman'            # process management
 gem 'thor'               # command-line interfaces
 gem 'cucumber'           # feature specification
 gem 'rspec'              # test assertions
