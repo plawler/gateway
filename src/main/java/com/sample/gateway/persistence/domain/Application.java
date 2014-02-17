@@ -27,9 +27,12 @@ public class Application extends BaseEntity {
     private String redirectUri;
     private String adminUri;
     private String imageUri;
-    private Byte isApproved;
-    private Byte isAdmin;
-    private Byte isBulkExtract;
+    @Column(name="isApproved", nullable = false, columnDefinition = "TINYINT(1)")
+    private Boolean approved;
+    @Column(name="isAdmin", nullable = false, columnDefinition = "TINYINT(1)")
+    private Boolean admin;
+    @Column(name="isBulkExtract", nullable = false, columnDefinition = "TINYINT(1)")
+    private Boolean bulkExtract;
     private Date registeredOn;
     private Date approvedOn;
 //    @ManyToOne
@@ -109,28 +112,18 @@ public class Application extends BaseEntity {
         this.imageUri = imageUri;
     }
 
-    public Byte getIsApproved() {
-        return isApproved;
-    }
+    public Boolean isApproved() { return approved; }
 
-    public void setIsApproved(Byte isApproved) {
-        this.isApproved = isApproved;
-    }
+    public void isApproved(Boolean approved) { this.approved = approved; }
 
-    public Byte getIsAdmin() {
-        return isAdmin;
-    }
+    public Boolean isAdmin() { return admin; }
 
-    public void setIsAdmin(Byte isAdmin) {
-        this.isAdmin = isAdmin;
-    }
+    public void setAdmin(Boolean admin) { this.admin = admin; }
 
-    public Byte getIsBulkExtract() {
-        return isBulkExtract;
-    }
+    public Boolean isBulkExtract() { return bulkExtract; }
 
-    public void setIsBulkExtract(Byte isBulkExtract) {
-        this.isBulkExtract = isBulkExtract;
+    public void setBulkExtract(Boolean bulkExtract) {
+        this.bulkExtract = bulkExtract;
     }
 
     public Date getRegisteredOn() {
