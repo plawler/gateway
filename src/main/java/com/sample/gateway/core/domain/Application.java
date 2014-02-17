@@ -33,39 +33,10 @@ public class Application {
 
     private Application() {}
 
-    Application(RegisterApplicationEvent registerApplication) {
-        this.adminUri = registerApplication.getAdminUri();
-        this.applicationName = registerApplication.getApplicationName();
-        this.appUri = registerApplication.getAppUri();
-        this.description = registerApplication.getDescription();
-        this.imageUri = registerApplication.getImageUri();
-        this.redirectUri = registerApplication.getRedirectUri();
-        this.admin = registerApplication.isAdmin();
-        this.bulkExtract = registerApplication.isBulkExtract();
-        this.approved = registerApplication.isApproved();
-        this.approvedOn = registerApplication.getApprovedOn();
-        this.registeredOn = registerApplication.getRegisteredOn();
-    }
-
-    Application(RegisteredApplicationEvent registeredApplicationEvent) {
-
-        this.applicationId = registeredApplicationEvent.getApplicationId();
-
-        this.adminUri = registeredApplicationEvent.getAdminUri();
-        this.applicationName = registeredApplicationEvent.getApplicationName();
-        this.appUri = registeredApplicationEvent.getAppUri();
-        this.description = registeredApplicationEvent.getDescription();
-        this.imageUri = registeredApplicationEvent.getImageUri();
-        this.redirectUri = registeredApplicationEvent.getRedirectUri();
-        this.admin = registeredApplicationEvent.isAdmin();
-        this.bulkExtract = registeredApplicationEvent.isBulkExtract();
-        this.approved = registeredApplicationEvent.isApproved();
-        this.approvedOn = registeredApplicationEvent.getApprovedOn();
-        this.registeredOn = registeredApplicationEvent.getRegisteredOn();
-    }
-
     public static Application fromApplicationData(RegisterApplicationEvent registerApplicationEvent) {
-        return new Application(registerApplicationEvent);
+        Application application = new Application();
+        BeanUtils.copyProperties(registerApplicationEvent, application);
+        return application;
     }
 
     public static Application fromApplicationData(RegisteredApplicationEvent registeredApplicationEvent) {
