@@ -27,11 +27,11 @@ public class Application extends BaseEntity {
     private String redirectUri;
     private String adminUri;
     private String imageUri;
-    @Column(name="isApproved", nullable = false, columnDefinition = "TINYINT(1)")
+    @Column(name="is_approved", nullable = false, columnDefinition = "TINYINT(1)")
     private Boolean approved;
-    @Column(name="isAdmin", nullable = false, columnDefinition = "TINYINT(1)")
+    @Column(name="is_admin", nullable = false, columnDefinition = "TINYINT(1)")
     private Boolean admin;
-    @Column(name="isBulkExtract", nullable = false, columnDefinition = "TINYINT(1)")
+    @Column(name="is_bulk_extract", nullable = false, columnDefinition = "TINYINT(1)")
     private Boolean bulkExtract;
     private Date registeredOn;
     private Date approvedOn;

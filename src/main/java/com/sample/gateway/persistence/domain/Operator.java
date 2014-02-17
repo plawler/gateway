@@ -18,7 +18,7 @@ public class Operator extends BaseEntity{
 
     private String operatorName;
     private String apiUri;
-    @Column(name="isEnabled", nullable = false, columnDefinition = "TINYINT(1)")
+    @Column(name="is_enabled", nullable = false, columnDefinition = "TINYINT(1)")
     private boolean enabled;
 
     public Operator(String createdBy){
