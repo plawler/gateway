@@ -38,9 +38,9 @@ public class Application extends BaseEntity {
     private Date registeredOn;
     private Date approvedOn;
 
-//    @ManyToOne
-//    @JoinColumn(name = "application_provider_id", referencedColumnName = "application_provider_id", nullable = false)
-//    private ApplicationProvidersEntity applicationProvidersByApplicationProviderId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "application_provider_id")
+    private ApplicationProvider applicationProvider;
 
     private Application(RegisterApplicationEvent registerApplication) {
         this.adminUri = registerApplication.getAdminUri();
@@ -172,18 +172,18 @@ public class Application extends BaseEntity {
         this.approvedOn = approvedOn;
     }
 
+    public ApplicationProvider getApplicationProvider() {
+        return applicationProvider;
+    }
+
+    public void setApplicationProvider(ApplicationProvider applicationProvider) {
+        this.applicationProvider = applicationProvider;
+    }
+
     public ApplicationData details() {
         ApplicationData dto = new ApplicationData();
         BeanUtils.copyProperties(this, dto);
         return dto;
     }
-
-//    public ApplicationProvidersEntity getApplicationProvidersByApplicationProviderId() {
-//        return applicationProvidersByApplicationProviderId;
-//    }
-//
-//    public void setApplicationProvidersByApplicationProviderId(ApplicationProvidersEntity applicationProvidersByApplicationProviderId) {
-//        this.applicationProvidersByApplicationProviderId = applicationProvidersByApplicationProviderId;
-//    }
 
 }
