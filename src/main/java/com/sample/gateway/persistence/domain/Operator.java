@@ -18,7 +18,8 @@ public class Operator extends BaseEntity{
 
     private String operatorName;
     private String apiUri;
-    private byte isEnabled;
+    @Column(name="isEnabled", nullable = false, columnDefinition = "TINYINT(1)")
+    private boolean enabled;
 
     public Operator(String createdBy){
         super(createdBy);
@@ -52,12 +53,10 @@ public class Operator extends BaseEntity{
         this.apiUri = apiUri;
     }
 
-    public byte getIsEnabled() {
-        return isEnabled;
-    }
+    public boolean isEnabled() { return enabled;}
 
-    public void setIsEnabled(byte isEnabled) {
-        this.isEnabled = isEnabled;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
 

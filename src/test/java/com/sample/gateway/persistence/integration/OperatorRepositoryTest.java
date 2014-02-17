@@ -13,9 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.*;
 
 /**
  * Created by lloydengebretsen on 2/15/14.
@@ -34,6 +32,7 @@ public class OperatorRepositoryTest {
         String createdBy = "Some Guy";
         Operator operator = new Operator(createdBy);
         operator.setOperatorName("A Number One Best Operator");
+        operator.setEnabled(true);
 
         repository.save(operator);
 
@@ -41,6 +40,7 @@ public class OperatorRepositoryTest {
         assertNotNull(retrieved);
         assertNotNull(retrieved.getCreatedAt());
         assertEquals("", createdBy, retrieved.getCreatedBy());
+        assertTrue(retrieved.isEnabled());
     }
 
     @Test
