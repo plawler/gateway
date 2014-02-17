@@ -2,8 +2,8 @@ package com.sample.gateway.persistence.repository;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.sample.gateway.model.Realm;
-import com.sample.gateway.model.Service;
+import com.sample.gateway.core.domain.Realm;
+import com.sample.gateway.core.domain.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

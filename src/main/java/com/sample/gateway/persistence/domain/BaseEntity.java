@@ -1,4 +1,4 @@
-package com.sample.gateway.persistence;
+package com.sample.gateway.persistence.domain;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;

@@ -2,6 +2,7 @@ package com.sample.gateway.persistence.repository;
 
 import com.sample.gateway.persistence.domain.Application;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 /**
  * Created with IntelliJ IDEA.

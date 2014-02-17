@@ -1,10 +1,6 @@
 package com.sample.gateway.persistence.domain;
 
-import com.sample.gateway.persistence.BaseEntity;
-
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.util.Date;
 
 /**
  * Created by lloydengebretsen on 2/15/14.

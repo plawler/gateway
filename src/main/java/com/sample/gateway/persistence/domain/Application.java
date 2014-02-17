@@ -1,6 +1,8 @@
 package com.sample.gateway.persistence.domain;
 
-import com.sample.gateway.persistence.BaseEntity;
+import com.sample.gateway.core.event.ApplicationData;
+import com.sample.gateway.core.event.RegisterApplicationEvent;
+import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -17,7 +19,7 @@ public class Application extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int applicationId;
+    private Long applicationId;
 
     private String clientId;
     private String sharedSecret;
@@ -27,24 +29,52 @@ public class Application extends BaseEntity {
     private String redirectUri;
     private String adminUri;
     private String imageUri;
-    @Column(name="is_approved", nullable = false, columnDefinition = "TINYINT(1)")
+    @Column(name="is_approved", columnDefinition = "TINYINT(1)")
     private Boolean approved;
-    @Column(name="is_admin", nullable = false, columnDefinition = "TINYINT(1)")
+    @Column(name="is_admin", columnDefinition = "TINYINT(1)")
     private Boolean admin;
-    @Column(name="is_bulk_extract", nullable = false, columnDefinition = "TINYINT(1)")
+    @Column(name="is_bulk_extract", columnDefinition = "TINYINT(1)")
     private Boolean bulkExtract;
     private Date registeredOn;
     private Date approvedOn;
+
 //    @ManyToOne
 //    @JoinColumn(name = "application_provider_id", referencedColumnName = "application_provider_id", nullable = false)
 //    private ApplicationProvidersEntity applicationProvidersByApplicationProviderId;
 
+    private Application(RegisterApplicationEvent registerApplication) {
+        this.adminUri = registerApplication.getAdminUri();
+        this.applicationName = registerApplication.getApplicationName();
+        this.appUri = registerApplication.getAppUri();
+        this.description = registerApplication.getDescription();
+        this.imageUri = registerApplication.getImageUri();
+        this.redirectUri = registerApplication.getRedirectUri();
+//        this.isAdmin = registerApplication.isAdmin();
+//        this.isBulkExtract = registerApplication.isBulkExtract();
+//        this.isApproved = registerApplication.isApproved()
+        this.registeredOn = registerApplication.getRegisteredOn();
 
-    public int getApplicationId() {
+        // likely that this should be a separate event from application registration, but, oh well.
+        this.approvedOn = registerApplication.getApprovedOn();
+        this.clientId = registerApplication.getClientId();
+        this.sharedSecret = registerApplication.getSharedSecret();
+    }
+
+    private Application(String createdBy) {
+        super(createdBy);
+    }
+
+    public Application() {}
+
+    public static Application newInstanceFrom(RegisterApplicationEvent registerApplication) {
+        return new Application(registerApplication);
+    }
+
+    public Long getApplicationId() {
         return applicationId;
     }
 
-    public void setApplicationId(int applicationId) {
+    public void setApplicationId(Long applicationId) {
         this.applicationId = applicationId;
     }
 
@@ -140,6 +170,12 @@ public class Application extends BaseEntity {
 
     public void setApprovedOn(Date approvedOn) {
         this.approvedOn = approvedOn;
+    }
+
+    public ApplicationData details() {
+        ApplicationData dto = new ApplicationData();
+        BeanUtils.copyProperties(this, dto);
+        return dto;
     }
 
 //    public ApplicationProvidersEntity getApplicationProvidersByApplicationProviderId() {

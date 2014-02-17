@@ -1,4 +1,4 @@
-package com.sample.gateway.model;
+package com.sample.gateway.core.domain;
 
 import java.io.Serializable;
 import java.util.UUID;
