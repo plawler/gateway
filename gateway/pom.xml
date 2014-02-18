@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.inbloom.gateway</groupId>
+    <artifactId>gateway-all</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>SLI</name>
+    <description>inBloom Gateway</description>
+    <url>http://www.inbloom.org</url>
+
+    <properties>
+        <java.version>1.6</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <maven.plugin.jetty.version>6.1.26</maven.plugin.jetty.version>
+
+        <guava.version>15.0</guava.version>
+        <jackson.version>1.9.13</jackson.version>
+        <java.jsp.version>2.1</java.jsp.version>
+        <java.servlet.version>2.5</java.servlet.version>
+        <junit.version>4.11</junit.version>
+        <slf4j.version>1.7.5</slf4j.version>
+        <spring.version>3.2.0.RELEASE</spring.version>
+        <spring.oath2.version>1.0.5.RELEASE</spring.oath2.version>
+    </properties>
+
+    <modules>
+       <module>gateway-core</module>
+    </modules>
+
+</project>
