@@ -42,30 +42,14 @@ public class Application extends BaseEntity {
     @JoinColumn(name = "application_provider_id")
     private ApplicationProvider applicationProvider;
 
-    private Application(RegisterApplicationEvent registerApplication) {
+    public Application() {
         super("created by the persistence layer");
-        ApplicationData data = registerApplication.getData();
-        this.adminUri = data.getAdminUri();
-        this.applicationName = data.getApplicationName();
-        this.appUri = data.getAppUri();
-        this.description = data.getDescription();
-        this.imageUri = data.getImageUri();
-        this.redirectUri = data.getRedirectUri();
-        this.admin = data.isAdmin();
-        this.bulkExtract = data.isBulkExtract();
-        this.approved = data.isApproved();
-        this.registeredOn = data.getRegisteredOn();
-
-        // likely that this should be a separate event from application registration, but, oh well.
-        this.approvedOn = data.getApprovedOn();
-        this.clientId = data.getClientId();
-        this.sharedSecret = data.getSharedSecret();
     }
 
-    public Application() {}
-
     public static Application newInstanceFrom(RegisterApplicationEvent registerApplication) {
-        return new Application(registerApplication);
+        Application application = new Application();
+        BeanUtils.copyProperties(registerApplication.getData(), application);
+        return application;
     }
 
     public Long getApplicationId() {

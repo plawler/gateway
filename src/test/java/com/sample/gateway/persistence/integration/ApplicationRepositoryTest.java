@@ -45,11 +45,8 @@ public class ApplicationRepositoryTest {
         applicationProvider.setUsername("blusun");
         applicationProvider = applicationProviderRepository.save(applicationProvider);
 
-
-
         Application application = new Application();
 
-//        application.setApplicationId(1);
         application.setApplicationName("Lloyd and Paul's Crazy Edu App");
         application.setClientId("123456");
         application.setSharedSecret("asdjhgsdfjgsadjfgkjhgasdjfgjksadghfkjhg");
@@ -60,6 +57,7 @@ public class ApplicationRepositoryTest {
         repository.save(application);
 
         Application retrieved = repository.findByApplicationName("Lloyd and Paul's Crazy Edu App");
+
         assertNotNull(retrieved);
         assertEquals(applicationProvider.getApplicationProviderId(), application.getApplicationProvider().getApplicationProviderId());
         assertEquals(applicationProvider.getUsername(), application.getApplicationProvider().getUsername());
