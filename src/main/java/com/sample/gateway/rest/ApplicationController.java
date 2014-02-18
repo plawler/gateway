@@ -1,6 +1,7 @@
 package com.sample.gateway.rest;
 
 import com.sample.gateway.core.domain.Application;
+import com.sample.gateway.core.event.ApplicationData;
 import com.sample.gateway.core.event.RegisterApplicationEvent;
 import com.sample.gateway.core.event.RegisteredApplicationEvent;
 import com.sample.gateway.core.service.ApplicationService;

@@ -60,7 +60,8 @@ public class CreateApplicationIntegrationTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andExpect(redirectedUrl("http://localhost/applications/1"));
     }
 
 }

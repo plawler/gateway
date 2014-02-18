@@ -35,7 +35,7 @@ class ApplicationServiceHandler implements ApplicationService {
     }
 
     private String generateClientId(Application application) {
-        return application.getApplicationName() + "123456";
+        return application.getApplicationName().replace(" ", "") + "123456";
     }
 
 }

@@ -22,4 +22,12 @@ public class RegisteredApplicationEvent {
     public Long getApplicationId() {
         return data.getApplicationId();
     }
+
+    public String getClientId() {
+        return data.getClientId();
+    }
+
+    public String getSharedSecret() {
+        return data.getSharedSecret();
+    }
 }
