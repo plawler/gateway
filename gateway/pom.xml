@@ -44,17 +44,18 @@
         <maven.plugin.jetty.version>6.1.26</maven.plugin.jetty.version>
 
         <fasterxml.jackson.version>2.3.0</fasterxml.jackson.version>
-        <guava.version>15.0</guava.version>
+        <guava.version>16.0.1</guava.version>
         <hibernate.entitymanager.version>4.3.0.Final</hibernate.entitymanager.version>
         <hibernate.jpa2.api.version>1.0.1.Final</hibernate.jpa2.api.version>
         <java.jsp.version>2.1</java.jsp.version>
         <java.servlet.version>2.5</java.servlet.version>
-        <junit.version>4.8.2</junit.version>
+        <junit.version>4.11</junit.version>
         <mockito.version>1.9.5</mockito.version>
-        <mysql.jdbc.version>5.1.25</mysql.jdbc.version>
-        <slf4j.version>1.6.1</slf4j.version>
+        <mysql.jdbc.version>5.1.29</mysql.jdbc.version>
+        <slf4j.version>1.7.6</slf4j.version>
 
-        <spring.version>3.2.0.RELEASE</spring.version>
+        <spring.version>3.2.7.RELEASE</spring.version>
+        <spring.security.version>3.2.0.RELEASE</spring.security.version>
         <spring.jpa.version>1.4.3.RELEASE</spring.jpa.version>
         <spring.oath2.version>1.0.5.RELEASE</spring.oath2.version>
     </properties>

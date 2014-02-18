@@ -1,7 +1,10 @@
 package com.sample.gateway.core.service;
 
 import com.sample.gateway.core.domain.Application;
-import com.sample.gateway.core.event.*;
+import com.sample.gateway.core.event.RegisterApplicationEvent;
+import com.sample.gateway.core.event.RegisteredApplicationEvent;
+import com.sample.gateway.core.event.RetrieveApplicationEvent;
+import com.sample.gateway.core.event.RetrievedApplicationEvent;
 import com.sample.gateway.persistence.service.ApplicationPersistenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,15 @@ import java.util.UUID;
  */
 @Service
 class ApplicationServiceHandler implements ApplicationService {
+
+
+    private static final int CLIENT_ID_LENGTH = 10;
+    private static final int CLIENT_SECRET_LENGTH = 48;
+    private static final char[] DEFAULT_CODEC = "1234567890abcdefghijklmnopqrstuvwxyz".toCharArray();
+    private static Random random = new SecureRandom();
+
+    @Autowired
+    private ApplicationRepository applicationRepository;
 
     @Autowired
     private ApplicationPersistenceService applicationPersistenceService;
