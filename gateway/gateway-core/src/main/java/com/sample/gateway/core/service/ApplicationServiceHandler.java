@@ -46,10 +46,13 @@ class ApplicationServiceHandler implements ApplicationService {
     }
 
     public ModifiedApplicationEvent modifyApplication(ModifyApplicationEvent modifyApplicationEvent) {
-        RetrievedApplicationEvent retrieved = retrieveApplication(new RetrieveApplicationEvent(modifyApplicationEvent.getApplicationId()));
-        Application application = Application.fromApplicationData(retrieved.getData());
-        application.modify(modifyApplicationEvent);
-        return applicationPersistenceService.modifyApplication(new ModifyApplicationEvent(application.details()));
+//        RetrievedApplicationEvent retrieved = retrieveApplication(new RetrieveApplicationEvent(modifyApplicationEvent.getApplicationId()));
+
+        // only necessary to retrieve if needed for building nice message for fields changed
+//        Application application = Application.fromApplicationData(retrieved.getData());
+//        application.modify(modifyApplicationEvent);
+
+        return applicationPersistenceService.modifyApplication(modifyApplicationEvent);
     }
 
     private String generateSharedSecret() {
