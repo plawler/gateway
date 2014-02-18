@@ -1,8 +1,6 @@
 package com.sample.gateway.core.domain.service;
 
-import com.sample.gateway.core.event.ApplicationData;
-import com.sample.gateway.core.event.RegisterApplicationEvent;
-import com.sample.gateway.core.event.RegisteredApplicationEvent;
+import com.sample.gateway.core.event.*;
 import com.sample.gateway.core.service.ApplicationService;
 
 import org.junit.Test;
@@ -44,8 +42,29 @@ public class ApplicationServiceIntegrationTest {
 
         assertNotNull(registered);
         assertNotNull(registered.getApplicationId());
-        assertEquals("TestApplication123456", registered.getClientId());
+        assertNotNull(registered.getClientId());
         assertNotNull(registered.getSharedSecret());
+    }
+
+    @Test
+    public void shouldModifyAnApplication() {
+        final String modifiedApplicationUri = "http://localhost:9000/modifiedtestapp";
+
+        ApplicationData data = new ApplicationData();
+        data.setApplicationName("Test Application");
+        data.setDescription("An application used as a fixture for testing");
+        data.setAppUri("http://localhost:9000/testapp");
+
+        RegisteredApplicationEvent registered = applicationService.registerNewApplication(new RegisterApplicationEvent(data));
+        RetrievedApplicationEvent retrieved = applicationService.retrieveApplication(new RetrieveApplicationEvent(registered.getApplicationId()));
+
+        ApplicationData retrievedData = retrieved.getData();
+        retrievedData.setAppUri(modifiedApplicationUri);
+
+        ModifiedApplicationEvent modified = applicationService.modifyApplication(new ModifyApplicationEvent(retrievedData));
+        RetrievedApplicationEvent retrievedAgain = applicationService.retrieveApplication(new RetrieveApplicationEvent(modified.getApplicationId()));
+
+        assertEquals(modifiedApplicationUri, retrievedAgain.getData().getAppUri());
     }
 
 }
