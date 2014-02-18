@@ -1,10 +1,7 @@
 package com.sample.gateway.core.service;
 
 import com.sample.gateway.core.domain.Application;
-import com.sample.gateway.core.event.RegisterApplicationEvent;
-import com.sample.gateway.core.event.RegisteredApplicationEvent;
-import com.sample.gateway.core.event.RetrieveApplicationEvent;
-import com.sample.gateway.core.event.RetrievedApplicationEvent;
+import com.sample.gateway.core.event.*;
 import com.sample.gateway.persistence.service.ApplicationPersistenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +32,13 @@ class ApplicationServiceHandler implements ApplicationService {
     @Override
     public RetrievedApplicationEvent retrieveApplication(RetrieveApplicationEvent retrieveApplicationEvent) {
         return applicationPersistenceService.retrieveApplication(retrieveApplicationEvent);
+    }
+
+    public ModifiedApplicationEvent modifyApplication(ModifyApplicationEvent modifyApplicationEvent) {
+        RetrievedApplicationEvent retrieved = retrieveApplication(new RetrieveApplicationEvent(modifyApplicationEvent.getApplicationId()));
+        Application application = Application.fromApplicationData(retrieved.getData());
+        application.modify(modifyApplicationEvent);
+        return applicationPersistenceService.modifyApplication(new ModifyApplicationEvent(application.details()));
     }
 
     private String generateSharedSecret(Application application) {

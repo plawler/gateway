@@ -25,7 +25,7 @@ import static org.junit.Assert.assertTrue;
  * To change this template use File | Settings | File Templates.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"file:src/main/webapp/WEB-INF/applicationContext.xml"})
+@ContextConfiguration({"file:gateway-core/src/main/webapp/WEB-INF/applicationContext.xml"})
 @Transactional
 @TransactionConfiguration(defaultRollback = true)
 public class ApplicationServiceIntegrationTest {

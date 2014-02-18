@@ -1,9 +1,6 @@
 package com.sample.gateway.persistence.service;
 
-import com.sample.gateway.core.event.RegisterApplicationEvent;
-import com.sample.gateway.core.event.RegisteredApplicationEvent;
-import com.sample.gateway.core.event.RetrieveApplicationEvent;
-import com.sample.gateway.core.event.RetrievedApplicationEvent;
+import com.sample.gateway.core.event.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,5 +14,7 @@ public interface ApplicationPersistenceService {
     RegisteredApplicationEvent registerApplication(RegisterApplicationEvent registerApplication);
 
     RetrievedApplicationEvent retrieveApplication(RetrieveApplicationEvent retrieveApplication);
+
+    ModifiedApplicationEvent modifyApplication(ModifyApplicationEvent modifyApplicationEvent);
 
 }

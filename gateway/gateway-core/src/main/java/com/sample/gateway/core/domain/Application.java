@@ -1,6 +1,7 @@
 package com.sample.gateway.core.domain;
 
 import com.sample.gateway.core.event.ApplicationData;
+import com.sample.gateway.core.event.ModifyApplicationEvent;
 import org.springframework.beans.BeanUtils;
 
 import java.util.Date;
@@ -169,6 +170,14 @@ public class Application {
         this.sharedSecret = sharedSecret;
         this.approved = true;
         this.approvedOn = new Date();
+    }
+
+    public void modify(ModifyApplicationEvent modifier) {
+        this.applicationName = modifier.getApplicationName();
+        this.description = modifier.getDescription();
+        this.appUri = modifier.getAppUri();
+        this.redirectUri = modifier.getRedirectUri();
+        this.imageUri = getImageUri();
     }
 
 }

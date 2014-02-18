@@ -62,4 +62,26 @@ public class ApplicationRepositoryTest {
         assertEquals(applicationProvider.getApplicationProviderId(), application.getApplicationProvider().getApplicationProviderId());
         assertEquals(applicationProvider.getUsername(), application.getApplicationProvider().getUsername());
     }
+
+    @Test
+    public void shouldUpdateAnApplicationAndSaveInRepo() {
+        Application application = new Application();
+
+        application.setApplicationName("My App");
+        application.setClientId("123456");
+        application.setSharedSecret("asdjhgsdfjgsadjfgkjhgasdjfgjksadghfkjhg");
+        application.setCreatedAt(new Date());
+        application.setCreatedBy("plawler");
+
+        repository.save(application);
+
+        Application retrieved = repository.findByApplicationName("My App");
+        retrieved.setApplicationName("My Modified App");
+
+        repository.save(retrieved);
+
+        Application retrievedAgain = repository.findByApplicationName("My Modified App");
+
+        assertEquals("My Modified App", retrievedAgain.getApplicationName());
+    }
 }

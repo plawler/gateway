@@ -3,20 +3,20 @@ package com.sample.gateway.core.event;
 /**
  * Created with IntelliJ IDEA.
  * User: paullawler
- * Date: 2/16/14
- * Time: 8:43 AM
+ * Date: 2/18/14
+ * Time: 3:43 PM
  * To change this template use File | Settings | File Templates.
  */
-public class RegisterApplicationEvent {
+public class ModifiedApplicationEvent {
 
     private final ApplicationData data;
 
-    public RegisterApplicationEvent(ApplicationData data) {
+    public ModifiedApplicationEvent(ApplicationData data) {
         this.data = data;
     }
 
-    public ApplicationData getData() {
-        return data;
+    public Long getApplicationId() {
+        return data.getApplicationId();
     }
 
 }
