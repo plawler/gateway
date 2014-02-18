@@ -2,6 +2,8 @@ package com.sample.gateway.persistence.service;
 
 import com.sample.gateway.core.event.RegisterApplicationEvent;
 import com.sample.gateway.core.event.RegisteredApplicationEvent;
+import com.sample.gateway.core.event.RetrieveApplicationEvent;
+import com.sample.gateway.core.event.RetrievedApplicationEvent;
 import com.sample.gateway.persistence.domain.Application;
 import com.sample.gateway.persistence.repository.ApplicationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,12 @@ class ApplicationPersistenceHandler implements ApplicationPersistenceService {
         Application application = Application.newInstanceFrom(registerApplicationEvent);
         applicationRepository.save(application);
         return new RegisteredApplicationEvent(application.details());
+    }
+
+    @Override
+    public RetrievedApplicationEvent retrieveApplication(RetrieveApplicationEvent retrieveApplication) {
+        Application app = applicationRepository.findOne(retrieveApplication.getApplicationId());
+        return new RetrievedApplicationEvent(app.details());
     }
 
 }
