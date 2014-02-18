@@ -15,6 +15,7 @@ import java.util.Date;
 public class Application {
 
     private Long applicationId;
+    private Long applicationProviderId;
     private String clientId;
     private String sharedSecret;
     private String applicationName;
@@ -35,6 +36,14 @@ public class Application {
         Application application = new Application();
         BeanUtils.copyProperties(applicationData, application);
         return application;
+    }
+
+    public Long getApplicationProviderId() {
+        return applicationProviderId;
+    }
+
+    public void setApplicationProviderId(Long applicationProviderId) {
+        this.applicationProviderId = applicationProviderId;
     }
 
     public String getApplicationName() {
@@ -91,6 +100,30 @@ public class Application {
 
     public Date getApprovedOn() {
         return approvedOn;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
+
+    public boolean isBulkExtract() {
+        return bulkExtract;
+    }
+
+    public void setBulkExtract(boolean bulkExtract) {
+        this.bulkExtract = bulkExtract;
+    }
+
+    public boolean isApproved() {
+        return approved;
+    }
+
+    public void setApproved(boolean approved) {
+        this.approved = approved;
     }
 
     public void setApplicationId(Long applicationId) {
