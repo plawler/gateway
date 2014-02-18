@@ -1,9 +1,6 @@
 package com.sample.gateway.core.service;
 
-import com.sample.gateway.core.event.RegisterApplicationEvent;
-import com.sample.gateway.core.event.RegisteredApplicationEvent;
-import com.sample.gateway.core.event.RetrieveApplicationEvent;
-import com.sample.gateway.core.event.RetrievedApplicationEvent;
+import com.sample.gateway.core.event.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,5 +13,6 @@ public interface ApplicationService {
 
     RegisteredApplicationEvent registerNewApplication(RegisterApplicationEvent registerApplicationEvent);
     RetrievedApplicationEvent retrieveApplication(RetrieveApplicationEvent retrieveApplicationEvent);
+    ModifiedApplicationEvent modifyApplication(ModifyApplicationEvent modifyApplicationEvent);
 
 }

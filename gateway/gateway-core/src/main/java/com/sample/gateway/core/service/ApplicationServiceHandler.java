@@ -45,6 +45,7 @@ class ApplicationServiceHandler implements ApplicationService {
         return applicationPersistenceService.retrieveApplication(retrieveApplicationEvent);
     }
 
+    @Override
     public ModifiedApplicationEvent modifyApplication(ModifyApplicationEvent modifyApplicationEvent) {
 //        RetrievedApplicationEvent retrieved = retrieveApplication(new RetrieveApplicationEvent(modifyApplicationEvent.getApplicationId()));
 

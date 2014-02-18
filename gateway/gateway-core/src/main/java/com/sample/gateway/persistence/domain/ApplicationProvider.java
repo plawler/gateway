@@ -1,5 +1,9 @@
 package com.sample.gateway.persistence.domain;
 
+import com.sample.gateway.core.event.ApplicationProviderData;
+import com.sample.gateway.core.event.RegisterApplicationProviderEvent;
+import org.springframework.beans.BeanUtils;
+
 import javax.persistence.*;
 import java.util.Collection;
 
@@ -33,6 +37,18 @@ public class ApplicationProvider extends BaseEntity{
         super();
     }
 
+
+    public static ApplicationProvider instanceFrom(RegisterApplicationProviderEvent registerApplicationProviderEvent) {
+        ApplicationProvider applicationProvider = new ApplicationProvider();
+        BeanUtils.copyProperties(registerApplicationProviderEvent.getData(), applicationProvider);
+        return applicationProvider;
+    }
+
+    public ApplicationProviderData details() {
+        ApplicationProviderData dto = new ApplicationProviderData();
+        BeanUtils.copyProperties(this, dto);
+        return dto;
+    }
 
     public String getUsername() {
         return username;
@@ -82,6 +98,8 @@ public class ApplicationProvider extends BaseEntity{
     public void setApplicationProviderId(Long applicationProviderId) {
         this.applicationProviderId = applicationProviderId;
     }
+
+
 
 //    public Collection<Application> getApplications() {
 //        return applications;

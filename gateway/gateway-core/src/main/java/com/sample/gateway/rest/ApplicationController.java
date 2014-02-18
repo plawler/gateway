@@ -49,4 +49,11 @@ public class ApplicationController {
         return new ResponseEntity<Application>(app, HttpStatus.OK);
     }
 
+    @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+    public ResponseEntity updateApplication(@RequestBody Application application, @PathVariable Long id) {
+        ModifiedApplicationEvent modifiedEvent = applicationService.modifyApplication(new ModifyApplicationEvent(application.details()));
+
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
 }
