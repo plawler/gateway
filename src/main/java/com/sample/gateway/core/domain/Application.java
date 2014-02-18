@@ -1,8 +1,6 @@
 package com.sample.gateway.core.domain;
 
 import com.sample.gateway.core.event.ApplicationData;
-import com.sample.gateway.core.event.RegisterApplicationEvent;
-import com.sample.gateway.core.event.RegisteredApplicationEvent;
 import org.springframework.beans.BeanUtils;
 
 import java.util.Date;
@@ -25,23 +23,17 @@ public class Application {
     private String redirectUri;
     private String adminUri;
     private String imageUri;
-    private Boolean admin;
-    private Boolean bulkExtract;
-    private Boolean approved;
+    private boolean admin;
+    private boolean bulkExtract;
+    private boolean approved;
     private Date registeredOn;
     private Date approvedOn;
 
     private Application() {}
 
-    public static Application fromApplicationData(RegisterApplicationEvent registerApplicationEvent) {
+    public static Application fromApplicationData(ApplicationData applicationData) {
         Application application = new Application();
-        BeanUtils.copyProperties(registerApplicationEvent, application);
-        return application;
-    }
-
-    public static Application fromApplicationData(RegisteredApplicationEvent registeredApplicationEvent) {
-        Application application = new Application();
-        BeanUtils.copyProperties(registeredApplicationEvent, application);
+        BeanUtils.copyProperties(applicationData, application);
         return application;
     }
 
@@ -101,10 +93,73 @@ public class Application {
         return approvedOn;
     }
 
+    public void setApplicationId(Long applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
+    public void setSharedSecret(String sharedSecret) {
+        this.sharedSecret = sharedSecret;
+    }
+
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setAppUri(String appUri) {
+        this.appUri = appUri;
+    }
+
+    public void setRedirectUri(String redirectUri) {
+        this.redirectUri = redirectUri;
+    }
+
+    public void setAdminUri(String adminUri) {
+        this.adminUri = adminUri;
+    }
+
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
+    }
+
+    public void setAdmin(Boolean admin) {
+        this.admin = admin;
+    }
+
+    public void setBulkExtract(Boolean bulkExtract) {
+        this.bulkExtract = bulkExtract;
+    }
+
+    public void setApproved(Boolean approved) {
+        this.approved = approved;
+    }
+
+    public void setRegisteredOn(Date registeredOn) {
+        this.registeredOn = registeredOn;
+    }
+
+    public void setApprovedOn(Date approvedOn) {
+        this.approvedOn = approvedOn;
+    }
+
     public ApplicationData details() {
         ApplicationData data = new ApplicationData();
         BeanUtils.copyProperties(this, data);
         return data;
+    }
+
+    public void approve(String clientId, String sharedSecret) {
+        this.clientId = clientId;
+        this.sharedSecret = sharedSecret;
+        this.approved = true;
+        this.approvedOn = new Date();
     }
 
 }

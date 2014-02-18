@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,28 +25,17 @@ class ApplicationServiceHandler implements ApplicationService {
 
     @Override
     public RegisteredApplicationEvent registerNewApplication(RegisterApplicationEvent registerApplicationEvent) {
-        Application application = Application.fromApplicationData(registerApplicationEvent);
-
-        registerApplicationEvent.setClientId(generateClientId(application)); // todo: i don't like this because we should not changing state. perhaps delegate to a new event
-        registerApplicationEvent.setSharedSecret(generateSharedSecret(application));
-
-        RegisteredApplicationEvent registeredEvent = applicationPersistenceService.registerApplication(registerApplicationEvent);
-
-        doSomethingWithEvent(registeredEvent);
-
-        return registeredEvent;
+        Application application = Application.fromApplicationData(registerApplicationEvent.getData());
+        application.approve(generateClientId(application), generateSharedSecret(application));
+        return applicationPersistenceService.registerApplication(new RegisterApplicationEvent(application.details()));
     }
 
     private String generateSharedSecret(Application application) {
-        return null;
+        return UUID.randomUUID().toString();
     }
 
     private String generateClientId(Application application) {
-        return null;
-    }
-
-    private void doSomethingWithEvent(RegisteredApplicationEvent registeredEvent) {
-        // todo: publish event?
+        return application.getApplicationName() + "123456";
     }
 
 }

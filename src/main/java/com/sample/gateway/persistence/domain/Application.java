@@ -43,25 +43,23 @@ public class Application extends BaseEntity {
     private ApplicationProvider applicationProvider;
 
     private Application(RegisterApplicationEvent registerApplication) {
-        this.adminUri = registerApplication.getAdminUri();
-        this.applicationName = registerApplication.getApplicationName();
-        this.appUri = registerApplication.getAppUri();
-        this.description = registerApplication.getDescription();
-        this.imageUri = registerApplication.getImageUri();
-        this.redirectUri = registerApplication.getRedirectUri();
-//        this.isAdmin = registerApplication.isAdmin();
-//        this.isBulkExtract = registerApplication.isBulkExtract();
-//        this.isApproved = registerApplication.isApproved()
-        this.registeredOn = registerApplication.getRegisteredOn();
+        super("created by the persistence layer");
+        ApplicationData data = registerApplication.getData();
+        this.adminUri = data.getAdminUri();
+        this.applicationName = data.getApplicationName();
+        this.appUri = data.getAppUri();
+        this.description = data.getDescription();
+        this.imageUri = data.getImageUri();
+        this.redirectUri = data.getRedirectUri();
+        this.admin = data.isAdmin();
+        this.bulkExtract = data.isBulkExtract();
+        this.approved = data.isApproved();
+        this.registeredOn = data.getRegisteredOn();
 
         // likely that this should be a separate event from application registration, but, oh well.
-        this.approvedOn = registerApplication.getApprovedOn();
-        this.clientId = registerApplication.getClientId();
-        this.sharedSecret = registerApplication.getSharedSecret();
-    }
-
-    private Application(String createdBy) {
-        super(createdBy);
+        this.approvedOn = data.getApprovedOn();
+        this.clientId = data.getClientId();
+        this.sharedSecret = data.getSharedSecret();
     }
 
     public Application() {}

@@ -20,9 +20,9 @@ public class ApplicationData {
     private String redirectUri;
     private String adminUri;
     private String imageUri;
-    private Boolean approved;
-    private Boolean admin;
-    private Boolean bulkExtract;
+    private boolean approved;
+    private boolean admin;
+    private boolean bulkExtract;
     private Date registeredOn;
     private Date approvedOn;
 
@@ -106,7 +106,7 @@ public class ApplicationData {
         this.approved = approved;
     }
 
-    public Boolean getAdmin() {
+    public Boolean isAdmin() {
         return admin;
     }
 
@@ -114,7 +114,7 @@ public class ApplicationData {
         this.admin = admin;
     }
 
-    public Boolean getBulkExtract() {
+    public Boolean isBulkExtract() {
         return bulkExtract;
     }
 

@@ -20,6 +20,7 @@ class ApplicationPersistenceHandler implements ApplicationPersistenceService {
     @Autowired
     ApplicationRepository applicationRepository;
 
+    // todo: instead of passing through the business events, how about CRUD events?
     @Override
     public RegisteredApplicationEvent registerApplication(RegisterApplicationEvent registerApplicationEvent) {
         Application application = Application.newInstanceFrom(registerApplicationEvent);

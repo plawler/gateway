@@ -31,11 +31,13 @@ public class ApplicationController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Application> register(@RequestBody Application application, UriComponentsBuilder componentsBuilder) {
         RegisteredApplicationEvent registeredEvent = applicationService.registerNewApplication(new RegisterApplicationEvent(application.details()));
-        Application newApp = Application.fromApplicationData(registeredEvent);
+
+        Application newApp = Application.fromApplicationData(registeredEvent.getData());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(componentsBuilder.path("/applications/{id}")
                     .buildAndExpand(registeredEvent.getApplicationId().toString()).toUri());
+
         return new ResponseEntity<Application>(newApp, headers, HttpStatus.CREATED);
     }
 

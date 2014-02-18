@@ -45,16 +45,15 @@ public class CreateApplicationIntegrationTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller)
                 .setMessageConverters(new MappingJackson2HttpMessageConverter()).build();
-
-        when(applicationService.registerNewApplication(any(RegisterApplicationEvent.class)))
-                .thenReturn(applicationRegistered(1L));
     }
 
     @Test
     public void shouldRegisterAnApplication() throws Exception {
+        when(applicationService.registerNewApplication(any(RegisterApplicationEvent.class)))
+                .thenReturn(applicationRegistered(1L));
+
         this.mockMvc.perform(
                 post("/applications")
                     .content(applicationJson())
@@ -63,16 +62,5 @@ public class CreateApplicationIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isCreated());
     }
-
-//    @Test
-//    public void simple() throws Exception {
-//        mockMvc.perform(post("/applications"))
-//                .content(standardOrderJSON())
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .accept(MediaType.APPLICATION_JSON))
-//                .andDo(print())
-//                .andExpect(status().isCreated());
-//    }
-
 
 }
