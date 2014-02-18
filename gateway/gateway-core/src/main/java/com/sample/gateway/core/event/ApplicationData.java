@@ -12,6 +12,7 @@ import java.util.Date;
 public class ApplicationData {
 
     private Long applicationId;
+    private Long applicationProviderId;
     private String clientId;
     private String sharedSecret;
     private String applicationName;
@@ -20,9 +21,9 @@ public class ApplicationData {
     private String redirectUri;
     private String adminUri;
     private String imageUri;
-    private boolean approved;
-    private boolean admin;
-    private boolean bulkExtract;
+    private Boolean approved;
+    private Boolean admin;
+    private Boolean bulkExtract;
     private Date registeredOn;
     private Date approvedOn;
 
@@ -32,6 +33,26 @@ public class ApplicationData {
 
     public void setApplicationId(Long applicationId) {
         this.applicationId = applicationId;
+    }
+
+    public Long getApplicationProviderId() {
+        return applicationProviderId;
+    }
+
+    public void setApplicationProviderId(Long applicationProviderId) {
+        this.applicationProviderId = applicationProviderId;
+    }
+
+    public Boolean getApproved() {
+        return approved;
+    }
+
+    public Boolean getAdmin() {
+        return admin;
+    }
+
+    public Boolean getBulkExtract() {
+        return bulkExtract;
     }
 
     public String getClientId() {

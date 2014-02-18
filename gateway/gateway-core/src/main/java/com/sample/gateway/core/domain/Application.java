@@ -24,9 +24,9 @@ public class Application {
     private String redirectUri;
     private String adminUri;
     private String imageUri;
-    private boolean admin;
-    private boolean bulkExtract;
-    private boolean approved;
+    private Boolean admin;
+    private Boolean bulkExtract;
+    private Boolean approved;
     private Date registeredOn;
     private Date approvedOn;
 
@@ -100,30 +100,6 @@ public class Application {
 
     public Date getApprovedOn() {
         return approvedOn;
-    }
-
-    public boolean isAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(boolean admin) {
-        this.admin = admin;
-    }
-
-    public boolean isBulkExtract() {
-        return bulkExtract;
-    }
-
-    public void setBulkExtract(boolean bulkExtract) {
-        this.bulkExtract = bulkExtract;
-    }
-
-    public boolean isApproved() {
-        return approved;
-    }
-
-    public void setApproved(boolean approved) {
-        this.approved = approved;
     }
 
     public void setApplicationId(Long applicationId) {
