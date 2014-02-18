@@ -2,7 +2,6 @@ package com.sample.gateway.persistence.repository;
 
 import com.sample.gateway.persistence.domain.Application;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,5 +13,7 @@ import org.springframework.stereotype.Repository;
 public interface ApplicationRepository extends CrudRepository<Application, Long> {
 
     Application findByApplicationName(String applicationName);
+
+    Application findByClientId(String clientId);
 
 }
