@@ -29,16 +29,20 @@ public class Application extends BaseEntity {
     private String redirectUri;
     private String adminUri;
     private String imageUri;
+
     @Column(name="is_approved", columnDefinition = "TINYINT(1)")
     private Boolean approved;
+
     @Column(name="is_admin", columnDefinition = "TINYINT(1)")
     private Boolean admin;
+
     @Column(name="is_bulk_extract", columnDefinition = "TINYINT(1)")
     private Boolean bulkExtract;
+
     private Date registeredOn;
     private Date approvedOn;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "application_provider_id")
     private ApplicationProvider applicationProvider;
 
@@ -170,13 +174,10 @@ public class Application extends BaseEntity {
         this.applicationProvider = applicationProvider;
     }
 
-    public Long getApplicationProviderId() {
-        return this.applicationProvider.getApplicationProviderId();
-    }
-
     public ApplicationData details() {
         ApplicationData dto = new ApplicationData();
         BeanUtils.copyProperties(this, dto);
+        dto.setApplicationProviderId(this.getApplicationProvider().getApplicationProviderId());
         return dto;
     }
 

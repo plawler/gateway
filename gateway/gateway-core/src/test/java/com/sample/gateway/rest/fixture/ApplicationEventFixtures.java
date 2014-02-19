@@ -3,6 +3,8 @@ package com.sample.gateway.rest.fixture;
 import com.sample.gateway.core.event.ApplicationData;
 import com.sample.gateway.core.event.RegisteredApplicationEvent;
 
+import java.util.Date;
+
 /**
  * Created with IntelliJ IDEA.
  * User: paullawler
@@ -15,6 +17,9 @@ public class ApplicationEventFixtures {
     public static RegisteredApplicationEvent applicationRegistered(Long applicationId) {
         ApplicationData data = registerApplicationData();
         data.setApplicationId(applicationId);
+        data.setApprovedOn(new Date());
+        data.setRegisteredOn(new Date());
+        data.setApproved(true);
         return new RegisteredApplicationEvent(data);
     }
 

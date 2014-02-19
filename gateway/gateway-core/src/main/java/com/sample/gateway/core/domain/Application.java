@@ -1,7 +1,9 @@
 package com.sample.gateway.core.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.sample.gateway.core.event.ApplicationData;
 import com.sample.gateway.core.event.ModifyApplicationEvent;
+import com.sample.gateway.util.JsonDateSerializer;
 import org.springframework.beans.BeanUtils;
 
 import java.util.Date;
@@ -95,10 +97,12 @@ public class Application {
         return approved;
     }
 
+    @JsonSerialize(using = JsonDateSerializer.class)
     public Date getRegisteredOn() {
         return registeredOn;
     }
 
+    @JsonSerialize(using = JsonDateSerializer.class)
     public Date getApprovedOn() {
         return approvedOn;
     }
@@ -163,6 +167,10 @@ public class Application {
         ApplicationData data = new ApplicationData();
         BeanUtils.copyProperties(this, data);
         return data;
+    }
+
+    public void register() {
+        this.registeredOn = new Date();
     }
 
     public void approve(String clientId, String sharedSecret) {

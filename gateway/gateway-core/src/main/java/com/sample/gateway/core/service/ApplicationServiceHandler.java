@@ -8,6 +8,7 @@ import com.sample.gateway.persistence.service.ApplicationPersistenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.security.SecureRandom;
 import java.util.Date;
 import java.util.Random;
@@ -37,7 +38,10 @@ class ApplicationServiceHandler implements ApplicationService {
     @Override
     public RegisteredApplicationEvent registerNewApplication(RegisterApplicationEvent registerApplicationEvent) {
         Application application = Application.fromApplicationData(registerApplicationEvent.getData());
+
         application.approve(generateClientId(), generateSharedSecret());
+        application.register();
+
         return applicationPersistenceService.registerApplication(new RegisterApplicationEvent(application.details()));
     }
 
@@ -95,6 +99,5 @@ class ApplicationServiceHandler implements ApplicationService {
         }
         return new String(chars);
     }
-
 
 }
