@@ -30,4 +30,9 @@ public class RegisteredApplicationEvent {
     public String getSharedSecret() {
         return data.getSharedSecret();
     }
+
+    public Boolean getApproved() {
+        return data.getApproved();
+    }
+
 }

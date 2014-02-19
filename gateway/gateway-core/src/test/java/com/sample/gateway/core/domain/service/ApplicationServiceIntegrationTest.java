@@ -1,8 +1,11 @@
 package com.sample.gateway.core.domain.service;
 
+import com.sample.gateway.core.domain.ApplicationProvider;
 import com.sample.gateway.core.event.*;
+import com.sample.gateway.core.service.ApplicationProviderService;
 import com.sample.gateway.core.service.ApplicationService;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +34,25 @@ public class ApplicationServiceIntegrationTest {
     @Autowired
     ApplicationService applicationService;
 
+    @Autowired
+    ApplicationProviderService applicationProviderService;
+
+    private ApplicationProvider provider;
+
+    @Before
+    public void setup() {
+        ApplicationProviderData data = new ApplicationProviderData();
+        data.setApplicationProviderName("Bob the Developer");
+        data.setUsername("bdeveloper");
+        data.setTermsAccepted(true);
+        RegisteredApplicationProviderEvent event = applicationProviderService.registerApplicationProvider(new RegisterApplicationProviderEvent(data));
+        provider = ApplicationProvider.fromApplicationProviderData(event.getData());
+    }
+
     @Test
     public void shouldRegisterNewApplication() {
         ApplicationData data = new ApplicationData();
+        data.setApplicationProviderId(provider.getApplicationProviderId());
         data.setApplicationName("Test Application");
         data.setAppUri("http://localhost:9000");
 
@@ -42,6 +61,7 @@ public class ApplicationServiceIntegrationTest {
 
         assertNotNull(registered);
         assertNotNull(registered.getApplicationId());
+        assertTrue(registered.getApproved());
         assertNotNull(registered.getClientId());
         assertNotNull(registered.getSharedSecret());
     }
