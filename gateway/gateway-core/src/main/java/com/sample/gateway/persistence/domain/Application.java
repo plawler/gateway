@@ -124,15 +124,23 @@ public class Application extends BaseEntity {
         this.imageUri = imageUri;
     }
 
-    public Boolean isApproved() { return approved; }
+    public Boolean getApproved() {
+        return approved;
+    }
 
-    public void isApproved(Boolean approved) { this.approved = approved; }
+    public void setApproved(Boolean approved) {
+        this.approved = approved;
+    }
 
-    public Boolean isAdmin() { return admin; }
+    public Boolean getAdmin() {
+        return admin;
+    }
 
     public void setAdmin(Boolean admin) { this.admin = admin; }
 
-    public Boolean isBulkExtract() { return bulkExtract; }
+    public Boolean getBulkExtract() {
+        return bulkExtract;
+    }
 
     public void setBulkExtract(Boolean bulkExtract) {
         this.bulkExtract = bulkExtract;

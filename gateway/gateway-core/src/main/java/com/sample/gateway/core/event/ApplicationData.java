@@ -107,7 +107,7 @@ public class ApplicationData {
         this.imageUri = imageUri;
     }
 
-    public Boolean isApproved() {
+    public Boolean getApproved() {
         return approved;
     }
 
@@ -115,7 +115,7 @@ public class ApplicationData {
         this.approved = approved;
     }
 
-    public Boolean isAdmin() {
+    public Boolean getAdmin() {
         return admin;
     }
 
@@ -123,7 +123,7 @@ public class ApplicationData {
         this.admin = admin;
     }
 
-    public Boolean isBulkExtract() {
+    public Boolean getBulkExtract() {
         return bulkExtract;
     }
 

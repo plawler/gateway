@@ -1,7 +1,5 @@
 package com.sample.gateway.core.event;
 
-import java.util.Date;
-
 /**
  * Created with IntelliJ IDEA.
  * User: paullawler
@@ -42,11 +40,11 @@ public class ModifyApplicationEvent {
     }
 
     public Boolean isAdmin() {
-        return data.isAdmin();
+        return data.getAdmin();
     }
 
     public Boolean isBulkExtract() {
-        return data.isBulkExtract();
+        return data.getBulkExtract();
     }
 
 }
