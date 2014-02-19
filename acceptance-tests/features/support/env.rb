@@ -8,9 +8,11 @@ require 'webmock/cucumber'
 WebMock.allow_net_connect!
 
 require 'rest-client'
+require_relative 'paths'
 
 class TestWorld
   include Capybara::DSL
+  include Paths
 end
 
 World do

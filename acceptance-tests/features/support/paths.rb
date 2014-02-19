@@ -1,10 +1,11 @@
 module Paths
   def path_for(resource)
-    case resource
+    path = case resource
       when /^realms$/
         'realms'
       else
         resource
-    end
+     end
+    "#{ENV['GATEWAY_URL']}/#{path}"
   end
 end
