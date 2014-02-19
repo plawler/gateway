@@ -61,6 +61,7 @@ public class ApplicationServiceIntegrationTest {
 
         assertNotNull(registered);
         assertNotNull(registered.getApplicationId());
+        assertEquals(provider.getApplicationProviderId(), registered.getApplicationProviderId());
         assertTrue(registered.getApproved());
         assertNotNull(registered.getClientId());
         assertNotNull(registered.getSharedSecret());
@@ -71,6 +72,7 @@ public class ApplicationServiceIntegrationTest {
         final String modifiedApplicationUri = "http://localhost:9000/modifiedtestapp";
 
         ApplicationData data = new ApplicationData();
+        data.setApplicationProviderId(provider.getApplicationProviderId());
         data.setApplicationName("Test Application");
         data.setDescription("An application used as a fixture for testing");
         data.setAppUri("http://localhost:9000/testapp");

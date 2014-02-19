@@ -35,4 +35,7 @@ public class RegisteredApplicationEvent {
         return data.getApproved();
     }
 
+    public Long getApplicationProviderId() {
+        return data.getApplicationProviderId();
+    }
 }

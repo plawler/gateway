@@ -19,4 +19,8 @@ public class RegisterApplicationEvent {
         return data;
     }
 
+    public Long getApplicationProviderId() {
+        return data.getApplicationProviderId();
+    }
+
 }

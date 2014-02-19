@@ -1,6 +1,7 @@
 package com.sample.gateway.core.service;
 
 import com.sample.gateway.core.domain.Application;
+import com.sample.gateway.core.domain.ApplicationProvider;
 import com.sample.gateway.core.event.*;
 import com.sample.gateway.persistence.repository.ApplicationRepository;
 import com.sample.gateway.persistence.service.ApplicationPersistenceService;

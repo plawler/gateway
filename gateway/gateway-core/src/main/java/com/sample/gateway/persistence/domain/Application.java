@@ -170,6 +170,10 @@ public class Application extends BaseEntity {
         this.applicationProvider = applicationProvider;
     }
 
+    public Long getApplicationProviderId() {
+        return this.applicationProvider.getApplicationProviderId();
+    }
+
     public ApplicationData details() {
         ApplicationData dto = new ApplicationData();
         BeanUtils.copyProperties(this, dto);

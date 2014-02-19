@@ -2,6 +2,8 @@ package com.sample.gateway.persistence.service;
 
 import com.sample.gateway.core.event.*;
 import com.sample.gateway.persistence.domain.Application;
+import com.sample.gateway.persistence.domain.ApplicationProvider;
+import com.sample.gateway.persistence.repository.ApplicationProviderRepository;
 import com.sample.gateway.persistence.repository.ApplicationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -19,10 +21,14 @@ class ApplicationPersistenceHandler implements ApplicationPersistenceService {
     @Autowired
     ApplicationRepository applicationRepository;
 
-    // todo: instead of passing through the business events, how about CRUD events?
+    @Autowired
+    ApplicationProviderRepository applicationProviderRepository;
+
     @Override
     public RegisteredApplicationEvent registerApplication(RegisterApplicationEvent registerApplicationEvent) {
         Application application = Application.newInstanceFrom(registerApplicationEvent);
+        ApplicationProvider provider = applicationProviderRepository.findOne(registerApplicationEvent.getApplicationProviderId());
+        application.setApplicationProvider(provider); // todo: validate the provider
         applicationRepository.save(application);
         return new RegisteredApplicationEvent(application.details());
     }
