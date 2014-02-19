@@ -3,12 +3,15 @@ package com.sample.gateway.rest;
 import com.sample.gateway.core.domain.ApplicationProvider;
 import com.sample.gateway.core.event.RegisterApplicationProviderEvent;
 import com.sample.gateway.core.event.RegisteredApplicationProviderEvent;
+import com.sample.gateway.core.event.RetrieveApplicationProviderEvent;
+import com.sample.gateway.core.event.RetrievedApplicationProviderEvent;
 import com.sample.gateway.core.service.ApplicationProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,5 +39,13 @@ public class ApplicationProviderController {
                 .buildAndExpand(registeredEvent.getData().getApplicationProviderId().toString()).toUri());
 
         return new ResponseEntity<ApplicationProvider>(newAppProvider, headers, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value="/{id}")
+    public ResponseEntity<ApplicationProvider> getApplicationProvider(@PathVariable Long id) {
+        RetrievedApplicationProviderEvent retrievedEvent = applicationProviderService.retrieveApplicationProvider(new RetrieveApplicationProviderEvent(id));
+        ApplicationProvider app = ApplicationProvider.fromApplicationProviderData(retrievedEvent.getData());
+
+        return new ResponseEntity<ApplicationProvider>(app, HttpStatus.OK);
     }
 }

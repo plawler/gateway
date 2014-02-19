@@ -25,6 +25,8 @@ public class ApplicationProviderPersistenceHandler implements ApplicationProvide
 
     @Override
     public RetrievedApplicationProviderEvent retrieveApplicationProvider(RetrieveApplicationProviderEvent retrieveApplicationProviderEvent) {
-        return null;
+        ApplicationProvider appProvider = applicationProviderRepository.findOne(retrieveApplicationProviderEvent.getId());
+        RetrievedApplicationProviderEvent response = new RetrievedApplicationProviderEvent(appProvider.details());
+        return response;
     }
 }
