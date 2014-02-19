@@ -43,18 +43,6 @@ public class ApplicationData {
         this.applicationProviderId = applicationProviderId;
     }
 
-    public Boolean getApproved() {
-        return approved;
-    }
-
-    public Boolean getAdmin() {
-        return admin;
-    }
-
-    public Boolean getBulkExtract() {
-        return bulkExtract;
-    }
-
     public String getClientId() {
         return clientId;
     }
