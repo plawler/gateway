@@ -26,7 +26,9 @@ public class KeyGeneratorFactoryTest {
     @Test
     public void shouldReturnANewKeyGenerator() {
         ApplicationKeyGenerator generator = keyGeneratorFactory.getKeyGenerator("secureRandomKeyGenerator");
-        assertNotNull(generator.generateKey(12));
+        assertNotNull(generator.generateClientId());
+        assertNotNull(generator.generateSharedSecret());
+
     }
 
 }
