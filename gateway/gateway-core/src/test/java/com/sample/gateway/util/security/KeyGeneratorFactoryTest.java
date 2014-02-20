@@ -1,8 +1,5 @@
 package com.sample.gateway.util.security;
 
-import com.sample.gateway.persistence.repository.ApplicationRepository;
-import com.sample.gateway.util.security.ApplicationKeyGenerator;
-import com.sample.gateway.util.security.ApplicationKeyGeneratorFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +22,6 @@ public class KeyGeneratorFactoryTest {
 
     @Autowired
     private ApplicationKeyGeneratorFactory keyGeneratorFactory;
-
-    @Autowired
-    private ApplicationRepository repository;
 
     @Test
     public void shouldReturnANewKeyGenerator() {
