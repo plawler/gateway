@@ -9,6 +9,7 @@ package com.sample.gateway.util.security;
  */
 public interface ApplicationKeyGenerator {
 
-    String generateKey(Integer length);
+    String generateClientId();
+    String generateSharedSecret();
 
 }
