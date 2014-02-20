@@ -19,12 +19,12 @@ end
 Then(/^all is green$/) do
 end
 
-When /^I use the (.*) resource/ do |resource|
-  @resource = RestClient::Resource.new(path_for(resource))
+When /^I GET the (.*) resource$/ do |resource_type|
+  @response = RestClient.get(path_for(resource_type)) { |response, request, results| response }
 end
 
-Then /^a GET on the resource should contain a list of (.*)$/ do |resource_type|
-  body = JSON.parse @resource.get
+Then /^I get a list of (.*)$/ do |resource_type|
+  body = JSON.parse(@response)
   body.should be_a_kind_of Array
   instance_variable_set("@#{resource_type}", body)
 end
@@ -36,8 +36,6 @@ Then /^each realm has an "identifier" and a "name"/ do
   end
 end
 
-Then /^a GET on the resource should not be allowed$/ do
-  @resource.get do |response, request, result|
-    response.code.should == 405
-  end
+Then /^the response status should be (\d+)/ do |code|
+  @response.code.should == code.to_i
 end

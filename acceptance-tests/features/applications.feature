@@ -4,8 +4,8 @@ Feature:
   I need to register my application
 
 Scenario: Application providers are not allowed to get a list of applications
-  When I use the applications resource
-  Then a GET on the resource should not be allowed
+  When I GET the applications resource
+  Then the response status should be 405 Method Not Allowed
 
 Scenario: Application providers can create new applications
   Given I use the applications resource
