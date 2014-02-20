@@ -1,5 +1,8 @@
 package com.sample.gateway.persistence.domain;
 
+import com.sample.gateway.core.event.OperatorData;
+import org.springframework.beans.BeanUtils;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -11,7 +14,7 @@ public class Operator extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int operatorId;
+    private Long operatorId;
 
     private String operatorName;
     private String apiUri;
@@ -30,11 +33,23 @@ public class Operator extends BaseEntity{
 
     }
 
-    public int getOperatorId() {
+    public static Operator fromOperatorData(OperatorData data) {
+        Operator operator = new Operator();
+        BeanUtils.copyProperties(data, operator);
+        return operator;
+    }
+
+    public OperatorData details() {
+        OperatorData data = new OperatorData();
+        BeanUtils.copyProperties(this, data);
+        return data;
+    }
+
+    public Long getOperatorId() {
         return operatorId;
     }
 
-    public void setOperatorId(int operatorId) {
+    public void setOperatorId(Long operatorId) {
         this.operatorId = operatorId;
     }
 
@@ -71,5 +86,6 @@ public class Operator extends BaseEntity{
     public Date getContractEndOn() { return contractEndOn; }
 
     public void setContractEndOn(Date contractEndOn) { this.contractEndOn = contractEndOn; }
+
 
 }
