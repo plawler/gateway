@@ -17,7 +17,7 @@ import static junit.framework.Assert.*;
  * To change this template use File | Settings | File Templates.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"file:gateway-core/src/main/webapp/WEB-INF/applicationContext.xml"})
+@ContextConfiguration({"classpath:applicationContext.xml"})
 public class KeyGeneratorFactoryTest {
 
     @Autowired
