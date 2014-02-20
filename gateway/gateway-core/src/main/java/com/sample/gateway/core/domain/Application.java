@@ -5,6 +5,8 @@ import com.sample.gateway.core.event.ApplicationData;
 import com.sample.gateway.core.event.ModifyApplicationEvent;
 import com.sample.gateway.util.JsonDateSerializer;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowire;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 

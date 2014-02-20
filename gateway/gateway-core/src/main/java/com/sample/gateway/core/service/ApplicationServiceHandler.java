@@ -1,18 +1,15 @@
 package com.sample.gateway.core.service;
 
 import com.sample.gateway.core.domain.Application;
-import com.sample.gateway.core.domain.ApplicationProvider;
 import com.sample.gateway.core.event.*;
 import com.sample.gateway.persistence.repository.ApplicationRepository;
 import com.sample.gateway.persistence.service.ApplicationPersistenceService;
+import com.sample.gateway.util.security.ApplicationKeyGeneratorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.security.SecureRandom;
-import java.util.Date;
 import java.util.Random;
-import java.util.UUID;
 
 /**
  * Created with IntelliJ IDEA.
@@ -34,6 +31,9 @@ class ApplicationServiceHandler implements ApplicationService {
 
     @Autowired
     private ApplicationRepository applicationRepository;
+
+    @Autowired
+    private ApplicationKeyGeneratorFactory keyGeneratorFactory;
 
     @Override
     public RegisteredApplicationEvent registerNewApplication(RegisterApplicationEvent registerApplicationEvent) {

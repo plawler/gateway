@@ -26,7 +26,8 @@
 
     <context:component-scan base-package="com.sample.gateway.persistence.repository,
         com.sample.gateway.persistence.service,
-        com.sample.gateway.core.service"/>
+        com.sample.gateway.core.service,
+        com.sample.gateway.util"/>
 
     <jpa:repositories base-package="com.sample.gateway.persistence.repository"/>
 
@@ -58,5 +59,16 @@
     </bean>
 
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"/>
+
+    <!--<bean id="keyGeneratorFactory" class="org.springframework.beans.factory.config.ServiceLocatorFactoryBean">-->
+        <!--<property name="serviceLocatorInterface" value="com.sample.gateway.util.ApplicationKeyGeneratorFactory"/>-->
+    <!--</bean>-->
+
+    <bean id="myServiceFactory" class="org.springframework.beans.factory.config.ServiceLocatorFactoryBean">
+        <property name="serviceLocatorInterface" value="com.sample.gateway.util.security.ApplicationKeyGeneratorFactory"/>
+    </bean>
+
+    <alias name="SecureRandomKeyGenerator" alias="secureRandomKeyGenerator"/>
+    <!--<bean id="secureRandom" class="com.sample.gateway.util.SecureRandomKeyGenerator"/>-->
 
 </beans>
