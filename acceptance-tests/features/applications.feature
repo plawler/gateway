@@ -8,6 +8,5 @@ Scenario: Application providers are not allowed to get a list of applications
   Then the response status should be 405 Method Not Allowed
 
 Scenario: Application providers can create new applications
-  Given I use the applications resource
    When I POST a new application
    Then I can GET that application
