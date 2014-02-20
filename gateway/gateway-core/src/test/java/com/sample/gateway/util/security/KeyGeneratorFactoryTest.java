@@ -1,4 +1,4 @@
-package com.sample.gateway.util;
+package com.sample.gateway.util.security;
 
 import com.sample.gateway.persistence.repository.ApplicationRepository;
 import com.sample.gateway.util.security.ApplicationKeyGenerator;
@@ -34,6 +34,5 @@ public class KeyGeneratorFactoryTest {
         ApplicationKeyGenerator generator = keyGeneratorFactory.getKeyGenerator("secureRandomKeyGenerator");
         assertNotNull(generator.generateKey(12));
     }
-
 
 }
