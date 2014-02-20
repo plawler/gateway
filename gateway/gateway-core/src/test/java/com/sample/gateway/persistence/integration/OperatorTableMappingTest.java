@@ -33,6 +33,9 @@ public class OperatorTableMappingTest {
         JPAAssertions.assertTableHasColumn(entityManager, "operators", "api_uri");
         JPAAssertions.assertTableHasColumn(entityManager, "operators", "operator_id");
         JPAAssertions.assertTableHasColumn(entityManager, "operators", "is_enabled");
+        JPAAssertions.assertTableHasColumn(entityManager, "operators", "connector_uri");
+        JPAAssertions.assertTableHasColumn(entityManager, "operators", "contract_start_on");
+        JPAAssertions.assertTableHasColumn(entityManager, "operators", "contract_end_on");
 
     }
 }

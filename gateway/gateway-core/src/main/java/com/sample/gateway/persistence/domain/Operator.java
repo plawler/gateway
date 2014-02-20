@@ -1,6 +1,7 @@
 package com.sample.gateway.persistence.domain;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Created by lloydengebretsen on 2/15/14.
@@ -14,6 +15,10 @@ public class Operator extends BaseEntity{
 
     private String operatorName;
     private String apiUri;
+    private String connectorUri;
+    private Date contractStartOn;
+    private Date contractEndOn;
+
     @Column(name="is_enabled", nullable = false, columnDefinition = "TINYINT(1)")
     private boolean enabled;
 
@@ -55,6 +60,16 @@ public class Operator extends BaseEntity{
         this.enabled = enabled;
     }
 
+    public String getConnectorUri() { return connectorUri; }
 
+    public void setConnectorUri(String connectorUri) { this.connectorUri = connectorUri; }
+
+    public Date getContractStartOn() { return contractStartOn; }
+
+    public void setContractStartOn(Date contractStartOn) { this.contractStartOn = contractStartOn; }
+
+    public Date getContractEndOn() { return contractEndOn; }
+
+    public void setContractEndOn(Date contractEndOn) { this.contractEndOn = contractEndOn; }
 
 }
