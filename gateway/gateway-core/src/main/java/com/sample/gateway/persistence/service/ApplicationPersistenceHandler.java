@@ -53,7 +53,7 @@ class ApplicationPersistenceHandler implements ApplicationPersistenceService {
 
         applicationRepository.save(application);
 
-        return new ModifiedApplicationEvent(application.details());
+        return ModifiedApplicationEvent.newInstance(application.getApplicationId(), application.details());
     }
 
 }

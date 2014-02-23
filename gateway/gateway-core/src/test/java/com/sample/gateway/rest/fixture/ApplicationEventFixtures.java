@@ -2,6 +2,7 @@ package com.sample.gateway.rest.fixture;
 
 import com.sample.gateway.core.event.ApplicationData;
 import com.sample.gateway.core.event.RegisteredApplicationEvent;
+import com.sample.gateway.core.event.RetrievedApplicationEvent;
 
 import java.util.Date;
 
@@ -21,6 +22,11 @@ public class ApplicationEventFixtures {
         data.setRegisteredOn(new Date());
         data.setApproved(true);
         return new RegisteredApplicationEvent(data);
+    }
+
+    public static RetrievedApplicationEvent applicationRetrieved(Long applicationId) {
+        RegisteredApplicationEvent event = applicationRegistered(1L);
+        return new RetrievedApplicationEvent(event.getData()); // could decorate? interesting...
     }
 
     public static ApplicationData registerApplicationData() {

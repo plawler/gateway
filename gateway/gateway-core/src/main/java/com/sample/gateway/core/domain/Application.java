@@ -182,12 +182,4 @@ public class Application {
         this.approvedOn = new Date();
     }
 
-    public void modify(ModifyApplicationEvent modifier) {
-        this.applicationName = modifier.getApplicationName();
-        this.description = modifier.getDescription();
-        this.appUri = modifier.getAppUri();
-        this.redirectUri = modifier.getRedirectUri();
-        this.imageUri = getImageUri();
-    }
-
 }

@@ -10,13 +10,15 @@ package com.sample.gateway.core.event;
 public class ModifyApplicationEvent {
 
     private final ApplicationData data;
+    private final Long applicationId;
 
-    public ModifyApplicationEvent(ApplicationData data) {
+    public ModifyApplicationEvent(Long applicationId, ApplicationData data) {
         this.data = data;
+        this.applicationId = applicationId;
     }
 
     public Long getApplicationId() {
-        return data.getApplicationId();
+        return applicationId;
     }
 
     public String getApplicationName() {

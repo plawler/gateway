@@ -1,6 +1,7 @@
 package com.sample.gateway.rest;
 
 import com.sample.gateway.core.event.RegisterApplicationEvent;
+import com.sample.gateway.core.event.RetrieveApplicationEvent;
 import com.sample.gateway.core.service.ApplicationService;
 import org.junit.Before;
 import org.junit.Test;
@@ -62,6 +63,24 @@ public class CreateApplicationIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(redirectedUrl("http://localhost/applications/1"));
+    }
+
+    @Test
+    public void shouldRetrieveAnApplication() throws Exception {
+        Long applicationId = 1L;
+
+        when(applicationService.retrieveApplication(any(RetrieveApplicationEvent.class)))
+                .thenReturn(applicationRetrieved(applicationId));
+
+        this.mockMvc.perform(
+                get("/applications/{id}", applicationId.toString())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void shouldNotModifyAnApplicationThatIsNotFound() {
+
     }
 
 }

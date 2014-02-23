@@ -26,9 +26,6 @@ class ApplicationServiceHandler implements ApplicationService {
     private ApplicationPersistenceService applicationPersistenceService;
 
     @Autowired
-    private ApplicationRepository applicationRepository;
-
-    @Autowired
     private ApplicationKeyGeneratorFactory keyGeneratorFactory;
 
     @Override
@@ -50,12 +47,10 @@ class ApplicationServiceHandler implements ApplicationService {
 
     @Override
     public ModifiedApplicationEvent modifyApplication(ModifyApplicationEvent modifyApplicationEvent) {
-//        RetrievedApplicationEvent retrieved = retrieveApplication(new RetrieveApplicationEvent(modifyApplicationEvent.getApplicationId()));
-
-        // only necessary to retrieve if needed for building nice message for fields changed
-//        Application application = Application.fromApplicationData(retrieved.getData());
-//        application.modify(modifyApplicationEvent);
-
+        RetrievedApplicationEvent retrieved = retrieveApplication(new RetrieveApplicationEvent(modifyApplicationEvent.getApplicationId()));
+        if (retrieved == null) {
+            return ModifiedApplicationEvent.notFound(modifyApplicationEvent.getApplicationId());
+        }
         return applicationPersistenceService.modifyApplication(modifyApplicationEvent);
     }
 }

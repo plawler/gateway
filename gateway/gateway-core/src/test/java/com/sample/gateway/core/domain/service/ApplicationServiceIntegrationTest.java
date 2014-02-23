@@ -83,7 +83,7 @@ public class ApplicationServiceIntegrationTest {
         ApplicationData retrievedData = retrieved.getData();
         retrievedData.setAppUri(modifiedApplicationUri);
 
-        ModifiedApplicationEvent modified = applicationService.modifyApplication(new ModifyApplicationEvent(retrievedData));
+        ModifiedApplicationEvent modified = applicationService.modifyApplication(new ModifyApplicationEvent(retrievedData.getApplicationId(), retrievedData));
         RetrievedApplicationEvent retrievedAgain = applicationService.retrieveApplication(new RetrieveApplicationEvent(modified.getApplicationId()));
 
         assertEquals(modifiedApplicationUri, retrievedAgain.getData().getAppUri());
