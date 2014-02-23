@@ -9,3 +9,7 @@
 # Maven
 log/
 target/
+
+# rvm
+.ruby-version
+.rvmrc
