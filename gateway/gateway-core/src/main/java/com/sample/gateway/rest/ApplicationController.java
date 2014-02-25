@@ -45,15 +45,21 @@ public class ApplicationController {
     public ResponseEntity<Application> getApplication(@PathVariable Long id) {
         RetrievedApplicationEvent retrievedEvent = applicationService.retrieveApplication(new RetrieveApplicationEvent(id));
         Application app = Application.fromApplicationData(retrievedEvent.getData());
-
         return new ResponseEntity<Application>(app, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
     public ResponseEntity updateApplication(@RequestBody Application application, @PathVariable Long id) {
-        ModifiedApplicationEvent modifiedEvent = applicationService.modifyApplication(new ModifyApplicationEvent(application.details()));
+        ModifiedApplicationEvent modifiedEvent = applicationService.modifyApplication(new ModifyApplicationEvent(id, application.details()));
 
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        // should we reject the request??
+        if (!modifiedEvent.getApplicationId().equals(id)) {
+            return new ResponseEntity<Application>(application, HttpStatus.CONFLICT);
+        } else if (modifiedEvent.updateCompleted()) {
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<Application>(application, HttpStatus.NOT_FOUND);
+        }
     }
 
 }

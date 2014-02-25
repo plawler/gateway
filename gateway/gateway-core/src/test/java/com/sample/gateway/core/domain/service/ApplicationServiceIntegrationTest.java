@@ -26,7 +26,7 @@ import static org.junit.Assert.assertTrue;
  * To change this template use File | Settings | File Templates.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"file:gateway-core/src/main/webapp/WEB-INF/applicationContext.xml"})
+@ContextConfiguration({"classpath:applicationContext.xml"})
 @Transactional
 @TransactionConfiguration(defaultRollback = true)
 public class ApplicationServiceIntegrationTest {
@@ -83,7 +83,7 @@ public class ApplicationServiceIntegrationTest {
         ApplicationData retrievedData = retrieved.getData();
         retrievedData.setAppUri(modifiedApplicationUri);
 
-        ModifiedApplicationEvent modified = applicationService.modifyApplication(new ModifyApplicationEvent(retrievedData));
+        ModifiedApplicationEvent modified = applicationService.modifyApplication(new ModifyApplicationEvent(retrievedData.getApplicationId(), retrievedData));
         RetrievedApplicationEvent retrievedAgain = applicationService.retrieveApplication(new RetrieveApplicationEvent(modified.getApplicationId()));
 
         assertEquals(modifiedApplicationUri, retrievedAgain.getData().getAppUri());

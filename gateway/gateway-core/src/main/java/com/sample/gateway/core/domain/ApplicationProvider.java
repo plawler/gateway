@@ -15,7 +15,7 @@ public class ApplicationProvider {
     private Boolean termsAccepted;
     private Boolean accountConfirmed;
 
-    private ApplicationProvider() {};
+    private ApplicationProvider() {}
 
     public static ApplicationProvider fromApplicationProviderData(ApplicationProviderData data){
         ApplicationProvider applicationProvider = new ApplicationProvider();

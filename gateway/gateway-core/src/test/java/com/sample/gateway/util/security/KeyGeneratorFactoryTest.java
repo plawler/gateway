@@ -1,8 +1,5 @@
 package com.sample.gateway.util.security;
 
-import com.sample.gateway.persistence.repository.ApplicationRepository;
-import com.sample.gateway.util.security.ApplicationKeyGenerator;
-import com.sample.gateway.util.security.ApplicationKeyGeneratorFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +17,11 @@ import static junit.framework.Assert.*;
  * To change this template use File | Settings | File Templates.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"file:gateway-core/src/main/webapp/WEB-INF/applicationContext.xml"})
+@ContextConfiguration({"classpath:applicationContext.xml"})
 public class KeyGeneratorFactoryTest {
 
     @Autowired
     private ApplicationKeyGeneratorFactory keyGeneratorFactory;
-
-    @Autowired
-    private ApplicationRepository repository;
 
     @Test
     public void shouldReturnANewKeyGenerator() {
