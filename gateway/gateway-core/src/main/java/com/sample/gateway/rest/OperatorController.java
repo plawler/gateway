@@ -28,9 +28,9 @@ public class OperatorController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Operator> register(@RequestBody Operator operator, UriComponentsBuilder componentsBuilder) {
-        RegisteredOperatorEvent registeredEvent = operatorService.registerOperator(new RegisterOperatorEvent(operator.details()));
+        RegisteredOperatorEvent registeredEvent = operatorService.registerOperator(new RegisterOperatorEvent(operator));
 
-        Operator newOperator = Operator.fromApplicationProviderData(registeredEvent.getData());
+        Operator newOperator = registeredEvent.getData();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(componentsBuilder.path("/operators/{id}")

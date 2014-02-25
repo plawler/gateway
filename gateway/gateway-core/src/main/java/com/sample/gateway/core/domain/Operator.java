@@ -1,6 +1,5 @@
 package com.sample.gateway.core.domain;
 
-import com.sample.gateway.core.event.OperatorData;
 import org.springframework.beans.BeanUtils;
 
 import java.util.Date;
@@ -17,20 +16,6 @@ public class Operator {
     private Date contractStartOn;
     private Date contractEndOn;
     private boolean enabled;
-
-
-    public OperatorData details(){
-        OperatorData oData = new OperatorData();
-        BeanUtils.copyProperties(this, oData);
-        return oData;
-    }
-
-    public static Operator fromApplicationProviderData(OperatorData data) {
-        Operator op = new Operator();
-        BeanUtils.copyProperties(data, op);
-        return op;
-    }
-
 
 
     public Long getOperatorId() {

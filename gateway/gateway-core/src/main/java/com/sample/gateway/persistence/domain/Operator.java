@@ -1,6 +1,5 @@
 package com.sample.gateway.persistence.domain;
 
-import com.sample.gateway.core.event.OperatorData;
 import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
@@ -33,14 +32,14 @@ public class Operator extends BaseEntity{
 
     }
 
-    public static Operator fromOperatorData(OperatorData data) {
+    public static Operator fromDomain(com.sample.gateway.core.domain.Operator data) {
         Operator operator = new Operator();
         BeanUtils.copyProperties(data, operator);
         return operator;
     }
 
-    public OperatorData details() {
-        OperatorData data = new OperatorData();
+    public com.sample.gateway.core.domain.Operator toDomain() {
+        com.sample.gateway.core.domain.Operator data = new com.sample.gateway.core.domain.Operator();
         BeanUtils.copyProperties(this, data);
         return data;
     }

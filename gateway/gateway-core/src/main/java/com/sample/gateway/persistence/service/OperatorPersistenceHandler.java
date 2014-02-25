@@ -1,6 +1,5 @@
 package com.sample.gateway.persistence.service;
 
-import com.sample.gateway.core.event.OperatorData;
 import com.sample.gateway.core.event.RegisterOperatorEvent;
 import com.sample.gateway.core.event.RegisteredOperatorEvent;
 import com.sample.gateway.persistence.domain.Operator;
@@ -19,9 +18,9 @@ public class OperatorPersistenceHandler implements OperatorPersistenceService{
 
     @Override
     public RegisteredOperatorEvent registerOperator(RegisterOperatorEvent registerOperatorEvent) {
-        Operator operator = Operator.fromOperatorData(registerOperatorEvent.getData());
+        Operator operator = Operator.fromDomain(registerOperatorEvent.getData());
         operatorRepository.save(operator);
-        RegisteredOperatorEvent registeredEvent = new RegisteredOperatorEvent(operator.details());
+        RegisteredOperatorEvent registeredEvent = new RegisteredOperatorEvent(operator.toDomain());
         return registeredEvent;
     }
 }
