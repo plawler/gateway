@@ -21,4 +21,5 @@ public class OperatorServiceHandler implements OperatorService {
     public RegisteredOperatorEvent registerOperator(RegisterOperatorEvent operatorRegisterEvent) {
        return operatorPersistenceService.registerOperator(operatorRegisterEvent);
     }
+
 }

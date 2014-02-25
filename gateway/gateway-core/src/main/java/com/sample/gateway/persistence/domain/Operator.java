@@ -32,18 +32,6 @@ public class Operator extends BaseEntity{
 
     }
 
-    public static Operator fromDomain(com.sample.gateway.core.domain.Operator data) {
-        Operator operator = new Operator();
-        BeanUtils.copyProperties(data, operator);
-        return operator;
-    }
-
-    public com.sample.gateway.core.domain.Operator toDomain() {
-        com.sample.gateway.core.domain.Operator data = new com.sample.gateway.core.domain.Operator();
-        BeanUtils.copyProperties(this, data);
-        return data;
-    }
-
     public Long getOperatorId() {
         return operatorId;
     }

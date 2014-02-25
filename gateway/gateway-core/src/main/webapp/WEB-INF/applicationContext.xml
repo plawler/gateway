@@ -60,10 +60,22 @@
 
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"/>
 
-    <bean id="myServiceFactory" class="org.springframework.beans.factory.config.ServiceLocatorFactoryBean">
+    <bean id="keyGeneratorFactory" class="org.springframework.beans.factory.config.ServiceLocatorFactoryBean">
         <property name="serviceLocatorInterface" value="com.sample.gateway.util.security.ApplicationKeyGeneratorFactory"/>
     </bean>
 
     <alias name="SecureRandomKeyGenerator" alias="secureRandomKeyGenerator"/>
+
+    <bean id="conversionService"
+          class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <bean class="com.sample.gateway.util.mapper.DomainApplicationModelMapper"/>
+                <bean class="com.sample.gateway.util.mapper.PersistentApplicationModelMapper"/>
+                <bean class="com.sample.gateway.util.mapper.DomainOperatorModelMapper"/>
+                <bean class="com.sample.gateway.util.mapper.PersistentOperatorModelMapper"/>
+            </set>
+        </property>
+    </bean>
 
 </beans>
