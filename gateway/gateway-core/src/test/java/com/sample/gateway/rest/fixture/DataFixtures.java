@@ -1,5 +1,6 @@
 package com.sample.gateway.rest.fixture;
 
+import com.sample.gateway.core.domain.Operator;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
@@ -16,6 +17,12 @@ public class DataFixtures {
     public static String applicationJson() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(ApplicationEventFixtures.registerApplication());
+    }
+
+    public static String operatorJson() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(OperatorEventFixtures.registerOperator());
+
     }
 
 }

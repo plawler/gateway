@@ -3,6 +3,8 @@ package com.sample.gateway.rest;
 import com.sample.gateway.core.domain.Operator;
 import com.sample.gateway.core.event.RegisterOperatorEvent;
 import com.sample.gateway.core.event.RegisteredOperatorEvent;
+import com.sample.gateway.core.event.RetrieveOperatorEvent;
+import com.sample.gateway.core.event.RetrievedOperatorEvent;
 import com.sample.gateway.core.service.OperatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -39,11 +41,20 @@ public class OperatorController {
         return new ResponseEntity<Operator>(newOperator, headers, HttpStatus.CREATED);
     }
 
-    /*@RequestMapping(method = RequestMethod.GET, value="/{id}")
-    public ResponseEntity<ApplicationProviderEntity> getApplicationProviderEntity(@PathVariable Long id) {
-        RetrievedApplicationProviderEvent retrievedEvent = applicationProviderService.retrieveApplicationProvider(new RetrieveApplicationProviderEvent(id));
-        ApplicationProviderEntity app = ApplicationProviderEntity.fromApplicationProviderData(retrievedEvent.getData());
+    @RequestMapping(method = RequestMethod.GET, value="/{id}")
+    public ResponseEntity<Operator> retrieve(@PathVariable Long id) {
+        Operator operator = new Operator();
+        operator.setOperatorId(id);
+        RetrievedOperatorEvent retrievedEvent = operatorService.retrieveOperator(new RetrieveOperatorEvent(operator));
+        operator = retrievedEvent.getData();
 
-        return new ResponseEntity<ApplicationProviderEntity>(app, HttpStatus.OK);
-    }*/
+        return new ResponseEntity<Operator>(operator, HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value="/{id}")
+    public ResponseEntity modify(@PathVariable Long id) {
+
+        //TODO implement modify
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 }

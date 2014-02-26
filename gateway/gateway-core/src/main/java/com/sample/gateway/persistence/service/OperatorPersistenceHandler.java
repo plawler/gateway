@@ -1,5 +1,6 @@
 package com.sample.gateway.persistence.service;
 
+import com.sample.gateway.core.domain.Operator;
 import com.sample.gateway.core.event.RegisterOperatorEvent;
 import com.sample.gateway.core.event.RegisteredOperatorEvent;
 import com.sample.gateway.core.event.RetrieveOperatorEvent;
@@ -27,13 +28,13 @@ public class OperatorPersistenceHandler implements OperatorPersistenceService {
         OperatorEntity operatorEntity = conversionService.convert(registerOperatorEvent.getData(), OperatorEntity.class);
         operatorRepository.save(operatorEntity);
         return new RegisteredOperatorEvent(conversionService.convert(operatorEntity,
-                com.sample.gateway.core.domain.Operator.class));
+                Operator.class));
     }
 
     @Override
     public RetrievedOperatorEvent retrieveOperator(RetrieveOperatorEvent retrieveOperatorEvent) {
         OperatorEntity retrieved = operatorRepository.findOne(retrieveOperatorEvent.getId());
         return new RetrievedOperatorEvent(conversionService.convert(retrieved,
-                com.sample.gateway.core.domain.Operator.class));
+                Operator.class));
     }
 }
