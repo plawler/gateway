@@ -1,5 +1,7 @@
 package com.sample.gateway.core.event;
 
+import com.sample.gateway.core.domain.Application;
+
 /**
  * Created with IntelliJ IDEA.
  * User: paullawler
@@ -11,22 +13,22 @@ public class ModifiedApplicationEvent {
 
     private final Long applicationId;
     private boolean updateCompleted;
-    private ApplicationData data;
+    private Application application;
 
     private ModifiedApplicationEvent(Long applicationId) {
         this.applicationId = applicationId;
         this.updateCompleted = true;
     }
 
-    public static ModifiedApplicationEvent newInstance(Long applicationId, ApplicationData data) {
+    public static ModifiedApplicationEvent newInstance(Long applicationId, Application application) {
         ModifiedApplicationEvent event = new ModifiedApplicationEvent(applicationId);
         event.updateCompleted = true;
-        event.data = data;
+        event.application = application;
         return event;
     }
 
     public Long getApplicationId() {
-        return data.getApplicationId();
+        return this.applicationId;
     }
 
     public static ModifiedApplicationEvent notFound(Long applicationId) {

@@ -1,5 +1,7 @@
 package com.sample.gateway.core.event;
 
+import com.sample.gateway.core.domain.Application;
+
 /**
  * Created with IntelliJ IDEA.
  * User: paullawler
@@ -9,11 +11,11 @@ package com.sample.gateway.core.event;
  */
 public class ModifyApplicationEvent {
 
-    private final ApplicationData data;
+    private final Application application;
     private final Long applicationId;
 
-    public ModifyApplicationEvent(Long applicationId, ApplicationData data) {
-        this.data = data;
+    public ModifyApplicationEvent(Long applicationId, Application application) {
+        this.application = application;
         this.applicationId = applicationId;
     }
 
@@ -22,31 +24,31 @@ public class ModifyApplicationEvent {
     }
 
     public String getApplicationName() {
-        return data.getApplicationName();
+        return application.getApplicationName();
     }
 
     public String getDescription() {
-        return data.getDescription();
+        return application.getDescription();
     }
 
     public String getAppUri() {
-        return data.getAppUri();
+        return application.getAppUri();
     }
 
     public String getRedirectUri() {
-        return data.getRedirectUri();
+        return application.getRedirectUri();
     }
 
     public String getImageUri() {
-        return data.getImageUri();
+        return application.getImageUri();
     }
 
     public Boolean isAdmin() {
-        return data.getAdmin();
+        return application.getAdmin();
     }
 
     public Boolean isBulkExtract() {
-        return data.getBulkExtract();
+        return application.getBulkExtract();
     }
 
 }

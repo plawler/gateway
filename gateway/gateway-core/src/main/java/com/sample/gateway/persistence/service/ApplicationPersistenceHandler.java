@@ -6,6 +6,7 @@ import com.sample.gateway.persistence.domain.ApplicationProvider;
 import com.sample.gateway.persistence.repository.ApplicationProviderRepository;
 import com.sample.gateway.persistence.repository.ApplicationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -24,19 +25,22 @@ class ApplicationPersistenceHandler implements ApplicationPersistenceService {
     @Autowired
     ApplicationProviderRepository applicationProviderRepository;
 
+    @Autowired
+    ConversionService conversionService;
+
     @Override
     public RegisteredApplicationEvent registerApplication(RegisterApplicationEvent registerApplicationEvent) {
-        Application application = Application.newInstanceFrom(registerApplicationEvent);
+        Application application = conversionService.convert(registerApplicationEvent.getData(), com.sample.gateway.persistence.domain.Application.class);
         ApplicationProvider provider = applicationProviderRepository.findOne(registerApplicationEvent.getApplicationProviderId());
         application.setApplicationProvider(provider); // todo: validate the provider
         applicationRepository.save(application);
-        return new RegisteredApplicationEvent(application.details());
+        return new RegisteredApplicationEvent(convertToDomain(application));
     }
 
     @Override
     public RetrievedApplicationEvent retrieveApplication(RetrieveApplicationEvent retrieveApplication) {
-        Application app = applicationRepository.findOne(retrieveApplication.getApplicationId());
-        return new RetrievedApplicationEvent(app.details());
+        Application application = applicationRepository.findOne(retrieveApplication.getApplicationId());
+        return new RetrievedApplicationEvent(convertToDomain(application));
     }
 
     @Override
@@ -53,7 +57,11 @@ class ApplicationPersistenceHandler implements ApplicationPersistenceService {
 
         applicationRepository.save(application);
 
-        return ModifiedApplicationEvent.newInstance(application.getApplicationId(), application.details());
+        return ModifiedApplicationEvent.newInstance(application.getApplicationId(), convertToDomain(application));
+    }
+
+    private com.sample.gateway.core.domain.Application convertToDomain(Application application) {
+        return conversionService.convert(application, com.sample.gateway.core.domain.Application.class);
     }
 
 }

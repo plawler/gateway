@@ -1,6 +1,5 @@
 package com.sample.gateway.persistence.domain;
 
-import com.sample.gateway.core.event.ApplicationData;
 import com.sample.gateway.core.event.RegisterApplicationEvent;
 import org.springframework.beans.BeanUtils;
 
@@ -172,13 +171,6 @@ public class Application extends BaseEntity {
 
     public void setApplicationProvider(ApplicationProvider applicationProvider) {
         this.applicationProvider = applicationProvider;
-    }
-
-    public ApplicationData details() {
-        ApplicationData dto = new ApplicationData();
-        BeanUtils.copyProperties(this, dto);
-        dto.setApplicationProviderId(this.getApplicationProvider().getApplicationProviderId());
-        return dto;
     }
 
 }

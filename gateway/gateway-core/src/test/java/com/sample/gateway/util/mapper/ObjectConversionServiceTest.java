@@ -8,7 +8,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static com.sample.gateway.rest.fixture.ApplicationEventFixtures.registerApplicationData;
+import static com.sample.gateway.rest.fixture.ApplicationEventFixtures.registerApplication;
 import static org.junit.Assert.*;
 
 /**
@@ -28,7 +28,7 @@ public class ObjectConversionServiceTest {
     @Test
     public void shouldMapADomainToPersistenceModel() {
         assertTrue(true);
-        Application domain = Application.fromApplicationData(registerApplicationData());
+        Application domain = registerApplication();
         com.sample.gateway.persistence.domain.Application persistent = conversionService.convert(domain, com.sample.gateway.persistence.domain.Application.class);
         assertNotNull(persistent);
         assertEquals(persistent.getApplicationName(), domain.getApplicationName());

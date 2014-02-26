@@ -15,6 +15,7 @@ public class DataFixtures {
 
     public static String applicationJson() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(ApplicationEventFixtures.registerApplicationData());
+        return mapper.writeValueAsString(ApplicationEventFixtures.registerApplication());
     }
+
 }

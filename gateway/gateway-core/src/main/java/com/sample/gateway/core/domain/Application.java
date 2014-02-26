@@ -1,12 +1,7 @@
 package com.sample.gateway.core.domain;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.sample.gateway.core.event.ApplicationData;
-import com.sample.gateway.core.event.ModifyApplicationEvent;
 import com.sample.gateway.util.JsonDateSerializer;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowire;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 
@@ -37,9 +32,11 @@ public class Application {
 
     private Application() {}
 
-    public static Application fromApplicationData(ApplicationData applicationData) {
+    public static Application newInstance(Long providerId, String name, String uri) {
         Application application = new Application();
-        BeanUtils.copyProperties(applicationData, application);
+        application.setApplicationProviderId(providerId);
+        application.setApplicationName(name);
+        application.setAppUri(uri);
         return application;
     }
 
@@ -163,12 +160,6 @@ public class Application {
 
     public void setApprovedOn(Date approvedOn) {
         this.approvedOn = approvedOn;
-    }
-
-    public ApplicationData details() {
-        ApplicationData data = new ApplicationData();
-        BeanUtils.copyProperties(this, data);
-        return data;
     }
 
     public void register() {

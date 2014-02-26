@@ -1,5 +1,7 @@
 package com.sample.gateway.core.event;
 
+import com.sample.gateway.core.domain.Application;
+
 /**
  * Created with IntelliJ IDEA.
  * User: paullawler
@@ -9,13 +11,13 @@ package com.sample.gateway.core.event;
  */
 public class RegisteredApplicationEvent {
 
-    private final ApplicationData data;
+    private final Application data;
 
-    public RegisteredApplicationEvent(ApplicationData data) {
+    public RegisteredApplicationEvent(Application data) {
         this.data = data;
     }
 
-    public ApplicationData getData() {
+    public Application getData() {
         return data;
     }
 

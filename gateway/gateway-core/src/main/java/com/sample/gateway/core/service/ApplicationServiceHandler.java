@@ -30,14 +30,14 @@ class ApplicationServiceHandler implements ApplicationService {
 
     @Override
     public RegisteredApplicationEvent registerNewApplication(RegisterApplicationEvent registerApplicationEvent) {
-        Application application = Application.fromApplicationData(registerApplicationEvent.getData());
+        Application application = registerApplicationEvent.getData();
 
         ApplicationKeyGenerator keyGenerator = keyGeneratorFactory.getKeyGenerator("SecureRandomKeyGenerator");
 
         application.approve(keyGenerator.generateClientId(), keyGenerator.generateSharedSecret());
         application.register();
 
-        return applicationPersistenceService.registerApplication(new RegisterApplicationEvent(application.details()));
+        return applicationPersistenceService.registerApplication(new RegisterApplicationEvent(application));
     }
 
     @Override

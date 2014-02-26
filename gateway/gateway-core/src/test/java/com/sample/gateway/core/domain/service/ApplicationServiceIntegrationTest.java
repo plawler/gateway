@@ -1,5 +1,6 @@
 package com.sample.gateway.core.domain.service;
 
+import com.sample.gateway.core.domain.Application;
 import com.sample.gateway.core.domain.ApplicationProvider;
 import com.sample.gateway.core.event.*;
 import com.sample.gateway.core.service.ApplicationProviderService;
@@ -14,6 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.sample.gateway.rest.fixture.ApplicationEventFixtures.registerApplication;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -51,10 +53,7 @@ public class ApplicationServiceIntegrationTest {
 
     @Test
     public void shouldRegisterNewApplication() {
-        ApplicationData data = new ApplicationData();
-        data.setApplicationProviderId(provider.getApplicationProviderId());
-        data.setApplicationName("Test Application");
-        data.setAppUri("http://localhost:9000");
+        Application data = Application.newInstance(provider.getApplicationProviderId(), "Test Application", "http://localhost:9000");
 
         RegisterApplicationEvent registerApplicationEvent = new RegisterApplicationEvent(data);
         RegisteredApplicationEvent registered = applicationService.registerNewApplication(registerApplicationEvent);
@@ -71,7 +70,7 @@ public class ApplicationServiceIntegrationTest {
     public void shouldModifyAnApplication() {
         final String modifiedApplicationUri = "http://localhost:9000/modifiedtestapp";
 
-        ApplicationData data = new ApplicationData();
+        Application data = registerApplication();
         data.setApplicationProviderId(provider.getApplicationProviderId());
         data.setApplicationName("Test Application");
         data.setDescription("An application used as a fixture for testing");
@@ -80,10 +79,10 @@ public class ApplicationServiceIntegrationTest {
         RegisteredApplicationEvent registered = applicationService.registerNewApplication(new RegisterApplicationEvent(data));
         RetrievedApplicationEvent retrieved = applicationService.retrieveApplication(new RetrieveApplicationEvent(registered.getApplicationId()));
 
-        ApplicationData retrievedData = retrieved.getData();
-        retrievedData.setAppUri(modifiedApplicationUri);
+        Application application = retrieved.getData();
+        application.setAppUri(modifiedApplicationUri);
 
-        ModifiedApplicationEvent modified = applicationService.modifyApplication(new ModifyApplicationEvent(retrievedData.getApplicationId(), retrievedData));
+        ModifiedApplicationEvent modified = applicationService.modifyApplication(new ModifyApplicationEvent(application.getApplicationId(), application));
         RetrievedApplicationEvent retrievedAgain = applicationService.retrieveApplication(new RetrieveApplicationEvent(modified.getApplicationId()));
 
         assertEquals(modifiedApplicationUri, retrievedAgain.getData().getAppUri());

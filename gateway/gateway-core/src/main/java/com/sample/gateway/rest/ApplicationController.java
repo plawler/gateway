@@ -30,9 +30,9 @@ public class ApplicationController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Application> register(@RequestBody Application application, UriComponentsBuilder componentsBuilder) {
-        RegisteredApplicationEvent registeredEvent = applicationService.registerNewApplication(new RegisterApplicationEvent(application.details()));
+        RegisteredApplicationEvent registeredEvent = applicationService.registerNewApplication(new RegisterApplicationEvent(application));
 
-        Application newApp = Application.fromApplicationData(registeredEvent.getData());
+        Application newApp = registeredEvent.getData();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(componentsBuilder.path("/applications/{id}")
@@ -44,13 +44,13 @@ public class ApplicationController {
     @RequestMapping(method = RequestMethod.GET, value="/{id}")
     public ResponseEntity<Application> getApplication(@PathVariable Long id) {
         RetrievedApplicationEvent retrievedEvent = applicationService.retrieveApplication(new RetrieveApplicationEvent(id));
-        Application app = Application.fromApplicationData(retrievedEvent.getData());
+        Application app = retrievedEvent.getData();
         return new ResponseEntity<Application>(app, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
     public ResponseEntity updateApplication(@RequestBody Application application, @PathVariable Long id) {
-        ModifiedApplicationEvent modifiedEvent = applicationService.modifyApplication(new ModifyApplicationEvent(id, application.details()));
+        ModifiedApplicationEvent modifiedEvent = applicationService.modifyApplication(new ModifyApplicationEvent(id, application));
 
         // should we reject the request??
         if (!modifiedEvent.getApplicationId().equals(id)) {
