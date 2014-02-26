@@ -1,6 +1,6 @@
 package com.sample.gateway.persistence.domain.fixture;
 
-import com.sample.gateway.persistence.domain.Application;
+import com.sample.gateway.persistence.domain.ApplicationEntity;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,7 +11,7 @@ import com.sample.gateway.persistence.domain.Application;
  */
 public class Fixture {
 
-    public static Application firstApplication() {
+    public static ApplicationEntity firstApplication() {
         return null;
     }
 }

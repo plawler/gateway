@@ -5,14 +5,13 @@ import com.sample.gateway.core.event.RegisterApplicationProviderEvent;
 import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
-import java.util.Collection;
 
 
 /**
  * Created by lloydengebretsen on 2/17/14.
  */
 @Entity(name = "application_providers")
-public class ApplicationProvider extends BaseEntity{
+public class ApplicationProviderEntity extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,21 +26,21 @@ public class ApplicationProvider extends BaseEntity{
     private Boolean accountConfirmed;
 //    @OneToMany
 //    @JoinColumn(name = "application_provider_id", nullable = false)
-//    private Collection<Application> applications;
+//    private Collection<ApplicationEntity> applications;
 
-    public ApplicationProvider(String createdBy){
+    public ApplicationProviderEntity(String createdBy){
         super(createdBy);
     }
 
-    public ApplicationProvider(){
+    public ApplicationProviderEntity(){
         super();
     }
 
 
-    public static ApplicationProvider instanceFrom(RegisterApplicationProviderEvent registerApplicationProviderEvent) {
-        ApplicationProvider applicationProvider = new ApplicationProvider();
-        BeanUtils.copyProperties(registerApplicationProviderEvent.getData(), applicationProvider);
-        return applicationProvider;
+    public static ApplicationProviderEntity instanceFrom(RegisterApplicationProviderEvent registerApplicationProviderEvent) {
+        ApplicationProviderEntity applicationProviderEntity = new ApplicationProviderEntity();
+        BeanUtils.copyProperties(registerApplicationProviderEvent.getData(), applicationProviderEntity);
+        return applicationProviderEntity;
     }
 
     public ApplicationProviderData details() {
@@ -101,11 +100,11 @@ public class ApplicationProvider extends BaseEntity{
 
 
 
-//    public Collection<Application> getApplications() {
+//    public Collection<ApplicationEntity> getApplications() {
 //        return applications;
 //    }
 //
-//    public void setApplications(Collection<Application> applications) {
+//    public void setApplications(Collection<ApplicationEntity> applications) {
 //        this.applications = applications;
 //    }
 

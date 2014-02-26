@@ -53,7 +53,7 @@ public class ApplicationServiceIntegrationTest {
 
     @Test
     public void shouldRegisterNewApplication() {
-        Application data = Application.newInstance(provider.getApplicationProviderId(), "Test Application", "http://localhost:9000");
+        Application data = Application.newInstance(provider.getApplicationProviderId(), "Test ApplicationEntity", "http://localhost:9000");
 
         RegisterApplicationEvent registerApplicationEvent = new RegisterApplicationEvent(data);
         RegisteredApplicationEvent registered = applicationService.registerNewApplication(registerApplicationEvent);
@@ -72,7 +72,7 @@ public class ApplicationServiceIntegrationTest {
 
         Application data = registerApplication();
         data.setApplicationProviderId(provider.getApplicationProviderId());
-        data.setApplicationName("Test Application");
+        data.setApplicationName("Test ApplicationEntity");
         data.setDescription("An application used as a fixture for testing");
         data.setAppUri("http://localhost:9000/testapp");
 

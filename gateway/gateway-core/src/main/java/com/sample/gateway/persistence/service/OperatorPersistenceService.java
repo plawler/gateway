@@ -3,6 +3,8 @@ package com.sample.gateway.persistence.service;
 import com.sample.gateway.core.domain.Operator;
 import com.sample.gateway.core.event.RegisterOperatorEvent;
 import com.sample.gateway.core.event.RegisteredOperatorEvent;
+import com.sample.gateway.core.event.RetrieveOperatorEvent;
+import com.sample.gateway.core.event.RetrievedOperatorEvent;
 import com.sample.gateway.persistence.repository.OperatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,4 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 public interface OperatorPersistenceService {
 
     public RegisteredOperatorEvent registerOperator(RegisterOperatorEvent registerOperatorEvent);
+
+    RetrievedOperatorEvent retrieveOperator(RetrieveOperatorEvent retrieveOperatorEvent);
 }

@@ -40,10 +40,10 @@ public class OperatorController {
     }
 
     /*@RequestMapping(method = RequestMethod.GET, value="/{id}")
-    public ResponseEntity<ApplicationProvider> getApplicationProvider(@PathVariable Long id) {
+    public ResponseEntity<ApplicationProviderEntity> getApplicationProviderEntity(@PathVariable Long id) {
         RetrievedApplicationProviderEvent retrievedEvent = applicationProviderService.retrieveApplicationProvider(new RetrieveApplicationProviderEvent(id));
-        ApplicationProvider app = ApplicationProvider.fromApplicationProviderData(retrievedEvent.getData());
+        ApplicationProviderEntity app = ApplicationProviderEntity.fromApplicationProviderData(retrievedEvent.getData());
 
-        return new ResponseEntity<ApplicationProvider>(app, HttpStatus.OK);
+        return new ResponseEntity<ApplicationProviderEntity>(app, HttpStatus.OK);
     }*/
 }

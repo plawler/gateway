@@ -1,6 +1,6 @@
 package com.sample.gateway.persistence.repository;
 
-import com.sample.gateway.persistence.domain.Application;
+import com.sample.gateway.persistence.domain.ApplicationEntity;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -10,10 +10,10 @@ import org.springframework.data.repository.CrudRepository;
  * Time: 4:22 PM
  * To change this template use File | Settings | File Templates.
  */
-public interface ApplicationRepository extends CrudRepository<Application, Long> {
+public interface ApplicationRepository extends CrudRepository<ApplicationEntity, Long> {
 
-    Application findByApplicationName(String applicationName);
+    ApplicationEntity findByApplicationName(String applicationName);
 
-    Application findByClientId(String clientId);
+    ApplicationEntity findByClientId(String clientId);
 
 }

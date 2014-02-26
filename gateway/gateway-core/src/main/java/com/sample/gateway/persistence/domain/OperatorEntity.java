@@ -9,7 +9,7 @@ import java.util.Date;
  * Created by lloydengebretsen on 2/15/14.
  */
 @Entity(name = "operators")
-public class Operator extends BaseEntity{
+public class OperatorEntity extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,11 +24,11 @@ public class Operator extends BaseEntity{
     @Column(name="is_enabled", nullable = false, columnDefinition = "TINYINT(1)")
     private boolean enabled;
 
-    public Operator(String createdBy){
+    public OperatorEntity(String createdBy){
         super(createdBy);
     }
 
-    public Operator(){
+    public OperatorEntity(){
 
     }
 

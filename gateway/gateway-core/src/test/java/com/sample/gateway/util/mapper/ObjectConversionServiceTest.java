@@ -1,6 +1,7 @@
 package com.sample.gateway.util.mapper;
 
 import com.sample.gateway.core.domain.Application;
+import com.sample.gateway.persistence.domain.ApplicationEntity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class ObjectConversionServiceTest {
     public void shouldMapADomainToPersistenceModel() {
         assertTrue(true);
         Application domain = registerApplication();
-        com.sample.gateway.persistence.domain.Application persistent = conversionService.convert(domain, com.sample.gateway.persistence.domain.Application.class);
+        ApplicationEntity persistent = conversionService.convert(domain, ApplicationEntity.class);
         assertNotNull(persistent);
         assertEquals(persistent.getApplicationName(), domain.getApplicationName());
     }

@@ -1,7 +1,7 @@
 package com.sample.gateway.persistence.integration;
 
 import com.sample.gateway.configuration.JPAConfiguration;
-import com.sample.gateway.persistence.domain.Operator;
+import com.sample.gateway.persistence.domain.OperatorEntity;
 import com.sample.gateway.persistence.repository.OperatorRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,8 +10,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
 
 import static junit.framework.Assert.*;
 
@@ -30,13 +28,13 @@ public class OperatorRepositoryTest {
     @Test
     public void shouldInsertOperatorIntoRepo() {
         String createdBy = "Some Guy";
-        Operator operator = new Operator(createdBy);
-        operator.setOperatorName("A Number One Best Operator");
-        operator.setEnabled(true);
+        OperatorEntity operatorEntity = new OperatorEntity(createdBy);
+        operatorEntity.setOperatorName("A Number One Best OperatorEntity");
+        operatorEntity.setEnabled(true);
 
-        repository.save(operator);
+        repository.save(operatorEntity);
 
-        Operator retrieved = repository.findByOperatorName("A Number One Best Operator");
+        OperatorEntity retrieved = repository.findByOperatorName("A Number One Best OperatorEntity");
         assertNotNull(retrieved);
         assertNotNull(retrieved.getCreatedAt());
         assertEquals("", createdBy, retrieved.getCreatedBy());
@@ -46,13 +44,13 @@ public class OperatorRepositoryTest {
     @Test
     public void shouldDeleteOperatorFromRepo() {
         String createdBy = "Some Other Guy";
-        String operatorName = "Operator the Second";
-        Operator operator = new Operator(createdBy);
-        operator.setOperatorName(operatorName);
+        String operatorName = "OperatorEntity the Second";
+        OperatorEntity operatorEntity = new OperatorEntity(createdBy);
+        operatorEntity.setOperatorName(operatorName);
 
-        repository.save(operator);
+        repository.save(operatorEntity);
 
-        Operator retrieved = repository.findByOperatorName(operatorName);
+        OperatorEntity retrieved = repository.findByOperatorName(operatorName);
 
         repository.delete(retrieved);
 

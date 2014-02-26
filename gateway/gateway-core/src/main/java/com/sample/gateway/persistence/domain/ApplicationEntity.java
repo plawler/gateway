@@ -14,7 +14,7 @@ import java.util.Date;
  * To change this template use File | Settings | File Templates.
  */
 @Entity(name = "applications")
-public class Application extends BaseEntity {
+public class ApplicationEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,16 +43,16 @@ public class Application extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "application_provider_id")
-    private ApplicationProvider applicationProvider;
+    private ApplicationProviderEntity applicationProviderEntity;
 
-    public Application() {
+    public ApplicationEntity() {
         super("created by the persistence layer");
     }
 
-    public static Application newInstanceFrom(RegisterApplicationEvent registerApplication) {
-        Application application = new Application();
-        BeanUtils.copyProperties(registerApplication.getData(), application);
-        return application;
+    public static ApplicationEntity newInstanceFrom(RegisterApplicationEvent registerApplication) {
+        ApplicationEntity applicationEntity = new ApplicationEntity();
+        BeanUtils.copyProperties(registerApplication.getData(), applicationEntity);
+        return applicationEntity;
     }
 
     public Long getApplicationId() {
@@ -165,12 +165,12 @@ public class Application extends BaseEntity {
         this.approvedOn = approvedOn;
     }
 
-    public ApplicationProvider getApplicationProvider() {
-        return applicationProvider;
+    public ApplicationProviderEntity getApplicationProviderEntity() {
+        return applicationProviderEntity;
     }
 
-    public void setApplicationProvider(ApplicationProvider applicationProvider) {
-        this.applicationProvider = applicationProvider;
+    public void setApplicationProviderEntity(ApplicationProviderEntity applicationProviderEntity) {
+        this.applicationProviderEntity = applicationProviderEntity;
     }
 
 }

@@ -1,8 +1,8 @@
 package com.sample.gateway.persistence.integration;
 
 import com.sample.gateway.configuration.JPAConfiguration;
-import com.sample.gateway.persistence.domain.Application;
-import com.sample.gateway.persistence.domain.ApplicationProvider;
+import com.sample.gateway.persistence.domain.ApplicationEntity;
+import com.sample.gateway.persistence.domain.ApplicationProviderEntity;
 import com.sample.gateway.persistence.repository.ApplicationProviderRepository;
 import com.sample.gateway.persistence.repository.ApplicationRepository;
 import org.junit.Test;
@@ -37,50 +37,50 @@ public class ApplicationRepositoryTest {
 
     @Test
     public void shouldInsertApplicationIntoRepo() {
-        ApplicationProvider applicationProvider = new ApplicationProvider("Some Guy");
-        applicationProvider.setAccountConfirmed(true);
-        applicationProvider.setApplicationProviderName("Blue Sun Apps Inc.");
-        applicationProvider.setOrganizationName("Blue Sun");
-        applicationProvider.setTermsAccepted(true);
-        applicationProvider.setUsername("blusun");
-        applicationProvider = applicationProviderRepository.save(applicationProvider);
+        ApplicationProviderEntity applicationProviderEntity = new ApplicationProviderEntity("Some Guy");
+        applicationProviderEntity.setAccountConfirmed(true);
+        applicationProviderEntity.setApplicationProviderName("Blue Sun Apps Inc.");
+        applicationProviderEntity.setOrganizationName("Blue Sun");
+        applicationProviderEntity.setTermsAccepted(true);
+        applicationProviderEntity.setUsername("blusun");
+        applicationProviderEntity = applicationProviderRepository.save(applicationProviderEntity);
 
-        Application application = new Application();
+        ApplicationEntity applicationEntity = new ApplicationEntity();
 
-        application.setApplicationName("Lloyd and Paul's Crazy Edu App");
-        application.setClientId("123456");
-        application.setSharedSecret("asdjhgsdfjgsadjfgkjhgasdjfgjksadghfkjhg");
-        application.setCreatedAt(new Date());
-        application.setCreatedBy("plawler");
-        application.setApplicationProvider(applicationProvider);
+        applicationEntity.setApplicationName("Lloyd and Paul's Crazy Edu App");
+        applicationEntity.setClientId("123456");
+        applicationEntity.setSharedSecret("asdjhgsdfjgsadjfgkjhgasdjfgjksadghfkjhg");
+        applicationEntity.setCreatedAt(new Date());
+        applicationEntity.setCreatedBy("plawler");
+        applicationEntity.setApplicationProviderEntity(applicationProviderEntity);
 
-        repository.save(application);
+        repository.save(applicationEntity);
 
-        Application retrieved = repository.findByApplicationName("Lloyd and Paul's Crazy Edu App");
+        ApplicationEntity retrieved = repository.findByApplicationName("Lloyd and Paul's Crazy Edu App");
 
         assertNotNull(retrieved);
-        assertEquals(applicationProvider.getApplicationProviderId(), application.getApplicationProvider().getApplicationProviderId());
-        assertEquals(applicationProvider.getUsername(), application.getApplicationProvider().getUsername());
+        assertEquals(applicationProviderEntity.getApplicationProviderId(), applicationEntity.getApplicationProviderEntity().getApplicationProviderId());
+        assertEquals(applicationProviderEntity.getUsername(), applicationEntity.getApplicationProviderEntity().getUsername());
     }
 
     @Test
     public void shouldUpdateAnApplicationAndSaveInRepo() {
-        Application application = new Application();
+        ApplicationEntity applicationEntity = new ApplicationEntity();
 
-        application.setApplicationName("My App");
-        application.setClientId("123456");
-        application.setSharedSecret("asdjhgsdfjgsadjfgkjhgasdjfgjksadghfkjhg");
-        application.setCreatedAt(new Date());
-        application.setCreatedBy("plawler");
+        applicationEntity.setApplicationName("My App");
+        applicationEntity.setClientId("123456");
+        applicationEntity.setSharedSecret("asdjhgsdfjgsadjfgkjhgasdjfgjksadghfkjhg");
+        applicationEntity.setCreatedAt(new Date());
+        applicationEntity.setCreatedBy("plawler");
 
-        repository.save(application);
+        repository.save(applicationEntity);
 
-        Application retrieved = repository.findByApplicationName("My App");
+        ApplicationEntity retrieved = repository.findByApplicationName("My App");
         retrieved.setApplicationName("My Modified App");
 
         repository.save(retrieved);
 
-        Application retrievedAgain = repository.findByApplicationName("My Modified App");
+        ApplicationEntity retrievedAgain = repository.findByApplicationName("My Modified App");
 
         assertEquals("My Modified App", retrievedAgain.getApplicationName());
     }

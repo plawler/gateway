@@ -1,8 +1,8 @@
 package com.sample.gateway.persistence.service;
 
 import com.sample.gateway.core.event.*;
-import com.sample.gateway.persistence.domain.Application;
-import com.sample.gateway.persistence.domain.ApplicationProvider;
+import com.sample.gateway.persistence.domain.ApplicationEntity;
+import com.sample.gateway.persistence.domain.ApplicationProviderEntity;
 import com.sample.gateway.persistence.repository.ApplicationProviderRepository;
 import com.sample.gateway.persistence.repository.ApplicationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,38 +30,38 @@ class ApplicationPersistenceHandler implements ApplicationPersistenceService {
 
     @Override
     public RegisteredApplicationEvent registerApplication(RegisterApplicationEvent registerApplicationEvent) {
-        Application application = conversionService.convert(registerApplicationEvent.getData(), com.sample.gateway.persistence.domain.Application.class);
-        ApplicationProvider provider = applicationProviderRepository.findOne(registerApplicationEvent.getApplicationProviderId());
-        application.setApplicationProvider(provider); // todo: validate the provider
-        applicationRepository.save(application);
-        return new RegisteredApplicationEvent(convertToDomain(application));
+        ApplicationEntity applicationEntity = conversionService.convert(registerApplicationEvent.getData(), ApplicationEntity.class);
+        ApplicationProviderEntity provider = applicationProviderRepository.findOne(registerApplicationEvent.getApplicationProviderId());
+        applicationEntity.setApplicationProviderEntity(provider); // todo: validate the provider
+        applicationRepository.save(applicationEntity);
+        return new RegisteredApplicationEvent(convertToDomain(applicationEntity));
     }
 
     @Override
     public RetrievedApplicationEvent retrieveApplication(RetrieveApplicationEvent retrieveApplication) {
-        Application application = applicationRepository.findOne(retrieveApplication.getApplicationId());
-        return new RetrievedApplicationEvent(convertToDomain(application));
+        ApplicationEntity applicationEntity = applicationRepository.findOne(retrieveApplication.getApplicationId());
+        return new RetrievedApplicationEvent(convertToDomain(applicationEntity));
     }
 
     @Override
     public ModifiedApplicationEvent modifyApplication(ModifyApplicationEvent modifyApplicationEvent) {
-        Application application = applicationRepository.findOne(modifyApplicationEvent.getApplicationId());
+        ApplicationEntity applicationEntity = applicationRepository.findOne(modifyApplicationEvent.getApplicationId());
 
-        application.setApplicationName(modifyApplicationEvent.getApplicationName());
-        application.setDescription(modifyApplicationEvent.getDescription());
-        application.setAppUri(modifyApplicationEvent.getAppUri());
-        application.setRedirectUri(modifyApplicationEvent.getRedirectUri());
-        application.setImageUri(modifyApplicationEvent.getImageUri());
-        application.setAdmin(modifyApplicationEvent.isAdmin());
-        application.setBulkExtract(modifyApplicationEvent.isBulkExtract());
+        applicationEntity.setApplicationName(modifyApplicationEvent.getApplicationName());
+        applicationEntity.setDescription(modifyApplicationEvent.getDescription());
+        applicationEntity.setAppUri(modifyApplicationEvent.getAppUri());
+        applicationEntity.setRedirectUri(modifyApplicationEvent.getRedirectUri());
+        applicationEntity.setImageUri(modifyApplicationEvent.getImageUri());
+        applicationEntity.setAdmin(modifyApplicationEvent.isAdmin());
+        applicationEntity.setBulkExtract(modifyApplicationEvent.isBulkExtract());
 
-        applicationRepository.save(application);
+        applicationRepository.save(applicationEntity);
 
-        return ModifiedApplicationEvent.newInstance(application.getApplicationId(), convertToDomain(application));
+        return ModifiedApplicationEvent.newInstance(applicationEntity.getApplicationId(), convertToDomain(applicationEntity));
     }
 
-    private com.sample.gateway.core.domain.Application convertToDomain(Application application) {
-        return conversionService.convert(application, com.sample.gateway.core.domain.Application.class);
+    private com.sample.gateway.core.domain.Application convertToDomain(ApplicationEntity applicationEntity) {
+        return conversionService.convert(applicationEntity, com.sample.gateway.core.domain.Application.class);
     }
 
 }
