@@ -18,3 +18,50 @@ end
 Then /^the response status should be (\d+)/ do |code|
   @response.code.should == code.to_i
 end
+
+# operator registration
+Given(/^I have a JSON representation of an operator$/) do
+  @operator_json = operator_resource.to_json
+end
+
+When(/^I POST to the (.*?) resource$/) do |resource|
+  @response = RestClient.post(path_for(resource), @operator_json, :content_type => :json)
+  @operator = JSON.parse(@response)
+end
+
+Then(/^the operator has an "identifier"$/) do
+  @operator['operatorId'].should_not be nil
+end
+
+# operator retrieval
+When /^I GET that operator resource$/ do
+  @response = RestClient.get(@response.headers[:location], :accept => :json)
+end
+
+# operator modification
+Given(/^I modify that resource$/) do
+  @operator['operatorName'] = 'Illinois Cloud'
+  @operator['enabled'] = false
+end
+
+When /^I PUT that operator resource$/ do
+  url = path_for('operators') + "/#{@operator['operatorId']}"
+  @response = RestClient.put(url, @operator, :content_type => :json)
+end
+
+Then /^the operator should be modified$/ do
+  url = path_for('operators') + "/#{@operator['operatorId']}"
+  @response = RestClient.get(url)
+  modified = JSON.parse(@response)
+  modified['enabled'].should be false
+  modified['operatorName'].should == @operator['operatorName']
+end
+
+def operator_resource
+  {
+      "operatorName" => "Illini Cloud",
+      "apiUri" => "http://localhost:8080",
+      "connectorUri" => "http://localhost:8080/connector",
+      "enabled" => true
+  }
+end
