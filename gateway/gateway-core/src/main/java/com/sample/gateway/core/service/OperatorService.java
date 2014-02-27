@@ -1,9 +1,6 @@
 package com.sample.gateway.core.service;
 
-import com.sample.gateway.core.event.RegisterOperatorEvent;
-import com.sample.gateway.core.event.RegisteredOperatorEvent;
-import com.sample.gateway.core.event.RetrieveOperatorEvent;
-import com.sample.gateway.core.event.RetrievedOperatorEvent;
+import com.sample.gateway.core.event.*;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,5 +13,6 @@ public interface OperatorService {
 
     public RetrievedOperatorEvent retrieveOperator(RetrieveOperatorEvent retrieveOperatorEvent);
 
+    public ModifiedOperatorEvent modifyOperator(ModifyOperatorEvent modifyOperatorEvent);
 
 }

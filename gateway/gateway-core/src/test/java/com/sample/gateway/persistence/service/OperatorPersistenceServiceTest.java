@@ -1,10 +1,8 @@
 package com.sample.gateway.persistence.service;
 
-import com.sample.gateway.core.event.RegisterOperatorEvent;
+import com.sample.gateway.core.event.*;
 import com.sample.gateway.core.domain.Operator;
-import com.sample.gateway.core.event.RegisteredOperatorEvent;
-import com.sample.gateway.core.event.RetrieveOperatorEvent;
-import com.sample.gateway.core.event.RetrievedOperatorEvent;
+import com.sample.gateway.persistence.domain.fixture.Fixture;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +32,8 @@ public class OperatorPersistenceServiceTest {
 
     @Test
     public void shouldRegisterAnOperator() {
-        RegisteredOperatorEvent event = createOperator("Illini Cloud");
+        String operatorName = "Illini Cloud";
+        RegisteredOperatorEvent event = operatorPersistenceService.registerOperator(new RegisterOperatorEvent(Fixture.buildOperator(operatorName)));
 
         assertNotNull(event);
         assertNotNull(event.getOperatorId());
@@ -43,13 +42,13 @@ public class OperatorPersistenceServiceTest {
     @Test
     public void shouldRetrieveAnOperator() {
         String operatorName = "My Operator";
-        RegisteredOperatorEvent registeredEvent = createOperator(operatorName);
+        RegisteredOperatorEvent registeredEvent = operatorPersistenceService.registerOperator(new RegisterOperatorEvent(Fixture.buildOperator(operatorName)));
 
         assertNotNull(registeredEvent);
         assertNotNull(registeredEvent.getOperatorId());
 
         Long id = registeredEvent.getOperatorId();
-        RetrievedOperatorEvent retrievedEvent = retrieveOperator(id);
+        RetrievedOperatorEvent retrievedEvent = operatorPersistenceService.retrieveOperator(new RetrieveOperatorEvent(id));
 
         assertNotNull(retrievedEvent);
         assertEquals(id, retrievedEvent.getData().getOperatorId());
@@ -57,18 +56,32 @@ public class OperatorPersistenceServiceTest {
 
     }
 
-    private RetrievedOperatorEvent retrieveOperator(Long id) {
-        Operator template = new Operator();
-        template.setOperatorId(id);
-        return operatorPersistenceService.retrieveOperator(new RetrieveOperatorEvent(template));
+    @Test
+    public void shouldModifyAnOperator() {
+        String operatorName = "My Operator";
+        String modifiedName = "Your Operator";
+
+
+        RegisteredOperatorEvent registeredEvent = operatorPersistenceService.registerOperator(new RegisterOperatorEvent(Fixture.buildOperator(operatorName)));
+
+        assertNotNull(registeredEvent);
+        assertNotNull(registeredEvent.getOperatorId());
+
+        Long id = registeredEvent.getOperatorId();
+        Long modifiedId = new Long(id + 1);
+        Operator retrievedOperator = operatorPersistenceService.retrieveOperator(new RetrieveOperatorEvent(id)).getData();
+        assertEquals(operatorName, retrievedOperator.getOperatorName());
+
+        retrievedOperator.setOperatorName(modifiedName);
+        retrievedOperator.setOperatorId(modifiedId); //This should not persist to the database
+
+        ModifiedOperatorEvent modifiedEvent = operatorPersistenceService.modifyOperator(new ModifyOperatorEvent(id, retrievedOperator));
+        assertTrue(modifiedEvent.isUpdateSuccessful());
+
+
+
+        Operator modified = operatorPersistenceService.retrieveOperator(new RetrieveOperatorEvent(id)).getData();
+        assertEquals(modifiedName, modified.getOperatorName());
+        assertNotEquals(modifiedId, modified.getOperatorId());
     }
-
-    private RegisteredOperatorEvent createOperator(String name) {
-        Operator operator = new Operator();
-        operator.setOperatorName(name);
-        operator.setEnabled(true);
-
-        return operatorPersistenceService.registerOperator(new RegisterOperatorEvent(operator));
-    }
-
 }

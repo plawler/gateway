@@ -1,10 +1,7 @@
 package com.sample.gateway.rest;
 
 import com.sample.gateway.core.domain.Operator;
-import com.sample.gateway.core.event.RegisterOperatorEvent;
-import com.sample.gateway.core.event.RegisteredOperatorEvent;
-import com.sample.gateway.core.event.RetrieveOperatorEvent;
-import com.sample.gateway.core.event.RetrievedOperatorEvent;
+import com.sample.gateway.core.event.*;
 import com.sample.gateway.core.service.OperatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -43,18 +40,24 @@ public class OperatorController {
 
     @RequestMapping(method = RequestMethod.GET, value="/{id}")
     public ResponseEntity<Operator> retrieve(@PathVariable Long id) {
-        Operator operator = new Operator();
-        operator.setOperatorId(id);
-        RetrievedOperatorEvent retrievedEvent = operatorService.retrieveOperator(new RetrieveOperatorEvent(operator));
-        operator = retrievedEvent.getData();
+        RetrievedOperatorEvent retrievedEvent = operatorService.retrieveOperator(new RetrieveOperatorEvent(id));
+        Operator operator = retrievedEvent.getData();
 
         return new ResponseEntity<Operator>(operator, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value="/{id}")
-    public ResponseEntity modify(@PathVariable Long id) {
+    public ResponseEntity modify(@RequestBody Operator operator, @PathVariable Long id) {
 
-        //TODO implement modify
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        ModifiedOperatorEvent modifiedEvent = operatorService.modifyOperator(new ModifyOperatorEvent(id, operator));
+
+        // should we reject the request??
+        if (!modifiedEvent.getId().equals(id)) {
+            return new ResponseEntity<Operator>(operator, HttpStatus.CONFLICT);
+        } else if (modifiedEvent.isUpdateSuccessful()) {
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<Operator>(operator, HttpStatus.NOT_FOUND);
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.sample.gateway.rest.fixture;
 
 import com.sample.gateway.core.domain.Operator;
+import com.sample.gateway.core.event.ModifiedOperatorEvent;
 import com.sample.gateway.core.event.RegisteredOperatorEvent;
 import com.sample.gateway.core.event.RetrievedOperatorEvent;
 
@@ -24,6 +25,13 @@ public class OperatorEventFixtures {
         operator.setOperatorId(operatorId);
 
         return new RetrievedOperatorEvent(operator);
+    }
+
+    public static ModifiedOperatorEvent operatorModified(Long operatorId) {
+        Operator operator = registerOperator();
+        operator.setOperatorId(operatorId);
+
+        return new ModifiedOperatorEvent(operatorId, operator, true, "Success");
     }
 
     public static Operator registerOperator() {

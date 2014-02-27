@@ -1,10 +1,7 @@
 package com.sample.gateway.persistence.service;
 
 import com.sample.gateway.core.domain.Operator;
-import com.sample.gateway.core.event.RegisterOperatorEvent;
-import com.sample.gateway.core.event.RegisteredOperatorEvent;
-import com.sample.gateway.core.event.RetrieveOperatorEvent;
-import com.sample.gateway.core.event.RetrievedOperatorEvent;
+import com.sample.gateway.core.event.*;
 import com.sample.gateway.persistence.domain.OperatorEntity;
 import com.sample.gateway.persistence.repository.OperatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,5 +33,21 @@ public class OperatorPersistenceHandler implements OperatorPersistenceService {
         OperatorEntity retrieved = operatorRepository.findOne(retrieveOperatorEvent.getId());
         return new RetrievedOperatorEvent(conversionService.convert(retrieved,
                 Operator.class));
+    }
+
+    @Override
+    public ModifiedOperatorEvent modifyOperator(ModifyOperatorEvent modifyOperatorEvent) {
+        OperatorEntity entity = operatorRepository.findOne(modifyOperatorEvent.getId());
+
+        entity.setOperatorName(modifyOperatorEvent.getOperatorName());
+        entity.setApiUri(modifyOperatorEvent.getApiUri());
+        entity.setConnectorUri(modifyOperatorEvent.getConnectorUri());
+        entity.setEnabled(modifyOperatorEvent.isEnabled());
+        entity.setContractStartOn(modifyOperatorEvent.getContractStartOn());
+        entity.setContractEndOn(modifyOperatorEvent.getContractEndOn());
+
+        operatorRepository.save(entity);
+
+        return new ModifiedOperatorEvent(modifyOperatorEvent.getId(), conversionService.convert(entity, Operator.class), true, "Update Successful");
     }
 }

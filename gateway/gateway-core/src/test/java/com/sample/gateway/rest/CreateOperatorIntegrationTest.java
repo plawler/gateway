@@ -1,5 +1,6 @@
 package com.sample.gateway.rest;
 
+import com.sample.gateway.core.event.ModifyOperatorEvent;
 import com.sample.gateway.core.event.RegisterOperatorEvent;
 import com.sample.gateway.core.event.RetrieveOperatorEvent;
 import com.sample.gateway.core.service.OperatorService;
@@ -76,7 +77,15 @@ public class CreateOperatorIntegrationTest {
     }
 
     @Test
-    public void shouldModifyAnOperator() {
+    public void shouldModifyAnOperator() throws Exception {
+        Long operatorId = new Long(1L);
+        when(operatorService.modifyOperator(any(ModifyOperatorEvent.class))).thenReturn(operatorModified(1L));
 
+        this.mockMvc.perform(put("/operators/{id}", operatorId.toString())
+                .content(operatorJson())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNoContent());
     }
 }

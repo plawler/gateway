@@ -2,6 +2,7 @@ package com.sample.gateway.persistence.integration;
 
 import com.sample.gateway.configuration.JPAConfiguration;
 import com.sample.gateway.persistence.domain.OperatorEntity;
+import com.sample.gateway.persistence.domain.fixture.Fixture;
 import com.sample.gateway.persistence.repository.OperatorRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,34 +28,45 @@ public class OperatorRepositoryTest {
 
     @Test
     public void shouldInsertOperatorIntoRepo() {
-        String createdBy = "Some Guy";
-        OperatorEntity operatorEntity = new OperatorEntity(createdBy);
-        operatorEntity.setOperatorName("A Number One Best OperatorEntity");
-        operatorEntity.setEnabled(true);
-
+        OperatorEntity operatorEntity = Fixture.buildOperatorEntity("A Number One Best OperatorEntity");
         repository.save(operatorEntity);
 
         OperatorEntity retrieved = repository.findByOperatorName("A Number One Best OperatorEntity");
         assertNotNull(retrieved);
         assertNotNull(retrieved.getCreatedAt());
-        assertEquals("", createdBy, retrieved.getCreatedBy());
         assertTrue(retrieved.isEnabled());
     }
 
     @Test
     public void shouldDeleteOperatorFromRepo() {
-        String createdBy = "Some Other Guy";
         String operatorName = "OperatorEntity the Second";
-        OperatorEntity operatorEntity = new OperatorEntity(createdBy);
-        operatorEntity.setOperatorName(operatorName);
+        OperatorEntity operatorEntity = Fixture.buildOperatorEntity(operatorName);
 
         repository.save(operatorEntity);
 
         OperatorEntity retrieved = repository.findByOperatorName(operatorName);
 
         repository.delete(retrieved);
-
         assertNull(repository.findByOperatorName(operatorName));
     }
+
+    @Test
+    public void shouldUpdateOperator() {
+        String operatorName = "Original Operator";
+        String modifiedName = "Modified Operator";
+        OperatorEntity operatorEntity = Fixture.buildOperatorEntity(operatorName);
+        repository.save(operatorEntity);
+
+        operatorEntity = repository.findByOperatorName(operatorName);
+        operatorEntity.setOperatorName(modifiedName);
+        repository.save(operatorEntity);
+
+
+        OperatorEntity modified = repository.findByOperatorName(modifiedName);
+        assertNotNull(modified);
+        assertEquals(modifiedName, modified.getOperatorName());
+    }
+
+
 
 }

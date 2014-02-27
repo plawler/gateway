@@ -7,11 +7,11 @@ import com.sample.gateway.core.domain.Operator;
  */
 public class RetrieveOperatorEvent {
 
-    private final Operator data;
+    private final Long id;
 
-    public RetrieveOperatorEvent(Operator data) {
-        this.data = data;
+    public RetrieveOperatorEvent(Long id) {
+        this.id = id;
     }
 
-    public Long getId(){ return data.getOperatorId(); };
+    public Long getId(){ return id; };
 }
