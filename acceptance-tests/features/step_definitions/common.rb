@@ -46,7 +46,7 @@ end
 
 When /^I PUT that operator resource$/ do
   url = path_for('operators') + "/#{@operator['operatorId']}"
-  @response = RestClient.put(url, @operator, :content_type => :json)
+  @response = RestClient.put(url, @operator.to_json, :content_type => :json)
 end
 
 Then /^the operator should be modified$/ do
