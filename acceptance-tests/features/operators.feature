@@ -9,7 +9,7 @@ Background:
 Scenario: inBloom admin registers an operator
   When I POST to the operators resource
   Then the response status should be 201 Created
-    And the operator has an "identifier"
+    And the operator has an identifier
   
 Scenario: inBloom admin can retrieve an operator that has been registered
   Given I POST to the operators resource

@@ -8,7 +8,7 @@ Then /^I get a list of (.*)$/ do |resource_type|
   instance_variable_set("@#{resource_type}", body)
 end
 
-Then /^each realm has an "identifier" and a "name"/ do
+Then /^each realm has an "identifier" and a "name"$/ do
   @realms.each do |realm|
     realm['identifier'].should_not be_nil
     realm['name'].should_not be_nil
@@ -20,17 +20,17 @@ Then /^the response status should be (\d+)/ do |code|
 end
 
 # operator registration
-Given(/^I have a JSON representation of an operator$/) do
+Given /^I have a JSON representation of an operator$/ do
   @operator_json = operator_resource.to_json
 end
 
-When(/^I POST to the (.*?) resource$/) do |resource|
+When /^I POST to the (.*?) resource$/ do |resource|
   @response = RestClient.post(path_for(resource), @operator_json, :content_type => :json)
   @operator = JSON.parse(@response)
 end
 
-Then(/^the operator has an "identifier"$/) do
-  @operator['operatorId'].should_not be nil
+Then /^the operator has an identifier$/ do
+  @operator['operatorId'].should_not be_nil
 end
 
 # operator retrieval
@@ -39,18 +39,18 @@ When /^I GET that operator resource$/ do
 end
 
 # operator modification
-Given(/^I modify that resource$/) do
+Given /^I modify that resource$/ do
   @operator['operatorName'] = 'Illinois Cloud'
   @operator['enabled'] = false
 end
 
 When /^I PUT that operator resource$/ do
-  url = path_for('operators') + "/#{@operator['operatorId']}"
+  url = path_for('operators', @operator['operatorId'])
   @response = RestClient.put(url, @operator.to_json, :content_type => :json)
 end
 
 Then /^the operator should be modified$/ do
-  url = path_for('operators') + "/#{@operator['operatorId']}"
+  url = path_for('operators', @operator['operatorId'])
   @response = RestClient.get(url)
   modified = JSON.parse(@response)
   modified['enabled'].should be false
@@ -59,9 +59,9 @@ end
 
 def operator_resource
   {
-      "operatorName" => "Illini Cloud",
-      "apiUri" => "http://localhost:8080",
-      "connectorUri" => "http://localhost:8080/connector",
-      "enabled" => true
+    'operatorName' => 'Illini Cloud',
+    'apiUri' => 'http://localhost:8080',
+    'connectorUri' => 'http://localhost:8080/connector',
+    'enabled' => true
   }
 end
