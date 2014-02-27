@@ -49,12 +49,6 @@ public class ApplicationEntity extends BaseEntity {
         super("created by the persistence layer");
     }
 
-    public static ApplicationEntity newInstanceFrom(RegisterApplicationEvent registerApplication) {
-        ApplicationEntity applicationEntity = new ApplicationEntity();
-        BeanUtils.copyProperties(registerApplication.getData(), applicationEntity);
-        return applicationEntity;
-    }
-
     public Long getApplicationId() {
         return applicationId;
     }

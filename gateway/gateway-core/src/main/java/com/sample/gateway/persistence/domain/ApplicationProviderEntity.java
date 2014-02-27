@@ -24,9 +24,6 @@ public class ApplicationProviderEntity extends BaseEntity{
     private Boolean termsAccepted;
     @Column(name="is_account_confirmed", columnDefinition = "TINYINT(1)")
     private Boolean accountConfirmed;
-//    @OneToMany
-//    @JoinColumn(name = "application_provider_id", nullable = false)
-//    private Collection<ApplicationEntity> applications;
 
     public ApplicationProviderEntity(String createdBy){
         super(createdBy);
