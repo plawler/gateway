@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
+
 /**
  * Created by lloydengebretsen on 2/20/14.
  */
@@ -26,7 +28,7 @@ public class OperatorController {
 
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Operator> register(@RequestBody Operator operator, UriComponentsBuilder componentsBuilder) {
+    public ResponseEntity<Operator> register(@Valid @RequestBody Operator operator, UriComponentsBuilder componentsBuilder) {
         RegisteredOperatorEvent registeredEvent = operatorService.registerOperator(new RegisterOperatorEvent(operator));
 
         Operator newOperator = registeredEvent.getData();

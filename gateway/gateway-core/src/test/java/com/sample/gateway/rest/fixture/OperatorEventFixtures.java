@@ -50,4 +50,10 @@ public class OperatorEventFixtures {
 
         return operator;
     }
+
+    public static Operator registerInvalidOperator() {
+        Operator operator = registerOperator();
+        operator.setOperatorName(null);
+        return operator;
+    }
 }

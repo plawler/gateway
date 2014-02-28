@@ -1,5 +1,6 @@
 package com.sample.gateway.core.domain;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.BeanUtils;
 
 import java.util.Date;
@@ -10,6 +11,8 @@ import java.util.Date;
 public class Operator {
 
     private Long operatorId;
+
+    @NotEmpty
     private String operatorName;
     private String apiUri;
     private String connectorUri;

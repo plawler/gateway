@@ -17,10 +17,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.io.IOException;
-
-import static com.sample.gateway.rest.fixture.DataFixtures.applicationJson;
-import static com.sample.gateway.rest.fixture.DataFixtures.operatorJson;
+import static com.sample.gateway.rest.fixture.JsonFixtures.invalidOperatorJson;
+import static com.sample.gateway.rest.fixture.JsonFixtures.operatorJson;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -47,7 +45,9 @@ public class CreateOperatorIntegrationTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller)
-                .setMessageConverters(new MappingJackson2HttpMessageConverter()).build();
+                .setMessageConverters(new MappingJackson2HttpMessageConverter())
+                .setHandlerExceptionResolvers(TestUtil.createExceptionResolver())
+                .build();
     }
 
     @Test
@@ -62,6 +62,18 @@ public class CreateOperatorIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(redirectedUrl("http://localhost/operators/1"));
     }
+
+    @Test
+    public void shouldHandleAnInvalidOperatorRegistration() throws Exception {
+
+        this.mockMvc.perform(post("/operators")
+                .content(invalidOperatorJson())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
 
     @Test
     public void shouldRetrieveAnOperator() throws Exception {
@@ -88,4 +100,5 @@ public class CreateOperatorIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isNoContent());
     }
+
 }

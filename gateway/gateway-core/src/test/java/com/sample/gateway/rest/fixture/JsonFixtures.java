@@ -12,7 +12,7 @@ import java.io.IOException;
  * Time: 1:55 PM
  * To change this template use File | Settings | File Templates.
  */
-public class DataFixtures {
+public class JsonFixtures {
 
     public static String applicationJson() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
@@ -20,9 +20,16 @@ public class DataFixtures {
     }
 
     public static String operatorJson() throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(OperatorEventFixtures.registerOperator());
+        return stringify(OperatorEventFixtures.registerOperator());
+    }
 
+    public static String invalidOperatorJson() throws IOException {
+        return stringify(OperatorEventFixtures.registerInvalidOperator());
+    }
+
+    private static String stringify(Operator operator) throws IOException{
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(operator);
     }
 
 }

@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static com.sample.gateway.rest.fixture.ApplicationEventFixtures.*;
-import static com.sample.gateway.rest.fixture.DataFixtures.*;
+import static com.sample.gateway.rest.fixture.JsonFixtures.*;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
