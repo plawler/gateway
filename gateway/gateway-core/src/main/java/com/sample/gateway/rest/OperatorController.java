@@ -26,7 +26,6 @@ public class OperatorController {
     @Autowired
     private OperatorService operatorService;
 
-
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Operator> register(@Valid @RequestBody Operator operator, UriComponentsBuilder componentsBuilder) {
         RegisteredOperatorEvent registeredEvent = operatorService.registerOperator(new RegisterOperatorEvent(operator));
@@ -44,7 +43,6 @@ public class OperatorController {
     public ResponseEntity<Operator> retrieve(@PathVariable Long id) {
         RetrievedOperatorEvent retrievedEvent = operatorService.retrieveOperator(new RetrieveOperatorEvent(id));
         Operator operator = retrievedEvent.getData();
-
         return new ResponseEntity<Operator>(operator, HttpStatus.OK);
     }
 
