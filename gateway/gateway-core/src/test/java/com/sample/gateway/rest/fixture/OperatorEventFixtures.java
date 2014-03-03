@@ -48,6 +48,9 @@ public class OperatorEventFixtures {
         operator.setEnabled(true);
         operator.setOperatorName("Fixture Data Operator");
 
+        operator.setPrimaryContactName("John Jacob Jingleheimer-Smith");
+        operator.setPrimaryContactEmail("jjingleheimersmith@some-domain.com");
+
         return operator;
     }
 
