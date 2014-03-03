@@ -199,6 +199,7 @@
                 <configuration>
                     <includes>
                         <include>**/*Tests.java</include>
+                        <include>**/*Test.java</include>
                     </includes>
                 </configuration>
                 <version>${maven-surefire-plugin-version}</version>
