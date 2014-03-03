@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS `gateway`.`operators` (
   `contract_end_on` DATE NULL,
   `primary_contact_name` VARCHAR(128) NULL,
   `primary_contact_email` VARCHAR(128) NULL,
+  `primary_contact_phone` VARCHAR(10) NULL,
   `created_at` DATETIME NULL,
   `created_by` VARCHAR(45) NULL,
   `updated_at` DATETIME NULL,

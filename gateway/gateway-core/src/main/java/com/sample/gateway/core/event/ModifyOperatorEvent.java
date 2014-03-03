@@ -53,4 +53,8 @@ public class ModifyOperatorEvent {
         return data.getPrimaryContactEmail();
     }
 
+    public String getPrimaryContactPhone() {
+        return data.getPrimaryContactPhone();
+    }
+
 }

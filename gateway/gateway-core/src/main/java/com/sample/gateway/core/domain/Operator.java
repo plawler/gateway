@@ -5,7 +5,9 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.URL;
 
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 /**
@@ -42,6 +44,9 @@ public class Operator {
     @NotEmpty
     @Length(max = 128, message = "Length may not exceed 128 characters")
     private String primaryContactEmail;
+
+    @Pattern(regexp = "\\d{10}")
+    private String primaryContactPhone;
 
 
     public Long getOperatorId() {
@@ -116,4 +121,11 @@ public class Operator {
         this.primaryContactEmail = primaryContactEmail;
     }
 
+    public String getPrimaryContactPhone() {
+        return primaryContactPhone;
+    }
+
+    public void setPrimaryContactPhone(String primaryContactPhone) {
+        this.primaryContactPhone = primaryContactPhone;
+    }
 }

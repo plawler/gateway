@@ -50,6 +50,8 @@ public class OperatorEventFixtures {
 
         operator.setPrimaryContactName("John Jacob Jingleheimer-Smith");
         operator.setPrimaryContactEmail("jjingleheimersmith@some-domain.com");
+        operator.setPrimaryContactPhone("1234567890");
+
 
         return operator;
     }

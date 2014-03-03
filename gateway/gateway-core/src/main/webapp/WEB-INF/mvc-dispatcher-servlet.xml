@@ -14,9 +14,21 @@
 
     <mvc:annotation-driven/>
 
+    <mvc:resources mapping="/docs/**" location="/doc-ui/" />
+
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/pages/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
+
+    <!-- to specify swagger properties
+        documentation.services.basePath=http://localhost:8080/swagger-springmvc-test
+    documentation.services.version=1.0
+    -->
+    <context:property-placeholder location="classpath:swagger.properties" />
+    <!-- Configuration Bean -->
+    <bean id="documentationConfig" class="com.mangofactory.swagger.configuration.DocumentationConfig"/>
+    <!-- Custom extensibility module (bean) Has override methods to customize the document generation-->
+    <!--<bean id="extensibilityModule" class="com.mangofactory.swagger.springmvc.example.config.ExampleExtensibilityModule" /> -->
 
 </beans>
