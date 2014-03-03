@@ -1,5 +1,7 @@
 package com.sample.gateway.core.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.sample.gateway.util.JsonDateSerializer;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -30,7 +32,10 @@ public class Operator {
     @Length(max = 128, message = "Length may not exceed 128 characters")
     private String connectorUri;
 
+    @JsonSerialize(using = JsonDateSerializer.class)
     private Date contractStartOn;
+
+    @JsonSerialize(using = JsonDateSerializer.class)
     private Date contractEndOn;
 
     @NotNull
