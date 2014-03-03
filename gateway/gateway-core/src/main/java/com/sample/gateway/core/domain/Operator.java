@@ -1,8 +1,11 @@
 package com.sample.gateway.core.domain;
 
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.BeanUtils;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -14,10 +17,21 @@ public class Operator {
 
     @NotEmpty
     private String operatorName;
+
+    @URL
+    @NotEmpty
+    @Length(max = 128)
     private String apiUri;
+
+    @URL
+    @NotEmpty
+    @Length(max = 128)
     private String connectorUri;
+
     private Date contractStartOn;
     private Date contractEndOn;
+
+    @NotNull
     private boolean enabled;
 
 
