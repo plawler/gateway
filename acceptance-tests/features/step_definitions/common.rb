@@ -25,12 +25,12 @@ Given /^I have a JSON representation of an operator$/ do
 end
 
 When /^I POST to the (.*?) resource$/ do |resource|
-  RestClient.post(path_for(resource), @operator_json, :content_type => :json) { |response, request, result|
+  RestClient.post(path_for(resource), @operator_json, :content_type => :json) do |response, request, result|
     @response = response
     if response.code == 201
       @operator = JSON.parse(@response)
     end
-  }
+  end
 end
 
 
