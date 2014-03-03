@@ -54,6 +54,8 @@ public class OperatorEventFixtures {
     public static Operator registerInvalidOperator() {
         Operator operator = registerOperator();
         operator.setOperatorName(null);
+        operator.setApiUri("not a valid url");
+        operator.setConnectorUri("much too long string dsgfafsadfsadjgkhsadkljghlaksdjghkjasdghlkjsdghkjshglkjsajlhsdklgjhasdkjghskaldjghksdajghlkasdjghkljsdghklasjdghkasdjghlkasdjghkjsadghksjdghsdagfsdadsgfdsgdsgdsgsdg");
         return operator;
     }
 }
