@@ -25,9 +25,14 @@ Given /^I have a JSON representation of an operator$/ do
 end
 
 When /^I POST to the (.*?) resource$/ do |resource|
-  @response = RestClient.post(path_for(resource), @operator_json, :content_type => :json)
-  @operator = JSON.parse(@response)
+  RestClient.post(path_for(resource), @operator_json, :content_type => :json) { |response, request, result|
+    @response = response
+    if response.code == 201
+      @operator = JSON.parse(@response)
+    end
+  }
 end
+
 
 Then /^the operator has an identifier$/ do
   @operator['operatorId'].should_not be_nil
@@ -55,6 +60,12 @@ Then /^the operator should be modified$/ do
   modified = JSON.parse(@response)
   modified['enabled'].should be false
   modified['operatorName'].should == @operator['operatorName']
+end
+
+Given /^I have an invalid JSON representation of an operator$/ do
+  bad_operator = JSON.parse(@operator_json)
+  bad_operator['operatorName'] = ''
+  @operator_json = bad_operator.to_json
 end
 
 def operator_resource
