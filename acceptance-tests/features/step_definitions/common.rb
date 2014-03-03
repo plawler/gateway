@@ -71,6 +71,8 @@ end
 def operator_resource
   {
     'operatorName' => 'Illini Cloud',
+    'primaryContactName' => 'Chief Illiniwek',
+    'primaryContactEmail' => 'chief@illinicloud.edu',
     'apiUri' => 'http://localhost:8080',
     'connectorUri' => 'http://localhost:8080/connector',
     'enabled' => true
