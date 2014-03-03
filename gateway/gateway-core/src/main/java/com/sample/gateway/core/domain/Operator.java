@@ -20,12 +20,12 @@ public class Operator {
 
     @URL
     @NotEmpty
-    @Length(max = 128)
+    @Length(max = 128, message = "Length may not exceed 128 characters")
     private String apiUri;
 
     @URL
     @NotEmpty
-    @Length(max = 128)
+    @Length(max = 128, message = "Length may not exceed 128 characters")
     private String connectorUri;
 
     private Date contractStartOn;
@@ -35,12 +35,12 @@ public class Operator {
     private boolean enabled;
 
     @NotEmpty
-    @Length(max = 128)
+    @Length(max = 128, message = "Length may not exceed 128 characters")
     private String primaryContactName;
 
     @Email
     @NotEmpty
-    @Length(max = 128)
+    @Length(max = 128, message = "Length may not exceed 128 characters")
     private String primaryContactEmail;
 
 
