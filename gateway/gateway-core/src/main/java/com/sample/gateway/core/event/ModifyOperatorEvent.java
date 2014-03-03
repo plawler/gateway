@@ -45,4 +45,12 @@ public class ModifyOperatorEvent {
         return data.getContractEndOn();
     }
 
+    public String getPrimaryContactName() {
+        return data.getPrimaryContactName();
+    }
+
+    public String getPrimaryContactEmail() {
+        return data.getPrimaryContactEmail();
+    }
+
 }

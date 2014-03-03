@@ -45,6 +45,8 @@ public class OperatorPersistenceHandler implements OperatorPersistenceService {
         entity.setEnabled(modifyOperatorEvent.isEnabled());
         entity.setContractStartOn(modifyOperatorEvent.getContractStartOn());
         entity.setContractEndOn(modifyOperatorEvent.getContractEndOn());
+        entity.setPrimaryContactEmail(modifyOperatorEvent.getPrimaryContactEmail());
+        entity.setPrimaryContactName(modifyOperatorEvent.getPrimaryContactName());
 
         operatorRepository.save(entity);
 

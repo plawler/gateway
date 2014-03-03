@@ -1,9 +1,9 @@
 package com.sample.gateway.core.domain;
 
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.URL;
-import org.springframework.beans.BeanUtils;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -33,6 +33,15 @@ public class Operator {
 
     @NotNull
     private boolean enabled;
+
+    @NotEmpty
+    @Length(max = 128)
+    private String primaryContactName;
+
+    @Email
+    @NotEmpty
+    @Length(max = 128)
+    private String primaryContactEmail;
 
 
     public Long getOperatorId() {
@@ -89,6 +98,22 @@ public class Operator {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getPrimaryContactName() {
+        return primaryContactName;
+    }
+
+    public void setPrimaryContactName(String primaryContactName) {
+        this.primaryContactName = primaryContactName;
+    }
+
+    public String getPrimaryContactEmail() {
+        return primaryContactEmail;
+    }
+
+    public void setPrimaryContactEmail(String primaryContactEmail) {
+        this.primaryContactEmail = primaryContactEmail;
     }
 
 }

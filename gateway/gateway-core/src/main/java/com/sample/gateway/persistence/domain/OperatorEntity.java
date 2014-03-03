@@ -20,6 +20,8 @@ public class OperatorEntity extends BaseEntity{
     private String connectorUri;
     private Date contractStartOn;
     private Date contractEndOn;
+    private String primaryContactName;
+    private String primaryContactEmail;
 
     @Column(name="is_enabled", nullable = false, columnDefinition = "TINYINT(1)")
     private boolean enabled;
@@ -74,5 +76,19 @@ public class OperatorEntity extends BaseEntity{
 
     public void setContractEndOn(Date contractEndOn) { this.contractEndOn = contractEndOn; }
 
+    public String getPrimaryContactName() {
+        return primaryContactName;
+    }
 
+    public void setPrimaryContactName(String primaryContactName) {
+        this.primaryContactName = primaryContactName;
+    }
+
+    public String getPrimaryContactEmail() {
+        return primaryContactEmail;
+    }
+
+    public void setPrimaryContactEmail(String primaryContactEmail) {
+        this.primaryContactEmail = primaryContactEmail;
+    }
 }
