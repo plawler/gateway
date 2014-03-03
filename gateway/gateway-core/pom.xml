@@ -146,6 +146,12 @@
             <version>5.0.3.Final</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.mangofactory</groupId>
+            <artifactId>swagger-springmvc</artifactId>
+            <version>0.6.5</version>
+        </dependency>
+
         <!-- TEST dependencies. -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -170,6 +176,7 @@
                 <directory>src/main/webapp/WEB-INF</directory>
                 <includes>
                     <include>*.xml</include>
+                    <include>*.properties</include>
                 </includes>
             </resource>
         </resources>
@@ -179,6 +186,7 @@
                 <directory>src/main/webapp/WEB-INF</directory>
                 <includes>
                     <include>*.xml</include>
+                    <include>*.properties</include>
                 </includes>
             </testResource>
         </testResources>
