@@ -51,7 +51,6 @@ public class OperatorController {
 
         ModifiedOperatorEvent modifiedEvent = operatorService.modifyOperator(new ModifyOperatorEvent(id, operator));
 
-        // should we reject the request??
         if (!modifiedEvent.getId().equals(id)) {
             return new ResponseEntity<Operator>(operator, HttpStatus.CONFLICT);
         } else if (modifiedEvent.isUpdateSuccessful()) {
