@@ -24,3 +24,8 @@ Scenario: inBloom admin can modify an operator that has been registered
   Then the response status should be 204 No Content
     And the operator should be modified
 
+Scenario: Gateway will reject an invalid operator
+  Given I have an invalid JSON representation of an operator
+  When I POST to the operators resource
+  Then the response status should be 400 Bad Request
+
