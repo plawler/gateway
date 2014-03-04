@@ -38,11 +38,6 @@ public class OperatorEventFixtures {
         operator.setApiUri("https://localhost/api");
         operator.setConnectorUri("https://localhost/connector");
 
-        operator.setContractStartOn(new Date());
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.YEAR, 1);
-        operator.setContractEndOn(cal.getTime());
-
         operator.setEnabled(true);
         operator.setOperatorName("Fixture Data Operator");
 

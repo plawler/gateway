@@ -37,14 +37,6 @@ public class ModifyOperatorEvent {
         return data.isEnabled();
     }
 
-    public Date getContractStartOn() {
-        return data.getContractStartOn();
-    }
-
-    public Date getContractEndOn() {
-        return data.getContractEndOn();
-    }
-
     public String getPrimaryContactName() {
         return data.getPrimaryContactName();
     }

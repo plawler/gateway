@@ -18,8 +18,6 @@ public class OperatorEntity extends BaseEntity{
     private String operatorName;
     private String apiUri;
     private String connectorUri;
-    private Date contractStartOn;
-    private Date contractEndOn;
     private String primaryContactName;
     private String primaryContactEmail;
     private String primaryContactPhone;
@@ -68,14 +66,6 @@ public class OperatorEntity extends BaseEntity{
     public String getConnectorUri() { return connectorUri; }
 
     public void setConnectorUri(String connectorUri) { this.connectorUri = connectorUri; }
-
-    public Date getContractStartOn() { return contractStartOn; }
-
-    public void setContractStartOn(Date contractStartOn) { this.contractStartOn = contractStartOn; }
-
-    public Date getContractEndOn() { return contractEndOn; }
-
-    public void setContractEndOn(Date contractEndOn) { this.contractEndOn = contractEndOn; }
 
     public String getPrimaryContactName() {
         return primaryContactName;
