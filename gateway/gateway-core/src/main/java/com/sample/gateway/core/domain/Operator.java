@@ -32,12 +32,6 @@ public class Operator {
     @Length(max = 128, message = "Length may not exceed 128 characters")
     private String connectorUri;
 
-    @JsonSerialize(using = JsonDateSerializer.class)
-    private Date contractStartOn;
-
-    @JsonSerialize(using = JsonDateSerializer.class)
-    private Date contractEndOn;
-
     @NotNull
     private boolean enabled;
 
@@ -84,22 +78,6 @@ public class Operator {
 
     public void setConnectorUri(String connectorUri) {
         this.connectorUri = connectorUri;
-    }
-
-    public Date getContractStartOn() {
-        return contractStartOn;
-    }
-
-    public void setContractStartOn(Date contractStartOn) {
-        this.contractStartOn = contractStartOn;
-    }
-
-    public Date getContractEndOn() {
-        return contractEndOn;
-    }
-
-    public void setContractEndOn(Date contractEndOn) {
-        this.contractEndOn = contractEndOn;
     }
 
     public boolean isEnabled() {

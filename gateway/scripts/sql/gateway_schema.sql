@@ -16,8 +16,6 @@ CREATE TABLE IF NOT EXISTS `gateway`.`operators` (
   `api_uri` VARCHAR(128) NULL,
   `connector_uri` VARCHAR(128) NULL,
   `is_enabled` TINYINT(1) NULL,
-  `contract_start_on` DATE NULL,
-  `contract_end_on` DATE NULL,
   `primary_contact_name` VARCHAR(128) NULL,
   `primary_contact_email` VARCHAR(128) NULL,
   `primary_contact_phone` VARCHAR(10) NULL,

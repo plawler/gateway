@@ -25,10 +25,6 @@ public class Fixture {
         OperatorEntity operatorEntity = new OperatorEntity(createdBy);
         operatorEntity.setOperatorName(operatorName);
         operatorEntity.setEnabled(true);
-        Calendar cal = Calendar.getInstance();
-        operatorEntity.setContractStartOn(cal.getTime());
-        cal.add(Calendar.YEAR, 1 );
-        operatorEntity.setContractEndOn(cal.getTime());
 
         String hypehnatedName = operatorName.replaceAll(" ", "-");
         operatorEntity.setConnectorUri("http://"+hypehnatedName+".com/connector");
@@ -44,10 +40,6 @@ public class Fixture {
 
         operator.setOperatorName(name);
         operator.setEnabled(true);
-        Calendar cal = Calendar.getInstance();
-        operator.setContractStartOn(cal.getTime());
-        cal.add(Calendar.YEAR, 1 );
-        operator.setContractEndOn(cal.getTime());
 
         String hypehnatedName = name.replaceAll(" ", "-");
         operator.setConnectorUri("http://"+hypehnatedName+".com/connector");
