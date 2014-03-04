@@ -13,15 +13,15 @@
         http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
     <!--<sec:http auto-config="true">-->
-        <!--<sec:intercept-url pattern="/**" access="ROLE_USER"/>-->
+    <!--<sec:intercept-url pattern="/**" access="ROLE_USER"/>-->
     <!--</sec:http>-->
 
     <!--<sec:authentication-manager>-->
-        <!--<sec:authentication-provider>-->
-            <!--<sec:user-service>-->
-                <!--<sec:user name="leonard" password="nimoy" authorities="ROLE_USER"/>-->
-            <!--</sec:user-service>-->
-        <!--</sec:authentication-provider>-->
+    <!--<sec:authentication-provider>-->
+    <!--<sec:user-service>-->
+    <!--<sec:user name="leonard" password="nimoy" authorities="ROLE_USER"/>-->
+    <!--</sec:user-service>-->
+    <!--</sec:authentication-provider>-->
     <!--</sec:authentication-manager>-->
 
     <context:component-scan base-package="com.sample.gateway.persistence.repository,
@@ -58,10 +58,13 @@
         </property>
     </bean>
 
-    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"/>
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
 
     <bean id="keyGeneratorFactory" class="org.springframework.beans.factory.config.ServiceLocatorFactoryBean">
-        <property name="serviceLocatorInterface" value="com.sample.gateway.util.security.ApplicationKeyGeneratorFactory"/>
+        <property name="serviceLocatorInterface"
+                  value="com.sample.gateway.util.security.ApplicationKeyGeneratorFactory"/>
     </bean>
 
     <alias name="SecureRandomKeyGenerator" alias="secureRandomKeyGenerator"/>

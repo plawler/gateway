@@ -20,7 +20,7 @@ public class JsonFixtures {
     }
 
     public static String operatorJson() throws IOException {
-        return stringify(OperatorEventFixtures.registerOperator());
+        return stringify(OperatorEventFixtures.newOperator());
     }
 
     public static String invalidOperatorJson() throws IOException {

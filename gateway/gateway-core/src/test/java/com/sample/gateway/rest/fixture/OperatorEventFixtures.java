@@ -14,29 +14,27 @@ import java.util.Date;
 public class OperatorEventFixtures {
 
     public static RegisteredOperatorEvent operatorRegistered(Long operatorId) {
-        Operator operator = registerOperator();
+        Operator operator = newOperator();
         operator.setOperatorId(operatorId);
 
         return new RegisteredOperatorEvent(operator);
     }
 
     public static RetrievedOperatorEvent operatorRetrieved(Long operatorId) {
-        Operator operator = registerOperator();
+        Operator operator = newOperator();
         operator.setOperatorId(operatorId);
 
         return new RetrievedOperatorEvent(operator);
     }
 
     public static ModifiedOperatorEvent operatorModified(Long operatorId) {
-        Operator operator = registerOperator();
+        Operator operator = newOperator();
         operator.setOperatorId(operatorId);
-
         return new ModifiedOperatorEvent(operatorId, operator, true, "Success");
     }
 
-    public static Operator registerOperator() {
+    public static Operator newOperator() {
         Operator operator = new Operator();
-        operator.setOperatorId(1L);
         operator.setApiUri("https://localhost/api");
         operator.setConnectorUri("https://localhost/connector");
 
@@ -57,7 +55,7 @@ public class OperatorEventFixtures {
     }
 
     public static Operator registerInvalidOperator() {
-        Operator operator = registerOperator();
+        Operator operator = newOperator();
         operator.setOperatorName(null);
         operator.setApiUri("not a valid url");
         operator.setConnectorUri("much too long string dsgfafsadfsadjgkhsadkljghlaksdjghkjasdghlkjsdghkjshglkjsajlhsdklgjhasdkjghskaldjghksdajghlkasdjghkljsdghklasjdghkasdjghlkasdjghkjsadghksjdghsdagfsdadsgfdsgdsgdsgsdg");

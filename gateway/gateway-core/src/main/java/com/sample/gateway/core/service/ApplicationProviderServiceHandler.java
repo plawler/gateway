@@ -7,11 +7,13 @@ import com.sample.gateway.core.event.RetrievedApplicationProviderEvent;
 import com.sample.gateway.persistence.service.ApplicationProviderPersistenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by lloydengebretsen on 2/18/14.
  */
 @Service
+@Transactional
 public class ApplicationProviderServiceHandler implements ApplicationProviderService {
 
     @Autowired
@@ -22,7 +24,7 @@ public class ApplicationProviderServiceHandler implements ApplicationProviderSer
         return applicationProviderPersistenceService.registerApplicationProvider(registerApplicationProviderEvent);
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public RetrievedApplicationProviderEvent retrieveApplicationProvider(RetrieveApplicationProviderEvent retrieveApplicationProviderEvent) {
         return applicationProviderPersistenceService.retrieveApplicationProvider(retrieveApplicationProviderEvent);
     }
