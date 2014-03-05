@@ -89,6 +89,19 @@ public class CreateOperatorIntegrationTest {
     }
 
     @Test
+    public void shouldHandleRetrieveOperatorNotFound() throws Exception {
+        Long operatorId = new Long(-1L);
+        when(operatorService.retrieveOperator(any(RetrieveOperatorEvent.class))).thenReturn(operatorNotFound());
+
+        this.mockMvc.perform(get("/operators/{id}", operatorId.toString())
+                .content(operatorJson())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     public void shouldModifyAnOperator() throws Exception {
         Long operatorId = new Long(1L);
         when(operatorService.modifyOperator(any(ModifyOperatorEvent.class))).thenReturn(operatorModified(1L));
@@ -101,4 +114,16 @@ public class CreateOperatorIntegrationTest {
                 .andExpect(status().isNoContent());
     }
 
+    @Test
+    public void shouldHandleModifyOperatorNotFound() throws Exception {
+        Long operatorId = new Long(-1L);
+        when(operatorService.modifyOperator(any(ModifyOperatorEvent.class))).thenReturn(operatorModifiedNotFound());
+
+        this.mockMvc.perform(put("/operators/{id}", operatorId.toString())
+                .content(operatorJson())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
 }

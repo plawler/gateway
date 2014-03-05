@@ -27,10 +27,18 @@ public class OperatorEventFixtures {
         return new RetrievedOperatorEvent(operator);
     }
 
+    public static RetrievedOperatorEvent operatorNotFound() {
+        return new RetrievedOperatorEvent(null);
+    }
+
     public static ModifiedOperatorEvent operatorModified(Long operatorId) {
         Operator operator = newOperator();
         operator.setOperatorId(operatorId);
         return new ModifiedOperatorEvent(operatorId, operator, true, "Success");
+    }
+
+    public static ModifiedOperatorEvent operatorModifiedNotFound() {
+        return new ModifiedOperatorEvent(null, null, false, "Not Found");
     }
 
     public static Operator newOperator() {
