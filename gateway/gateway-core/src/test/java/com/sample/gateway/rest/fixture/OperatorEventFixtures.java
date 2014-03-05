@@ -34,11 +34,11 @@ public class OperatorEventFixtures {
     public static ModifiedOperatorEvent operatorModified(Long operatorId) {
         Operator operator = newOperator();
         operator.setOperatorId(operatorId);
-        return new ModifiedOperatorEvent(operatorId, operator, true, "Success");
+        return ModifiedOperatorEvent.success(operatorId, operator);
     }
 
-    public static ModifiedOperatorEvent operatorModifiedNotFound() {
-        return new ModifiedOperatorEvent(null, null, false, "Not Found");
+    public static ModifiedOperatorEvent operatorModifiedNotFound(Long id) {
+        return ModifiedOperatorEvent.notFound(id);
     }
 
     public static Operator newOperator() {

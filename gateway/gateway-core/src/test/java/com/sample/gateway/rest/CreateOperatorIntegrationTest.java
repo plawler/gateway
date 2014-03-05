@@ -117,7 +117,7 @@ public class CreateOperatorIntegrationTest {
     @Test
     public void shouldHandleModifyOperatorNotFound() throws Exception {
         Long operatorId = new Long(-1L);
-        when(operatorService.modifyOperator(any(ModifyOperatorEvent.class))).thenReturn(operatorModifiedNotFound());
+        when(operatorService.modifyOperator(any(ModifyOperatorEvent.class))).thenReturn(operatorModifiedNotFound(operatorId));
 
         this.mockMvc.perform(put("/operators/{id}", operatorId.toString())
                 .content(operatorJson())

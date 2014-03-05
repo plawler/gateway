@@ -29,6 +29,14 @@ public class OperatorServiceHandler implements OperatorService {
 
     @Override
     public ModifiedOperatorEvent modifyOperator(ModifyOperatorEvent modifyOperatorEvent) {
+
+        RetrievedOperatorEvent retrievedOperatorEvent = retrieveOperator(new RetrieveOperatorEvent(modifyOperatorEvent.getId()));
+        if(retrievedOperatorEvent.getData() == null)
+        {
+            //could not find entity by id
+            return ModifiedOperatorEvent.notFound(modifyOperatorEvent.getId());
+        }
+
         return operatorPersistenceService.modifyOperator(modifyOperatorEvent);
     }
 

@@ -68,17 +68,26 @@ public class OperatorController {
     public ResponseEntity modify(@RequestBody Operator operator, @PathVariable Long id) {
 
         if(id == null) {
+            //fail fast if this came in without a valid Id
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        } else if (operator.getOperatorId() != null && !id.equals(operator.getOperatorId())) {
+            //fail fast if the id from endpoint does not match the one passed in the request body
+            // (i.e. can't update the operatorId)
+            return new ResponseEntity<Operator>(operator, HttpStatus.CONFLICT);
         }
 
         ModifiedOperatorEvent modifiedEvent = operatorService.modifyOperator(new ModifyOperatorEvent(id, operator));
 
-        if (modifiedEvent.getId() != null && !id.equals(modifiedEvent.getId())) {
-            return new ResponseEntity<Operator>(operator, HttpStatus.CONFLICT);
-        } else if (modifiedEvent.isUpdateSuccessful()) {
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
-        } else {
-            return new ResponseEntity<Operator>(operator, HttpStatus.NOT_FOUND);
+        //request failed, check reason and return correct error code
+        if (!modifiedEvent.isUpdateSuccessful()) {
+            if(ModifiedOperatorEvent.NOT_FOUND.equals(modifiedEvent.getStatusMessage())) {
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+            else {
+                return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);//throw 500 error if we don't know why this failed
+            }
         }
+
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }

@@ -49,6 +49,6 @@ public class OperatorPersistenceHandler implements OperatorPersistenceService {
 
         operatorRepository.save(entity);
 
-        return new ModifiedOperatorEvent(modifyOperatorEvent.getId(), conversionService.convert(entity, Operator.class), true, "Update Successful");
+        return ModifiedOperatorEvent.success(modifyOperatorEvent.getId(), conversionService.convert(entity, Operator.class));
     }
 }
