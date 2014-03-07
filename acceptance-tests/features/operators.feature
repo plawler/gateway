@@ -35,7 +35,7 @@ Scenario: Operator updates will fail if ids conflict
   When I PUT that operator resource with the wrong id on the URL
   Then the response status should be 409 Conflict
 
-Scenario: Operator updates will
+Scenario: Operator updates will not complete if the resource is not found
   Given I POST to the operators resource
     And I GET that operator resource
     And I modify that resource with an unknown id
