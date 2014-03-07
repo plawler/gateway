@@ -51,7 +51,7 @@ end
 
 When /^I PUT that operator resource$/ do
   url = path_for('operators', @operator['operatorId'])
-  @response = RestClient.put(url, @operator.to_json, :content_type => :json)
+  RestClient.put(url, @operator.to_json, :content_type => :json) { |response, request, result| @response = response }
 end
 
 Then /^the operator should be modified$/ do
@@ -66,6 +66,15 @@ Given /^I have an invalid JSON representation of an operator$/ do
   bad_operator = JSON.parse(@operator_json)
   bad_operator['operatorName'] = ''
   @operator_json = bad_operator.to_json
+end
+
+When /^I PUT that operator resource with the wrong id on the URL$/ do
+  url = path_for('operators', 0)
+  RestClient.put(url, @operator.to_json, :content_type => :json) { |response, request, result| @response = response }
+end
+
+Given /^I modify that resource with an unknown id$/ do
+  @operator['operatorId'] = 0
 end
 
 def operator_resource

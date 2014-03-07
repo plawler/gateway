@@ -29,3 +29,15 @@ Scenario: Gateway will reject an invalid operator
   When I POST to the operators resource
   Then the response status should be 400 Bad Request
 
+Scenario: Operator updates will fail if ids conflict
+  Given I POST to the operators resource
+    And I GET that operator resource
+  When I PUT that operator resource with the wrong id on the URL
+  Then the response status should be 409 Conflict
+
+Scenario: Operator updates will
+  Given I POST to the operators resource
+    And I GET that operator resource
+    And I modify that resource with an unknown id
+  When I PUT that operator resource
+  Then the response status should be 404 Not Found

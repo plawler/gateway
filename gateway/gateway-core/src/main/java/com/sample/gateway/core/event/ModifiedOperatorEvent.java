@@ -5,25 +5,16 @@ import com.sample.gateway.core.domain.Operator;
 /**
  * Created by lloydengebretsen on 2/27/14.
  */
-public class ModifiedOperatorEvent {
-
-    public static final String SUCCESS = "Update Successful";
-    public static final String NOT_FOUND = "Update failed, id not found";
+public class ModifiedOperatorEvent implements Event {
 
     private final Long id;
-    private final Operator data;
     private final Boolean updateSuccessful;
-    private final String statusMessage;
+    private final Status status;
 
-    public ModifiedOperatorEvent(Long id, Operator data, Boolean updateSuccessful, String statusMessage) {
-        this.data = data;
+    private ModifiedOperatorEvent(Long id, final Boolean updateSuccessful, Status status) {
         this.id = id;
         this.updateSuccessful = updateSuccessful;
-        this.statusMessage = statusMessage;
-    }
-
-    public Operator getData() {
-        return data;
+        this.status = status;
     }
 
     public Long getId() {
@@ -34,18 +25,17 @@ public class ModifiedOperatorEvent {
         return updateSuccessful;
     }
 
-    public String getStatusMessage() {
-        return statusMessage;
+    public static ModifiedOperatorEvent notFound(Long id) {
+        return new ModifiedOperatorEvent(id, false, Status.NOT_FOUND);
     }
 
-    public static ModifiedOperatorEvent notFound(Long id)
-    {
-        return new ModifiedOperatorEvent(id, null, false, NOT_FOUND);
+    public static ModifiedOperatorEvent success(Long id) {
+        return new ModifiedOperatorEvent(id, true, Status.SUCCESS);
     }
 
-    public static ModifiedOperatorEvent success(Long id, Operator modified)
-    {
-        return new ModifiedOperatorEvent(id, modified, true, SUCCESS);
+    @Override
+    public Status status() {
+        return this.status;
     }
 
 }
