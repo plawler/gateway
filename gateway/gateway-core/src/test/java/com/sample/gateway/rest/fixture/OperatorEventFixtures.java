@@ -34,7 +34,7 @@ public class OperatorEventFixtures {
     public static ModifiedOperatorEvent operatorModified(Long operatorId) {
         Operator operator = newOperator();
         operator.setOperatorId(operatorId);
-        return ModifiedOperatorEvent.success(operatorId, operator);
+        return ModifiedOperatorEvent.success(operatorId);
     }
 
     public static ModifiedOperatorEvent operatorModifiedNotFound(Long id) {
