@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Rollin' With Thyme</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--<link rel="stylesheet" type="text/css" media="all" href="../../css/main.css" th:href="@{/css/main.css}"/>-->
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/3.1.1/css/bootstrap.min.css"/>
+</head>
+<body>
+
+<div th:include="header :: #header"></div>
+
+<h2 th:text="${message}">Title</h2>
+
+<p>Parsley, sage, rosemary and thyme!</p>
+
+</body>
+</html>

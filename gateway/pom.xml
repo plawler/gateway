@@ -24,11 +24,14 @@
         <mysql.jdbc.version>5.1.29</mysql.jdbc.version>
         <swagger.version>0.6.5</swagger.version>
         <modelmapper.version>0.6.3</modelmapper.version>
+        <thymeleaf.version>2.1.1.RELEASE</thymeleaf.version>
+        <bootstrap.version>3.1.1</bootstrap.version>
     </properties>
 
     <modules>
        <!--<module>gateway-core</module> --><!-- TODO: Remove once we switch to boot -->
        <module>gateway-boot</module>
+       <module>gateway-portal</module>
     </modules>
 
     <repositories>
