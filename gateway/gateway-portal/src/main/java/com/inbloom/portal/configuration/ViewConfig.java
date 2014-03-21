@@ -12,20 +12,19 @@ import org.thymeleaf.templateresolver.TemplateResolver;
 /**
  * Created By: paullawler
  */
-@Configuration
+//@Configuration
 public class ViewConfig {
 
-    @Bean
-    public TemplateResolver templateResolver() {
-        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver();
+//    @Bean
+//    public TemplateResolver templateResolver() {
+//        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver();
 //        templateResolver.setPrefix("/WEB-INF/views/");
 //        templateResolver.setSuffix(".html");
-        templateResolver.setTemplateMode("HTML5");
-        templateResolver.setCacheable(false); // todo: manage with configuration
-
+//        templateResolver.setTemplateMode("HTML5");
+//        templateResolver.setCacheable(false);
 //        templateResolver.addTemplateAlias("header", "templates/header"); // http://stackoverflow.com/questions/12667300/thymeleaf-fragments-include
-        return templateResolver;
-    }
+//        return templateResolver;
+//    }
 
 //    @Bean
 //    public SpringTemplateEngine templateEngine() {
