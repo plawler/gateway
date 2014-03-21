@@ -17,4 +17,9 @@ public class HelloController {
         return "hello";
     }
 
+    @RequestMapping("/thymeleaf/layout")
+    public String content1() {
+        return "content";
+    }
+
 }
