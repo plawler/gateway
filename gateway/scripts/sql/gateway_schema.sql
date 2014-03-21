@@ -28,95 +28,20 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `gateway`.`contacts`
+-- Table `gateway`.`users`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `gateway`.`contacts` ;
+DROP TABLE IF EXISTS `gateway`.`users` ;
 
-CREATE TABLE IF NOT EXISTS `gateway`.`contacts` (
-  `contact_id` INT NOT NULL AUTO_INCREMENT,
-  `contact_name` VARCHAR(128) NULL,
-  `contact_email` VARCHAR(128) NULL,
-  `is_primary` TINYINT(1) NULL,
+CREATE TABLE IF NOT EXISTS `gateway`.`users` (
+  `user_id` INT NOT NULL,
+  `email` VARCHAR(45) NULL,
+  `first_name` VARCHAR(45) NULL,
+  `last_name` VARCHAR(45) NULL,
   `created_at` DATETIME NULL,
   `created_by` VARCHAR(45) NULL,
   `updated_at` DATETIME NULL,
   `updated_by` VARCHAR(45) NULL,
-  PRIMARY KEY (`contact_id`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `gateway`.`addresses`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `gateway`.`addresses` ;
-
-CREATE TABLE IF NOT EXISTS `gateway`.`addresses` (
-  `address_id` INT NOT NULL AUTO_INCREMENT,
-  `contact_id` INT NULL,
-  `county` VARCHAR(64) NULL,
-  `state_abbreviation` CHAR(2) NULL,
-  `street1` VARCHAR(64) NULL,
-  `street2` VARCHAR(64) NULL,
-  `city` VARCHAR(64) NULL,
-  `zip` VARCHAR(10) NULL,
-  `created_at` DATETIME NULL,
-  `created_by` VARCHAR(45) NULL,
-  `updated_at` DATETIME NULL,
-  `updated_by` VARCHAR(45) NULL,
-  PRIMARY KEY (`address_id`),
-  INDEX `fk_address_contact1_idx` (`contact_id` ASC),
-  CONSTRAINT `fk_address_contact1`
-    FOREIGN KEY (`contact_id`)
-    REFERENCES `gateway`.`contacts` (`contact_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `gateway`.`phone_number_types`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `gateway`.`phone_number_types` ;
-
-CREATE TABLE IF NOT EXISTS `gateway`.`phone_number_types` (
-  `phone_number_type_id` INT NOT NULL AUTO_INCREMENT,
-  `phone_number_type` VARCHAR(10) NULL,
-  `create_dt` DATETIME NULL,
-  `created_by` VARCHAR(45) NULL,
-  `update_dt` DATETIME NULL,
-  `updated_by` VARCHAR(45) NULL,
-  PRIMARY KEY (`phone_number_type_id`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `gateway`.`phone_numbers`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `gateway`.`phone_numbers` ;
-
-CREATE TABLE IF NOT EXISTS `gateway`.`phone_numbers` (
-  `phone_number_id` INT NOT NULL AUTO_INCREMENT,
-  `number` VARCHAR(10) NULL,
-  `phone_number_type_id` INT NULL,
-  `contact_id` INT NULL,
-  `created_at` DATETIME NULL,
-  `created_by` VARCHAR(45) NULL,
-  `updated_at` DATETIME NULL,
-  `updated_by` VARCHAR(45) NULL,
-  PRIMARY KEY (`phone_number_id`),
-  INDEX `fk_telephone_contact1_idx` (`contact_id` ASC),
-  INDEX `fk_phone_numbers_phone_number_types1_idx` (`phone_number_type_id` ASC),
-  CONSTRAINT `fk_telephone_contact1`
-    FOREIGN KEY (`contact_id`)
-    REFERENCES `gateway`.`contacts` (`contact_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_phone_numbers_phone_number_types1`
-    FOREIGN KEY (`phone_number_type_id`)
-    REFERENCES `gateway`.`phone_number_types` (`phone_number_type_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+  PRIMARY KEY (`user_id`));
 
 
 -- -----------------------------------------------------
@@ -126,16 +51,20 @@ DROP TABLE IF EXISTS `gateway`.`application_providers` ;
 
 CREATE TABLE IF NOT EXISTS `gateway`.`application_providers` (
   `application_provider_id` INT NOT NULL AUTO_INCREMENT,
-  `username` VARCHAR(45) NULL,
+  `user_id` INT NOT NULL,
   `application_provider_name` VARCHAR(64) NULL,
   `organization_name` VARCHAR(64) NULL,
-  `is_terms_accepted` TINYINT(1) NULL,
-  `is_account_confirmed` TINYINT(1) NULL,
   `created_at` DATETIME NULL,
   `created_by` VARCHAR(45) NULL,
   `updated_at` DATETIME NULL,
   `updated_by` VARCHAR(45) NULL,
-  PRIMARY KEY (`application_provider_id`))
+  PRIMARY KEY (`application_provider_id`),
+  INDEX `fk_application_providers_users1_idx` (`user_id` ASC),
+  CONSTRAINT `fk_application_providers_users1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `gateway`.`users` (`user_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -201,59 +130,50 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `gateway`.`operators_contacts`
+-- Table `gateway`.`tokens`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `gateway`.`operators_contacts` ;
+DROP TABLE IF EXISTS `gateway`.`tokens` ;
 
-CREATE TABLE IF NOT EXISTS `gateway`.`operators_contacts` (
-  `operator_id` INT NOT NULL,
-  `contact_id` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `gateway`.`tokens` (
+  `token_id` INT NOT NULL,
+  `token` VARCHAR(22) NULL,
   `created_at` DATETIME NULL,
   `created_by` VARCHAR(45) NULL,
   `updated_at` DATETIME NULL,
   `updated_by` VARCHAR(45) NULL,
-  PRIMARY KEY (`operator_id`, `contact_id`),
-  INDEX `fk_operator_has_contact_contact1_idx` (`contact_id` ASC),
-  INDEX `fk_operator_has_contact_operator1_idx` (`operator_id` ASC),
-  CONSTRAINT `fk_operator_has_contact_operator1`
-    FOREIGN KEY (`operator_id`)
-    REFERENCES `gateway`.`operators` (`operator_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_operator_has_contact_contact1`
-    FOREIGN KEY (`contact_id`)
-    REFERENCES `gateway`.`contacts` (`contact_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+  PRIMARY KEY (`token_id`));
 
 
 -- -----------------------------------------------------
--- Table `gateway`.`application_providers_contacts`
+-- Table `gateway`.`verifications`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `gateway`.`application_providers_contacts` ;
+DROP TABLE IF EXISTS `gateway`.`verifications` ;
 
-CREATE TABLE IF NOT EXISTS `gateway`.`application_providers_contacts` (
-  `application_provider_id` INT NOT NULL,
-  `contact_id` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `gateway`.`verifications` (
+  `verification_id` INT NOT NULL,
+  `token_id` INT NOT NULL,
+  `user_id` INT NOT NULL,
+  `is_verified` TINYINT(1) NULL,
+  `valid_from` DATETIME NULL,
+  `valid_until` DATETIME NULL,
+  `client_ip_address` VARCHAR(45) NULL,
   `created_at` DATETIME NULL,
   `created_by` VARCHAR(45) NULL,
   `updated_at` DATETIME NULL,
   `updated_by` VARCHAR(45) NULL,
-  PRIMARY KEY (`application_provider_id`, `contact_id`),
-  INDEX `fk_contact_has_application_provider_application_provider1_idx` (`application_provider_id` ASC),
-  INDEX `fk_contact_has_application_provider_contact1_idx` (`contact_id` ASC),
-  CONSTRAINT `fk_contact_has_application_provider_contact1`
-    FOREIGN KEY (`contact_id`)
-    REFERENCES `gateway`.`contacts` (`contact_id`)
+  PRIMARY KEY (`verification_id`),
+  INDEX `fk_verifications_tokens1_idx` (`token_id` ASC),
+  INDEX `fk_verifications_users1_idx` (`user_id` ASC),
+  CONSTRAINT `fk_verifications_tokens1`
+    FOREIGN KEY (`token_id`)
+    REFERENCES `gateway`.`tokens` (`token_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_contact_has_application_provider_application_provider1`
-    FOREIGN KEY (`application_provider_id`)
-    REFERENCES `gateway`.`application_providers` (`application_provider_id`)
+  CONSTRAINT `fk_verifications_users1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `gateway`.`users` (`user_id`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    ON UPDATE NO ACTION);
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
