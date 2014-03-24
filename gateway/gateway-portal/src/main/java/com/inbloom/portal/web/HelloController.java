@@ -13,13 +13,8 @@ public class HelloController {
 
     @RequestMapping("/")
     public String hello(Model model) {
-        model.addAttribute("message", "Hi there, World!");
+        model.addAttribute("message", "Much hello, World!");
         return "hello";
-    }
-
-    @RequestMapping("/thymeleaf/layout")
-    public String content1() {
-        return "content";
     }
 
 }
