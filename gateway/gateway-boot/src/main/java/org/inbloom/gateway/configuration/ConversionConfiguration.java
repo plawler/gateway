@@ -1,7 +1,6 @@
 package org.inbloom.gateway.configuration;
 
-import org.inbloom.gateway.util.mapper.DomainOperatorModelMapper;
-import org.inbloom.gateway.util.mapper.PersistentOperatorModelMapper;
+import org.inbloom.gateway.util.mapper.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ConversionServiceFactoryBean;
@@ -31,6 +30,10 @@ public class ConversionConfiguration {
 
         converters.add(new DomainOperatorModelMapper());
         converters.add(new PersistentOperatorModelMapper());
+        converters.add(new DomainApplicationProviderModelMapper());
+        converters.add(new PersistentApplicationProviderModelMapper());
+        converters.add(new DomainUserModelMapper());
+        converters.add(new PersistentUserModelMapper());
 
         return converters;
     }

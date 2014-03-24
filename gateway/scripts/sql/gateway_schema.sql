@@ -28,43 +28,19 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `gateway`.`users`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `gateway`.`users` ;
-
-CREATE TABLE IF NOT EXISTS `gateway`.`users` (
-  `user_id` INT NOT NULL,
-  `email` VARCHAR(45) NULL,
-  `first_name` VARCHAR(45) NULL,
-  `last_name` VARCHAR(45) NULL,
-  `created_at` DATETIME NULL,
-  `created_by` VARCHAR(45) NULL,
-  `updated_at` DATETIME NULL,
-  `updated_by` VARCHAR(45) NULL,
-  PRIMARY KEY (`user_id`));
-
-
--- -----------------------------------------------------
 -- Table `gateway`.`application_providers`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `gateway`.`application_providers` ;
 
 CREATE TABLE IF NOT EXISTS `gateway`.`application_providers` (
   `application_provider_id` INT NOT NULL AUTO_INCREMENT,
-  `user_id` INT NOT NULL,
   `application_provider_name` VARCHAR(64) NULL,
   `organization_name` VARCHAR(64) NULL,
   `created_at` DATETIME NULL,
   `created_by` VARCHAR(45) NULL,
   `updated_at` DATETIME NULL,
   `updated_by` VARCHAR(45) NULL,
-  PRIMARY KEY (`application_provider_id`),
-  INDEX `fk_application_providers_users1_idx` (`user_id` ASC),
-  CONSTRAINT `fk_application_providers_users1`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `gateway`.`users` (`user_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  PRIMARY KEY (`application_provider_id`))
 ENGINE = InnoDB;
 
 
@@ -127,6 +103,30 @@ CREATE TABLE IF NOT EXISTS `gateway`.`application_enablements` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `gateway`.`users`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `gateway`.`users` ;
+
+CREATE TABLE IF NOT EXISTS `gateway`.`users` (
+  `user_id` INT NOT NULL AUTO_INCREMENT,
+  `email` VARCHAR(45) NULL,
+  `first_name` VARCHAR(45) NULL,
+  `last_name` VARCHAR(45) NULL,
+  `application_provider_id` INT NOT NULL,
+  `created_at` DATETIME NULL,
+  `created_by` VARCHAR(45) NULL,
+  `updated_at` DATETIME NULL,
+  `updated_by` VARCHAR(45) NULL,
+  PRIMARY KEY (`user_id`),
+  INDEX `fk_users_application_providers1_idx` (`application_provider_id` ASC),
+  CONSTRAINT `fk_users_application_providers1`
+    FOREIGN KEY (`application_provider_id`)
+    REFERENCES `gateway`.`application_providers` (`application_provider_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
 
 
 -- -----------------------------------------------------

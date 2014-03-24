@@ -1,6 +1,10 @@
 package org.inbloom.gateway.persistence.domain;
 
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.*;
+import javax.persistence.Entity;
 
 /**
  * Created by lloydengebretsen on 3/20/14.
@@ -14,10 +18,6 @@ public class ApplicationProviderEntity extends BaseEntity{
 
     private String applicationProviderName;
     private String organizationName;
-
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
 
     public Long getApplicationProviderId() {
         return applicationProviderId;
@@ -43,11 +43,4 @@ public class ApplicationProviderEntity extends BaseEntity{
         this.organizationName = organizationName;
     }
 
-    public UserEntity getUser() {
-        return user;
-    }
-
-    public void setUser(UserEntity user) {
-        this.user = user;
-    }
 }

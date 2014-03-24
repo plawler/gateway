@@ -19,8 +19,12 @@ public class RegisteredApplicationProviderEvent implements ResponseEvent{
         return new RegisteredApplicationProviderEvent(data, Status.SUCCESS);
     }
 
+    public ApplicationProvider getData(){
+        return data;
+    }
+
     @Override
     public Status status() {
-        return null;
+        return status;
     }
 }

@@ -1,9 +1,8 @@
 package org.inbloom.gateway.persistence.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.inbloom.gateway.core.domain.ApplicationProvider;
+
+import javax.persistence.*;
 
 /**
  * Created by lloydengebretsen on 3/20/14.
@@ -18,6 +17,8 @@ public class UserEntity extends BaseEntity{
     private String email;
     private String firstName;
     private String lastName;
+
+    private Long applicationProviderId;
 
     public Long getUserId() {
         return userId;
@@ -49,5 +50,13 @@ public class UserEntity extends BaseEntity{
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public Long getApplicationProviderId() {
+        return applicationProviderId;
+    }
+
+    public void setApplicationProviderId(Long applicationProviderId) {
+        this.applicationProviderId = applicationProviderId;
     }
 }
