@@ -7,7 +7,7 @@ import org.inbloom.gateway.core.event.*;
  */
 public interface ApplicationProviderPersistenceService {
 
-    public CreatedApplicationProviderEvent createApplicationProvider(CreateApplicationProviderEvent createApplicationProviderEvent);
+    public RegisteredApplicationProviderEvent createApplicationProvider(RegisterApplicationProviderEvent registerApplicationProviderEvent);
     public ModifiedApplicationProviderEvent modifyApplicationProvider(ModifyApplicationProviderEvent modifyApplicationProviderEvent);
     public RetrievedApplicationProviderEvent retrieveApplicationProvider(RetrieveApplicationProviderEvent retrieveApplicationProviderEvent);
 }

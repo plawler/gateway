@@ -6,7 +6,7 @@ import org.inbloom.gateway.core.domain.Operator;
 /**
  * Created by lloydengebretsen on 2/27/14.
  */
-public class ModifyOperatorEvent {
+public class ModifyOperatorEvent implements RequestEvent{
 
     private final Long id;
     private final Operator data;

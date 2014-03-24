@@ -5,7 +5,7 @@ import org.inbloom.gateway.persistence.domain.BaseEntity;
 /**
  * Created by lloydengebretsen on 3/21/14.
  */
-public class ModifyVerificationEvent {
+public class ModifyVerificationEvent implements RequestEvent{
     private Long verificationId;
     private Boolean verified;
     private String clientIpAddress;

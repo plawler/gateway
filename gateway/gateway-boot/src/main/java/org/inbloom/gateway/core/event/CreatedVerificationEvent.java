@@ -9,7 +9,7 @@ import java.util.Date;
 /**
  * Created by lloydengebretsen on 3/21/14.
  */
-public class CreatedVerificationEvent {
+public class CreatedVerificationEvent implements ResponseEvent{
 
     private final Verification data;
 
@@ -19,5 +19,10 @@ public class CreatedVerificationEvent {
 
     public Verification getData(){
         return data;
+    }
+
+    @Override
+    public Status status() {
+        return null;
     }
 }

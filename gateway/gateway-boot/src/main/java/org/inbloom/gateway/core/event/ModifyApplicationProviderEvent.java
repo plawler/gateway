@@ -3,5 +3,5 @@ package org.inbloom.gateway.core.event;
 /**
  * Created by lloydengebretsen on 3/24/14.
  */
-public class ModifyApplicationProviderEvent {
+public class ModifyApplicationProviderEvent implements RequestEvent{
 }

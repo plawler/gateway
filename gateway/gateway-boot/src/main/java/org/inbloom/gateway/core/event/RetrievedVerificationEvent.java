@@ -5,7 +5,7 @@ import org.inbloom.gateway.core.domain.Verification;
 /**
  * Created by lloydengebretsen on 3/21/14.
  */
-public class RetrievedVerificationEvent {
+public class RetrievedVerificationEvent implements ResponseEvent{
 
     private final Verification data;
 
@@ -15,5 +15,10 @@ public class RetrievedVerificationEvent {
 
     public Verification getData() {
         return data;
+    }
+
+    @Override
+    public Status status() {
+        return null;
     }
 }

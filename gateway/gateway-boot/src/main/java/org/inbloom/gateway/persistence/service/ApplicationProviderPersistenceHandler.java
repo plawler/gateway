@@ -1,6 +1,11 @@
 package org.inbloom.gateway.persistence.service;
 
+import org.inbloom.gateway.core.domain.ApplicationProvider;
 import org.inbloom.gateway.core.event.*;
+import org.inbloom.gateway.persistence.domain.ApplicationProviderEntity;
+import org.inbloom.gateway.persistence.repository.ApplicationProviderRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -9,10 +14,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class ApplicationProviderPersistenceHandler implements ApplicationProviderPersistenceService {
 
+    @Autowired
+    private ApplicationProviderRepository applicationProviderRepository;
+
+    @Autowired
+    private ConversionService conversionService;
 
     @Override
-    public CreatedApplicationProviderEvent createApplicationProvider(CreateApplicationProviderEvent createApplicationProviderEvent) {
-        return null;
+    public RegisteredApplicationProviderEvent createApplicationProvider(RegisterApplicationProviderEvent registerApplicationProviderEvent) {
+        ApplicationProviderEntity entity = conversionService.convert(registerApplicationProviderEvent.getData(), ApplicationProviderEntity.class);
+        applicationProviderRepository.save(entity);
+        return RegisteredApplicationProviderEvent.success(conversionService.convert(entity, ApplicationProvider.class));
     }
 
     @Override

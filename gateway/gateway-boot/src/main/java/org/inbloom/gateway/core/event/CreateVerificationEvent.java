@@ -9,7 +9,7 @@ import java.util.Date;
 /**
  * Created by lloydengebretsen on 3/21/14.
  */
-public class CreateVerificationEvent {
+public class CreateVerificationEvent implements RequestEvent{
 
     private final Verification data;
 
