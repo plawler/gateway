@@ -76,17 +76,14 @@ public class OperatorController {
 
         ModifiedOperatorEvent modifiedEvent = operatorService.modifyOperator(new ModifyOperatorEvent(id, operator));
 
-        //request failed, check reason and return correct error code
-        if (!modifiedEvent.isUpdateSuccessful()) {
-            switch (modifiedEvent.status())
-            {
-                case NOT_FOUND:
-                    return new ResponseEntity(HttpStatus.NOT_FOUND);
-                default:
-                    return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);//throw 500 error if we don't know why this failed
-            }
+        switch (modifiedEvent.status())
+        {
+            case SUCCESS:
+                return new ResponseEntity(HttpStatus.NO_CONTENT);
+            case NOT_FOUND:
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            default:
+                return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);//throw 500 error if we don't know why this failed
         }
-
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }

@@ -14,4 +14,12 @@ public class ApplicationProviderFixture {
         applicationProvider.setOrganizationName("#1 App Provider Inc.");
         return applicationProvider;
     }
+
+    public static ApplicationProvider modifyApplicationProvider(Long appProviderId){
+        ApplicationProvider applicationProvider = buildApplicationProvider();
+        applicationProvider.setApplicationProviderId(appProviderId);
+        applicationProvider.setApplicationProviderName("Some different Name");
+        applicationProvider.getUser().setLastName("Some-New-Name");
+        return applicationProvider;
+    }
 }

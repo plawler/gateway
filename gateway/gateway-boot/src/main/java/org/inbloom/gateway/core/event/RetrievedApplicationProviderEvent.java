@@ -7,22 +7,29 @@ import org.inbloom.gateway.core.domain.ApplicationProvider;
  */
 public class RetrievedApplicationProviderEvent implements ResponseEvent{
 
-    private final ApplicationProvider appProvider;
+    private final ApplicationProvider data;
     private final Status status;
 
     private RetrievedApplicationProviderEvent(ApplicationProvider data, Status status) {
-        this.appProvider=data;
+        this.data =data;
         this.status = status;
     }
 
     @Override
     public Status status() {
-        return null;
+        return status;
     }
 
-    public ApplicationProvider getApplicationProvider() {
-        return appProvider;
+    public ApplicationProvider getData() {
+        return data;
     }
 
 
+    public static RetrievedApplicationProviderEvent success(ApplicationProvider data) {
+        return new RetrievedApplicationProviderEvent(data, Status.SUCCESS);
+    }
+
+    public static RetrievedApplicationProviderEvent notFound() {
+        return new RetrievedApplicationProviderEvent(null, Status.NOT_FOUND);
+    }
 }

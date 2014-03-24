@@ -79,7 +79,7 @@ public class OperatorPersistenceServiceTest {
         retrievedOperator.setOperatorId(modifiedId); //This should not persist to the database
 
         ModifiedOperatorEvent modifiedEvent = operatorPersistenceService.modifyOperator(new ModifyOperatorEvent(id, retrievedOperator));
-        assertTrue(modifiedEvent.isUpdateSuccessful());
+        assertEquals(ResponseEvent.Status.SUCCESS, modifiedEvent.status());
 
 
 

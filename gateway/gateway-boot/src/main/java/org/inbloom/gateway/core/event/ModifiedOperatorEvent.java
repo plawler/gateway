@@ -10,13 +10,11 @@ public class ModifiedOperatorEvent implements ResponseEvent {
 
     private final Long id;
     private final Operator data;
-    private final Boolean updateSuccessful;
     private final Status status;
 
-    private ModifiedOperatorEvent(Long id, Operator data, Boolean updateSuccessful, Status status) {
+    private ModifiedOperatorEvent(Long id, Operator data, Status status) {
         this.data = data;
         this.id = id;
-        this.updateSuccessful = updateSuccessful;
         this.status = status;
     }
 
@@ -28,18 +26,14 @@ public class ModifiedOperatorEvent implements ResponseEvent {
         return id;
     }
 
-    public Boolean isUpdateSuccessful() {
-        return updateSuccessful;
-    }
-
     public static ModifiedOperatorEvent notFound(Long id)
     {
-        return new ModifiedOperatorEvent(id, null, false, Status.NOT_FOUND);
+        return new ModifiedOperatorEvent(id, null, Status.NOT_FOUND);
     }
 
     public static ModifiedOperatorEvent success(Long id, Operator modified)
     {
-        return new ModifiedOperatorEvent(id, modified, true, Status.SUCCESS);
+        return new ModifiedOperatorEvent(id, modified, Status.SUCCESS);
     }
 
     @Override

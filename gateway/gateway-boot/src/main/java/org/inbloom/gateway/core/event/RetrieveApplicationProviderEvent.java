@@ -5,8 +5,14 @@ package org.inbloom.gateway.core.event;
  */
 public class RetrieveApplicationProviderEvent implements RequestEvent{
 
-    public RetrieveApplicationProviderEvent(Long appProviderId)
-    {
+    private final Long id;
 
+    public RetrieveApplicationProviderEvent(Long id)
+    {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

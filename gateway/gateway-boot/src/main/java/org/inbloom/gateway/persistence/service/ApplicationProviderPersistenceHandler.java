@@ -1,15 +1,19 @@
 package org.inbloom.gateway.persistence.service;
 
+import org.apache.commons.lang.StringUtils;
 import org.inbloom.gateway.core.domain.ApplicationProvider;
 import org.inbloom.gateway.core.domain.User;
 import org.inbloom.gateway.core.event.*;
 import org.inbloom.gateway.persistence.domain.ApplicationProviderEntity;
+import org.inbloom.gateway.persistence.domain.BaseEntity;
 import org.inbloom.gateway.persistence.domain.UserEntity;
 import org.inbloom.gateway.persistence.repository.ApplicationProviderRepository;
 import org.inbloom.gateway.persistence.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 /**
  * Created by lloydengebretsen on 3/24/14.
@@ -28,11 +32,12 @@ public class ApplicationProviderPersistenceHandler implements ApplicationProvide
     @Override
     public RegisteredApplicationProviderEvent createApplicationProvider(RegisterApplicationProviderEvent registerApplicationProviderEvent) {
         ApplicationProviderEntity appProviderEntity = conversionService.convert(registerApplicationProviderEvent.getData(), ApplicationProviderEntity.class);
-
+        setCreateData(appProviderEntity);
         applicationProviderRepository.save(appProviderEntity);
 
         UserEntity userEntity = conversionService.convert(registerApplicationProviderEvent.getData().getUser(), UserEntity.class);
         userEntity.setApplicationProviderId(appProviderEntity.getApplicationProviderId());
+        setCreateData(userEntity);
         userRepository.save(userEntity);
 
         ApplicationProvider appProviderDomain = conversionService.convert(appProviderEntity, ApplicationProvider.class);
@@ -42,11 +47,53 @@ public class ApplicationProviderPersistenceHandler implements ApplicationProvide
 
     @Override
     public ModifiedApplicationProviderEvent modifyApplicationProvider(ModifyApplicationProviderEvent modifyApplicationProviderEvent) {
-        return null;
+        ApplicationProviderEntity retrieved = applicationProviderRepository.findOne(modifyApplicationProviderEvent.getId());
+
+        retrieved.setApplicationProviderName(modifyApplicationProviderEvent.getApplicationProviderName());
+        retrieved.setApplicationProviderName(modifyApplicationProviderEvent.getOrganizationName());
+        setUpdateData(retrieved);
+        applicationProviderRepository.save(retrieved);
+
+        ApplicationProvider result = conversionService.convert(retrieved, ApplicationProvider.class);
+
+        UserEntity retrievedUser = userRepository.findByApplicationProviderId(retrieved.getApplicationProviderId());
+        setUpdateData(retrievedUser);
+        if(StringUtils.isNotBlank(modifyApplicationProviderEvent.getUserEmail())){
+            retrievedUser.setEmail(modifyApplicationProviderEvent.getUserEmail());
+        }
+        if(StringUtils.isNotBlank(modifyApplicationProviderEvent.getUserFirstName())){
+            retrievedUser.setFirstName(modifyApplicationProviderEvent.getUserFirstName());
+        }
+        if(StringUtils.isNotBlank(modifyApplicationProviderEvent.getUserLastName())){
+            retrievedUser.setLastName(modifyApplicationProviderEvent.getUserLastName());
+        }
+        userRepository.save(retrievedUser);
+        result.setUser(conversionService.convert(retrievedUser, User.class));
+
+        return ModifiedApplicationProviderEvent.success(result);
     }
 
     @Override
     public RetrievedApplicationProviderEvent retrieveApplicationProvider(RetrieveApplicationProviderEvent retrieveApplicationProviderEvent) {
-        return null;
+        ApplicationProviderEntity retrieved = applicationProviderRepository.findOne(retrieveApplicationProviderEvent.getId());
+        if(retrieved == null) {
+            return RetrievedApplicationProviderEvent.notFound();
+        }
+        else {
+            UserEntity retrievedUser = userRepository.findByApplicationProviderId(retrieved.getApplicationProviderId());
+            ApplicationProvider appProviderDomain = conversionService.convert(retrieved, ApplicationProvider.class);
+            appProviderDomain.setUser(conversionService.convert(retrievedUser, User.class));
+            return RetrievedApplicationProviderEvent.success(appProviderDomain);
+        }
+    }
+
+    private void setCreateData(BaseEntity entity){
+        entity.setCreatedAt(new Date());
+        entity.setCreatedBy("System"); //TODO replace with actual user info after security model is implemented
+    }
+
+    private void setUpdateData(BaseEntity entity){
+        entity.setUpdatedAt(new Date());
+        entity.setUpdatedBy("System"); //TODO replace with actual user info after security model is implemented
     }
 }

@@ -1,9 +1,7 @@
 package org.inbloom.gateway.persistence.service;
 
 import org.inbloom.gateway.Gateway;
-import org.inbloom.gateway.core.event.RegisterApplicationProviderEvent;
-import org.inbloom.gateway.core.event.RegisteredApplicationProviderEvent;
-import org.inbloom.gateway.core.event.ResponseEvent;
+import org.inbloom.gateway.core.event.*;
 import org.inbloom.gateway.fixture.ApplicationProviderEventFixtures;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +13,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by lloydengebretsen on 3/24/14.
@@ -30,7 +29,7 @@ public class ApplicationProviderPersistenceServiceTest {
     ApplicationProviderPersistenceService applicationProviderPersistenceService;
 
     @Test
-    public void testCreateApplicationProvider(){
+    public void shouldCreateAnApplicationProvider(){
         RegisterApplicationProviderEvent request = ApplicationProviderEventFixtures.buildRegisterApplicationProviderEvent();
         RegisteredApplicationProviderEvent response = applicationProviderPersistenceService.createApplicationProvider(request);
 
@@ -41,5 +40,41 @@ public class ApplicationProviderPersistenceServiceTest {
 
         //test cascade for user entity
         assertEquals(request.getData().getUser().getEmail(), response.getData().getUser().getEmail());
+    }
+
+    @Test
+    public void shouldRetrieveAnApplicationProvider(){
+        RegisterApplicationProviderEvent registerRequest = ApplicationProviderEventFixtures.buildRegisterApplicationProviderEvent();
+        RegisteredApplicationProviderEvent registerResponse = applicationProviderPersistenceService.createApplicationProvider(registerRequest);
+        Long appProviderId = registerResponse.getData().getApplicationProviderId();
+
+
+        RetrievedApplicationProviderEvent retrieveResponse = applicationProviderPersistenceService.retrieveApplicationProvider(new RetrieveApplicationProviderEvent(appProviderId));
+        assertEquals(ResponseEvent.Status.SUCCESS, retrieveResponse.status());
+        assertEquals(registerRequest.getData().getOrganizationName(),retrieveResponse.getData().getOrganizationName());
+        assertEquals(registerRequest.getData().getApplicationProviderName(), retrieveResponse.getData().getApplicationProviderName());
+
+        assertNotNull(retrieveResponse.getData().getUser());
+        assertEquals(registerRequest.getData().getUser().getEmail(), retrieveResponse.getData().getUser().getEmail());
+    }
+
+    @Test
+    public void shouldModifyAnApplicationProvider(){
+        RegisterApplicationProviderEvent registerRequest = ApplicationProviderEventFixtures.buildRegisterApplicationProviderEvent();
+        RegisteredApplicationProviderEvent registerResponse = applicationProviderPersistenceService.createApplicationProvider(registerRequest);
+        Long appProviderId = registerResponse.getData().getApplicationProviderId();
+
+        ModifyApplicationProviderEvent modifyRequest = ApplicationProviderEventFixtures.buildModifyApplicationProviderEvent(appProviderId);
+        ModifiedApplicationProviderEvent modifyResponse = applicationProviderPersistenceService.modifyApplicationProvider(modifyRequest);
+
+        assertEquals(ResponseEvent.Status.SUCCESS, modifyResponse.status());
+
+        RetrievedApplicationProviderEvent retrieveResponse = applicationProviderPersistenceService.retrieveApplicationProvider(new RetrieveApplicationProviderEvent(appProviderId));
+        assertEquals(ResponseEvent.Status.SUCCESS, retrieveResponse.status());
+        assertEquals(modifyRequest.getOrganizationName(),retrieveResponse.getData().getOrganizationName());
+
+        assertEquals(modifyRequest.getUserEmail(), retrieveResponse.getData().getUser().getEmail());
+        assertEquals(modifyRequest.getUserLastName(), retrieveResponse.getData().getUser().getLastName());
+
     }
 }

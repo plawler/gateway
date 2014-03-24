@@ -1,16 +1,31 @@
 package org.inbloom.gateway.core.event;
 
+import org.inbloom.gateway.core.domain.ApplicationProvider;
+
 /**
  * Created by lloydengebretsen on 3/24/14.
  */
 public class ModifiedApplicationProviderEvent implements ResponseEvent{
 
-    @Override
-    public Status status() {
-        return null;
+    private final Status status;
+    private final ApplicationProvider data;
+
+    private ModifiedApplicationProviderEvent(ApplicationProvider data, Status status) {
+        this.data = data;
+        this.status = status;
     }
 
-    public boolean isUpdateSuccessful() {
-        return false;  //To change body of created methods use File | Settings | File Templates.
+    @Override
+    public Status status() {
+        return status;
     }
+
+    public static ModifiedApplicationProviderEvent success(ApplicationProvider data){
+        return new ModifiedApplicationProviderEvent(data, Status.SUCCESS);
+    }
+
+    public static ModifiedApplicationProviderEvent notFound(){
+        return new ModifiedApplicationProviderEvent(null, Status.SUCCESS);
+    }
+
 }
