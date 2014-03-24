@@ -19,16 +19,25 @@
         <version>1.0.0.RC4</version>
     </parent>
 
+    <prerequisites>
+        <maven>3.1.0</maven>
+    </prerequisites>
+
     <properties>
         <!-- Needed for boot project -->
         <mysql.jdbc.version>5.1.29</mysql.jdbc.version>
         <swagger.version>0.6.5</swagger.version>
         <modelmapper.version>0.6.3</modelmapper.version>
+        <thymeleaf.version>2.1.2.RELEASE</thymeleaf.version>
+        <bootstrap.version>3.1.1</bootstrap.version>
+        <jquery.version>2.1.0-2</jquery.version>
     </properties>
 
     <modules>
        <!--<module>gateway-core</module> --><!-- TODO: Remove once we switch to boot -->
+       <module>inbloom-notifications-client</module>
        <module>gateway-boot</module>
+       <module>gateway-portal</module>
     </modules>
 
     <repositories>
