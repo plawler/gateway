@@ -13,3 +13,5 @@ target/
 # rvm
 .ruby-version
 .rvmrc
+
+lib/*
