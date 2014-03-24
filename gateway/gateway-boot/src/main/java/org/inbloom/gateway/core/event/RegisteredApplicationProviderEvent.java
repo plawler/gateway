@@ -23,4 +23,8 @@ public class RegisteredApplicationProviderEvent implements ResponseEvent{
     public Status status() {
         return null;
     }
+
+    public ApplicationProvider getApplicationProvider() {
+        return data;
+    }
 }

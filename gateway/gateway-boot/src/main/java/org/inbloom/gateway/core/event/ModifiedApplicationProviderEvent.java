@@ -9,4 +9,8 @@ public class ModifiedApplicationProviderEvent implements ResponseEvent{
     public Status status() {
         return null;
     }
+
+    public boolean isUpdateSuccessful() {
+        return false;  //To change body of created methods use File | Settings | File Templates.
+    }
 }
