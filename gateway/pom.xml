@@ -31,6 +31,7 @@
         <thymeleaf.version>2.1.2.RELEASE</thymeleaf.version>
         <bootstrap.version>3.1.1</bootstrap.version>
         <jquery.version>2.1.0-2</jquery.version>
+        <unbounded.ldap.version>2.3.5</unbounded.ldap.version>
     </properties>
 
     <modules>
@@ -47,6 +48,7 @@
             <snapshots><enabled>true</enabled></snapshots>
         </repository>
     </repositories>
+
     <pluginRepositories>
         <pluginRepository>
             <id>spring-milestones</id>
