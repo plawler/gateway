@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:remove="all">Confirm Developer Account Registration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+<p><span th:text="${name}">First name</span>,</p>
+<p>Thank you for registering for a developer account with inBloom.</p>
+<p>Please follow this link to validate your email address and create a password to complete your registration.</p>
+<a th:href="${link}"><p th:text="${link}">Click to validate your account</p></a>
+<p>Thank you,<br/>
+<em>inBloom</em>
+</p>
+</body>
+
+</html>
