@@ -2,6 +2,7 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
+DROP SCHEMA IF EXISTS `gateway` ;
 CREATE SCHEMA IF NOT EXISTS `gateway` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
 USE `gateway` ;
 
@@ -130,28 +131,13 @@ CREATE TABLE IF NOT EXISTS `gateway`.`users` (
 
 
 -- -----------------------------------------------------
--- Table `gateway`.`tokens`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `gateway`.`tokens` ;
-
-CREATE TABLE IF NOT EXISTS `gateway`.`tokens` (
-  `token_id` INT NOT NULL,
-  `token` VARCHAR(22) NULL,
-  `created_at` DATETIME NULL,
-  `created_by` VARCHAR(45) NULL,
-  `updated_at` DATETIME NULL,
-  `updated_by` VARCHAR(45) NULL,
-  PRIMARY KEY (`token_id`));
-
-
--- -----------------------------------------------------
 -- Table `gateway`.`verifications`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `gateway`.`verifications` ;
 
 CREATE TABLE IF NOT EXISTS `gateway`.`verifications` (
-  `verification_id` INT NOT NULL,
-  `token_id` INT NOT NULL,
+  `verification_id` INT NOT NULL AUTO_INCREMENT,
+  `token` VARCHAR(22) NOT NULL,
   `user_id` INT NOT NULL,
   `is_verified` TINYINT(1) NULL,
   `valid_from` DATETIME NULL,
@@ -162,13 +148,7 @@ CREATE TABLE IF NOT EXISTS `gateway`.`verifications` (
   `updated_at` DATETIME NULL,
   `updated_by` VARCHAR(45) NULL,
   PRIMARY KEY (`verification_id`),
-  INDEX `fk_verifications_tokens1_idx` (`token_id` ASC),
   INDEX `fk_verifications_users1_idx` (`user_id` ASC),
-  CONSTRAINT `fk_verifications_tokens1`
-    FOREIGN KEY (`token_id`)
-    REFERENCES `gateway`.`tokens` (`token_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
   CONSTRAINT `fk_verifications_users1`
     FOREIGN KEY (`user_id`)
     REFERENCES `gateway`.`users` (`user_id`)

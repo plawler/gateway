@@ -12,7 +12,7 @@ public class Verification {
     private Date validFrom;
     private Date validUntil;
     private String clientIpAddress;
-    private Token token;
+    private String token;
     private User user;
 
     public Long getVerificationId() {
@@ -55,11 +55,11 @@ public class Verification {
         this.clientIpAddress = clientIpAddress;
     }
 
-    public Token getToken() {
+    public String getToken() {
         return token;
     }
 
-    public void setToken(Token token) {
+    public void setToken(String token) {
         this.token = token;
     }
 

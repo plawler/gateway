@@ -1,10 +1,6 @@
 package org.inbloom.gateway.core.event;
 
-import org.inbloom.gateway.core.domain.Token;
-import org.inbloom.gateway.core.domain.User;
 import org.inbloom.gateway.core.domain.Verification;
-
-import java.util.Date;
 
 /**
  * Created by lloydengebretsen on 3/21/14.

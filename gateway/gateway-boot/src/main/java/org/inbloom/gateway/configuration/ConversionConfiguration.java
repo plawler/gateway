@@ -34,6 +34,8 @@ public class ConversionConfiguration {
         converters.add(new PersistentApplicationProviderModelMapper());
         converters.add(new DomainUserModelMapper());
         converters.add(new PersistentUserModelMapper());
+        converters.add(new PersistentVerificationModelMapper());
+        converters.add(new DomainVerificationModelMapper());
 
         return converters;
     }
