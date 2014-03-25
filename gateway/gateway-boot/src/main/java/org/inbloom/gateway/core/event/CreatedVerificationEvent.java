@@ -12,9 +12,11 @@ import java.util.Date;
 public class CreatedVerificationEvent implements ResponseEvent{
 
     private final Verification data;
+    private final Status status;
 
-    public CreatedVerificationEvent(Verification data){
+    private CreatedVerificationEvent(Verification data, Status status){
         this.data = data;
+        this.status = status;
     }
 
     public Verification getData(){
@@ -23,6 +25,14 @@ public class CreatedVerificationEvent implements ResponseEvent{
 
     @Override
     public Status status() {
-        return null;
+        return status;
+    }
+
+    public static CreatedVerificationEvent notFound() {
+        return new CreatedVerificationEvent(null, Status.NOT_FOUND);
+    }
+
+    public static CreatedVerificationEvent success(Verification verification) {
+        return new CreatedVerificationEvent(verification, Status.SUCCESS);
     }
 }

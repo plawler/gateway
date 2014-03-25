@@ -12,17 +12,21 @@ import java.util.Date;
 public class CreateVerificationEvent implements RequestEvent{
 
     private final Verification data;
+    private final Long userId;
 
-    public CreateVerificationEvent(User user, Token token, Date validFrom, Date validUntil) {
+    public CreateVerificationEvent(Long userId, Date validFrom, Date validUntil) {
         data = new Verification();
-        data.setToken(token);
-        data.setUser(user);
         data.setValidFrom(validFrom);
         data.setValidUntil(validUntil);
         data.setVerified(false);
+        this.userId = userId;
     }
 
     public Verification getData(){
         return data;
+    }
+
+    public Long getUserId() {
+        return userId;
     }
 }

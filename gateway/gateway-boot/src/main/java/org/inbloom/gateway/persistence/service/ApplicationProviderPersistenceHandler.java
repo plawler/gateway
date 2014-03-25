@@ -48,6 +48,9 @@ public class ApplicationProviderPersistenceHandler implements ApplicationProvide
     @Override
     public ModifiedApplicationProviderEvent modifyApplicationProvider(ModifyApplicationProviderEvent modifyApplicationProviderEvent) {
         ApplicationProviderEntity retrieved = applicationProviderRepository.findOne(modifyApplicationProviderEvent.getId());
+        if(retrieved == null){
+            return ModifiedApplicationProviderEvent.notFound();
+        }
 
         retrieved.setApplicationProviderName(modifyApplicationProviderEvent.getApplicationProviderName());
         retrieved.setApplicationProviderName(modifyApplicationProviderEvent.getOrganizationName());

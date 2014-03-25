@@ -20,13 +20,8 @@ public class VerificationEntity extends BaseEntity{
 
     private String clientIpAddress;
 
-    @ManyToOne
-    @JoinColumn(name="token_id")
-    private TokenEntity token;
-
-    @ManyToOne
-    @JoinColumn(name="user_id")
-    private UserEntity user;
+    private Long tokenId;
+    private Long userId;
 
     public Long getVerificationId() {
         return verificationId;
@@ -68,19 +63,19 @@ public class VerificationEntity extends BaseEntity{
         this.clientIpAddress = clientIpAddress;
     }
 
-    public TokenEntity getToken() {
-        return token;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setToken(TokenEntity token) {
-        this.token = token;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public UserEntity getUser() {
-        return user;
+    public Long getTokenId() {
+        return tokenId;
     }
 
-    public void setUser(UserEntity user) {
-        this.user = user;
+    public void setTokenId(Long tokenId) {
+        this.tokenId = tokenId;
     }
 }
