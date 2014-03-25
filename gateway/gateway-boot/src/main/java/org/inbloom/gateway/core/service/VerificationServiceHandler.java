@@ -56,11 +56,18 @@ public class VerificationServiceHandler implements VerificationService{
 
     @Override
     public ModifiedVerificationEvent modifyVerification(ModifyVerificationEvent modifyEvent) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+
+        //TODO: update verification status to set "is_verified" to true
+
+        //TODO: add user to LDAP
+
+        //TODO: provision sandbox tenant
+
+        return null;
     }
 
     @Override
     public RetrievedVerificationEvent retrieveVerification(RetrieveVerificationEvent retrieveEvent) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return verificationPersistenceService.retrieveVerification(retrieveEvent);
     }
 }

@@ -116,7 +116,7 @@ CREATE TABLE IF NOT EXISTS `gateway`.`users` (
   `email` VARCHAR(45) NULL,
   `first_name` VARCHAR(45) NULL,
   `last_name` VARCHAR(45) NULL,
-  `application_provider_id` INT NOT NULL,
+  `application_provider_id` INT NULL,
   `created_at` DATETIME NULL,
   `created_by` VARCHAR(45) NULL,
   `updated_at` DATETIME NULL,
@@ -137,9 +137,9 @@ DROP TABLE IF EXISTS `gateway`.`verifications` ;
 
 CREATE TABLE IF NOT EXISTS `gateway`.`verifications` (
   `verification_id` INT NOT NULL AUTO_INCREMENT,
-  `token` VARCHAR(22) NOT NULL,
-  `user_id` INT NOT NULL,
-  `is_verified` TINYINT(1) NULL,
+  `token` VARCHAR(22) NULL,
+  `user_id` INT NULL,
+  `is_verified` TINYINT(1) NULL DEFAULT false,
   `valid_from` DATETIME NULL,
   `valid_until` DATETIME NULL,
   `client_ip_address` VARCHAR(45) NULL,
