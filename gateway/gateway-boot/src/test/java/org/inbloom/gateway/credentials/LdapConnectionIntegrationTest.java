@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = LdapConfiguration.class)
-public class LdapConnectionTest {
+public class LdapConnectionIntegrationTest {
 
     private static final String TEST_DN = "cn=sonny.corleone@mailinator.com,ou=people,ou=LocalNew,ou=DevTest,dc=slidev,dc=org";
 
