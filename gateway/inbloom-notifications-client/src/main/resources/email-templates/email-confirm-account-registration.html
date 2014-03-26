@@ -7,16 +7,19 @@
 <body>
 <p><span th:text="${name}">First name</span>,</p>
 <div id="body">
-<p>
-Thank you for registering for a developer account with inBloom.
+<p th:text="#{account_reg_thanks}">
+Thank you line.
 </p>
-<p>
-Please follow this link to validate your email address and create a password to complete your registration
+
+<p th:text="#{account_reg_validate_instruction}">
+Validation link instructions.
 </p>
 
 <a th:href="${link}"><p th:text="${link}">Click to validate your account</p></a>
 
-Thank you,<br/>
+<p th:text="#{thank_you(${comma})}">
+tyvm
+</p>
 <em>inBloom</em>
 </div>
 </body>

@@ -35,16 +35,27 @@ public class EmailService {
     @Autowired
     private TemplateEngine templateEngine;
 
-
+    /**
+     * Builds and sends and account registration confirmation email message, using the specified Locale.
+     * @param recipientName The name of the recipient the message is intended for.
+     * @param recipientEmail The email address to send the message to.
+     * @param confirmationLink The link to embed within the email.
+     * @param locale The locale for the message (determines which resource bundle is used for multilingual support). Use Locale.ENGLISH.
+     * @throws MessagingException
+     */
     public void sendAccountRegistrationConfirmationEmail(final String recipientName, final String recipientEmail, final String confirmationLink, Locale locale) throws MessagingException {
         final String subject = "inBloom Developer Account Validation";
         final String replyTo = "do-notreply@inbloom.org";
         final String from = replyTo;
+        if (locale == null) {
+            locale = Locale.ENGLISH;
+        }
 
         // Prepare the evaluation context
         final Context context = new Context(locale);
         context.setVariable("name", recipientName);
         context.setVariable("link", confirmationLink);
+        context.setVariable("comma", ",");  //used by resource bundle to append punctuation.
 
         final String htmlContent = this.templateEngine.process(NotificationTemplateEnum.CONFIRM_ACCOUNT_REGISTRATION.getTemplateNameName(), context);
 
