@@ -41,4 +41,23 @@ public class RestErrorHandler {
         return validationError;
     }
 
+
+    @ExceptionHandler(ValidationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public GatewayError handleValidationException(ValidationException error)
+    {
+        //TODO: log?
+        return error.getGatewayError();
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseBody
+    public String handleValidationException(Exception error)
+    {
+        //TODO: log?
+        return error.getMessage();
+    }
+
 }
