@@ -42,7 +42,7 @@
         <property name="order" value="1"/>
     </bean>
 
-    <!-- THYMELEAF: Template Engine (Spring3-specific version) -->
+    <!-- THYMELEAF: Template Engine (Spring4-specific version) -->
     <bean id="templateEngine" class="org.thymeleaf.spring4.SpringTemplateEngine">
         <property name="templateResolvers">
             <set>

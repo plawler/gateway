@@ -48,19 +48,8 @@ public class EmailService {
 
         final String htmlContent = this.templateEngine.process(NotificationTemplateEnum.CONFIRM_ACCOUNT_REGISTRATION.getTemplateNameName(), context);
 
-        log.info(htmlContent);
-
         MimeMessageBuilder msgBuilder = new MimeMessageBuilder(this.mailSender, StandardCharsets.UTF_8.name());  //uses a spring helper within the builder
         final MimeMessage msg = msgBuilder.subject(subject).replyTo(replyTo).from(from).to(recipientEmail).body(htmlContent).isHtml(true).build();
-        //sendMail(msg);
+        mailSender.send(msg);
     }
-
-
-    /*
-     * Send the mail mail.
-     */
-    public void sendMail(MimeMessage message) throws MessagingException {
-        this.mailSender.send(message);
-    }
-
 }

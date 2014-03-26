@@ -37,6 +37,7 @@
         <junit.version>4.11</junit.version>
         <jquery.version>2.1.0-2</jquery.version>
         <logback.version>1.1.1</logback.version>
+        <mock.javamail.version>1.9</mock.javamail.version>
         <modelmapper.version>0.6.3</modelmapper.version>
         <mysql.jdbc.version>5.1.29</mysql.jdbc.version>
         <spring.version>4.0.2.RELEASE</spring.version>
