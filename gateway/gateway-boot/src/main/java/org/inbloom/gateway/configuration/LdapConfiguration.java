@@ -2,7 +2,7 @@ package org.inbloom.gateway.configuration;
 
 import com.unboundid.ldap.sdk.LDAPConnection;
 import com.unboundid.ldap.sdk.LDAPException;
-import org.inbloom.gateway.credentials.LdapConnectionFactoryBean;
+import org.inbloom.gateway.credentials.ldap.LdapConnectionFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

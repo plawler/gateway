@@ -1,4 +1,4 @@
-package org.inbloom.gateway.credentials;
+package org.inbloom.gateway.credentials.ldap;
 
 
 
@@ -31,7 +31,7 @@ public class LdapConnectionFactoryBean implements FactoryBean<LDAPConnection> {
     }
 
     @Override
-    public LDAPConnection getObject() throws LDAPException {
+    public LDAPConnection getObject() throws LDAPException { // todo: get fritzkreiged
         connection = new LDAPConnection();
         connection.connect(server, port);
         connection.bind(userDN, password);
