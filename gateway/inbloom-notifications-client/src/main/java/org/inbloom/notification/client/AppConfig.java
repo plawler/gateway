@@ -3,9 +3,7 @@ package org.inbloom.notification.client;
 import org.inbloom.notification.client.email.services.EmailService;
 import org.inbloom.notification.client.email.spring.NoticationClientPropertyPlaceholderConfig;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.*;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.thymeleaf.spring4.SpringTemplateEngine;
@@ -18,6 +16,7 @@ import java.util.Properties;
  */
 @Configuration
 @Import(NoticationClientPropertyPlaceholderConfig.class)
+@ComponentScan(basePackages = {"com.inbloom.notification.client"})
 public class AppConfig {
 
     @Value("${mail.server.host}")
@@ -100,4 +99,9 @@ public class AppConfig {
         return new EmailService();
     }
 
+    @Bean
+    @Scope ("singleton")
+    public NotificationServiceFacade notificationServiceFacade() {
+        return new NotificationServiceFacade();
+    }
 }

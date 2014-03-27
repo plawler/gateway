@@ -115,9 +115,10 @@
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
             <version>${commons.logging.version}</version>
-            <scope>test</scope>
+            <!-- <scope>test</scope> -->
         </dependency>
 
+        <!-- This magic swaps out javamail for an in-memory javamail replacement, for testing purposes. -->
         <dependency>
             <groupId>org.jvnet.mock-javamail</groupId>
             <artifactId>mock-javamail</artifactId>

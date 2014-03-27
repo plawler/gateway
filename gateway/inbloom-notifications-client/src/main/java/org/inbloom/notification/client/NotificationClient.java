@@ -1,10 +1,6 @@
 package org.inbloom.notification.client;
 
-import org.inbloom.notification.client.email.services.EmailService;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.mail.MessagingException;
-import java.util.Locale;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
  * Singleton entrypoint for sending notifications.  This is a simple implementation.  A more robust impl could force notification services (email, etc) to
@@ -14,10 +10,6 @@ import java.util.Locale;
  */
 public class NotificationClient {
 
-    public enum NotificationTypeEnum {
-        EMAIL;
-    }
-
     /** Private constructor prevents instantiation from other classes. */
     private NotificationClient() { }
 
@@ -26,38 +18,17 @@ public class NotificationClient {
      * or the first access to SingletonHolder.INSTANCE, not before.
      */
     private static class SingletonHolder {
-        private static final NotificationClient INSTANCE = new NotificationClient();
+        private static  NotificationServiceFacade INSTANCE;
+        static {
+            AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
+            NotificationServiceFacade notificationServiceFacade = (NotificationServiceFacade)ctx.getBean("notificationServiceFacade");
+            INSTANCE = notificationServiceFacade;
+        }
+
     }
 
-    public static NotificationClient getInstance() {
+    public static NotificationServiceFacade getInstance() {
         return SingletonHolder.INSTANCE;
-    }
-
-    @Autowired
-    private EmailService emailService;
-
-    /**
-     * Builds and sends and account registration confirmation  message, using the specified Locale.
-     * @param notificationTypeEnum The type of notification.
-     * @param recipientName The name of the recipient the message is intended for.
-     * @param recipientEmail The email address to send the message to.
-     * @param confirmationLink The link to embed within the email.
-     * @param locale The locale for the message (determines which resource bundle is used for multilingual support). Use Locale.ENGLISH.
-     * @throws MessagingException
-     */
-    public void sendAccountRegistrationConfirmation(final NotificationTypeEnum notificationTypeEnum, final String recipientName,
-                                                    final String recipientEmail, final String confirmationLink, Locale locale) throws MessagingException {
-        if (notificationTypeEnum == null) {
-            throw new IllegalStateException("A Notification Type must be provided.");
-        }
-
-        switch (notificationTypeEnum) {
-            case EMAIL:  this.emailService.sendAccountRegistrationConfirmation(recipientName, recipientEmail,confirmationLink,locale);
-                break;
-            default:  this.emailService.sendAccountRegistrationConfirmation(recipientName, recipientEmail,confirmationLink,locale);
-                break;
-        }
-
     }
 
 }
