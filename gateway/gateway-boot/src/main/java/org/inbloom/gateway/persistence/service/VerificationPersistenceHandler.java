@@ -51,7 +51,9 @@ public class VerificationPersistenceHandler implements VerificationPersistenceSe
 
     @Override
     public RetrievedVerificationEvent retrieveVerification(RetrieveVerificationEvent retrieveVerificationEvent) {
-        VerificationEntity verificationEntity = verificationRepository.findOne(retrieveVerificationEvent.getVerificationId());
-        return new RetrievedVerificationEvent(conversionService.convert(verificationEntity, Verification.class));
+        //TODO:
+//        VerificationEntity verificationEntity = verificationRepository.findOne(retrieveVerificationEvent.getVerificationId());
+//        return new RetrievedVerificationEvent(conversionService.convert(verificationEntity, Verification.class));
+        return RetrievedVerificationEvent.notFound();
     }
 }

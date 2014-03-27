@@ -14,4 +14,10 @@ public class UserFixture {
         user.setLastName("App-Provider");
         return user;
     }
+
+    public static User buildUser(Long id){
+        User user = buildUser();
+        user.setUserId(id);
+        return user;
+    }
 }

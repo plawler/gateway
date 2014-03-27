@@ -30,7 +30,7 @@ public class ApplicationProviderPersistenceServiceTest {
 
     @Test
     public void shouldCreateAnApplicationProvider(){
-        RegisterApplicationProviderEvent request = ApplicationProviderEventFixtures.buildRegisterAppProviderEvent(null);
+        RegisterApplicationProviderEvent request = ApplicationProviderEventFixtures.buildRegisterAppProviderEvent();
         RegisteredApplicationProviderEvent response = applicationProviderPersistenceService.createApplicationProvider(request);
 
         assertEquals(ResponseEvent.Status.SUCCESS, response.status());
@@ -44,7 +44,7 @@ public class ApplicationProviderPersistenceServiceTest {
 
     @Test
     public void shouldRetrieveAnApplicationProvider(){
-        RegisterApplicationProviderEvent registerRequest = ApplicationProviderEventFixtures.buildRegisterAppProviderEvent(null);
+        RegisterApplicationProviderEvent registerRequest = ApplicationProviderEventFixtures.buildRegisterAppProviderEvent();
         RegisteredApplicationProviderEvent registerResponse = applicationProviderPersistenceService.createApplicationProvider(registerRequest);
         Long appProviderId = registerResponse.getData().getApplicationProviderId();
 
@@ -60,7 +60,7 @@ public class ApplicationProviderPersistenceServiceTest {
 
     @Test
     public void shouldModifyAnApplicationProvider(){
-        RegisterApplicationProviderEvent registerRequest = ApplicationProviderEventFixtures.buildRegisterAppProviderEvent(null);
+        RegisterApplicationProviderEvent registerRequest = ApplicationProviderEventFixtures.buildRegisterAppProviderEvent();
         RegisteredApplicationProviderEvent registerResponse = applicationProviderPersistenceService.createApplicationProvider(registerRequest);
         Long appProviderId = registerResponse.getData().getApplicationProviderId();
 

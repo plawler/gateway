@@ -8,8 +8,8 @@ import org.inbloom.gateway.core.event.*;
 public class ApplicationProviderEventFixtures {
 
     /**register**/
-    public static RegisterApplicationProviderEvent buildRegisterAppProviderEvent(Long id) {
-        return new RegisterApplicationProviderEvent(ApplicationProviderFixture.buildAppProvider1(id));
+    public static RegisterApplicationProviderEvent buildRegisterAppProviderEvent() {
+        return new RegisterApplicationProviderEvent(ApplicationProviderFixture.buildAppProvider1(null));
     }
 
     /**modify**/

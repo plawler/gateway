@@ -34,6 +34,8 @@ public class VerificationServiceHandler implements VerificationService{
 
         Verification verification = createEvent.getData();
 
+        //TODO: delete other verifications?
+
         //generate verification token
         String token = keyGenerator.generateKey();
         verification.setToken(token);
