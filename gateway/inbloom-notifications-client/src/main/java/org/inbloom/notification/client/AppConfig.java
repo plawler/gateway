@@ -75,6 +75,7 @@ public class AppConfig {
      * THYMELEAF: Template Resolver for email templates
      */
     @Bean
+    @Scope ("singleton")
     public ClassLoaderTemplateResolver emailTemplateResolver() {
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
         templateResolver.setPrefix("email-templates/");
@@ -88,6 +89,7 @@ public class AppConfig {
      * THYMELEAF: Template Engine (Spring4-specific version)
      */
     @Bean
+    @Scope ("singleton")
     public SpringTemplateEngine templateEngine() {
         SpringTemplateEngine templateEngine = new SpringTemplateEngine();
         templateEngine.setTemplateResolver(emailTemplateResolver());
