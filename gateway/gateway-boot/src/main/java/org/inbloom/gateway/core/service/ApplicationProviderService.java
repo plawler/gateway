@@ -11,7 +11,7 @@ public interface ApplicationProviderService {
 
     public RegisteredApplicationProviderEvent registerApplicationProvider(RegisterApplicationProviderEvent createAppProviderEvent);
 
-    public ModifiedApplicationProviderEvent modifyApplicationProvicer(ModifyApplicationProviderEvent modifyAppProviderEvent);
+    public ModifiedApplicationProviderEvent modifyApplicationProvider(ModifyApplicationProviderEvent modifyAppProviderEvent);
 
     public RetrievedApplicationProviderEvent retrieveApplicationProvider(RetrieveApplicationProviderEvent retrieveAppProviderEvent);
 

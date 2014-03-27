@@ -25,7 +25,7 @@ public class ModifiedApplicationProviderEvent implements ResponseEvent{
     }
 
     public static ModifiedApplicationProviderEvent notFound(){
-        return new ModifiedApplicationProviderEvent(null, Status.SUCCESS);
+        return new ModifiedApplicationProviderEvent(null, Status.NOT_FOUND);
     }
 
 }

@@ -48,7 +48,7 @@ public class ApplicationProviderServiceHandler implements ApplicationProviderSer
     }
 
     @Override
-    public ModifiedApplicationProviderEvent modifyApplicationProvicer(ModifyApplicationProviderEvent modifyAppProviderEvent) {
+    public ModifiedApplicationProviderEvent modifyApplicationProvider(ModifyApplicationProviderEvent modifyAppProviderEvent) {
 
         return appProviderPersistenceService.modifyApplicationProvider(modifyAppProviderEvent);
     }

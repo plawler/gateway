@@ -76,12 +76,12 @@ public class ApplicationProviderController {
         if(id == null) {
             //fail fast if this came in without a valid Id
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        } else if (appProvider.getApplicationProviderId() != null && !id.equals(appProvider.getApplicationProviderId())) {
+        } else if (appProvider.getApplicationProviderId() == null || !id.equals(appProvider.getApplicationProviderId())) {
             //fail fast if the id from endpoint does not match the one passed in the request body
             return new ResponseEntity<ApplicationProvider>(appProvider, HttpStatus.CONFLICT);
         }
 
-        ModifiedApplicationProviderEvent modifiedEvent = appProviderService.modifyApplicationProvicer(new ModifyApplicationProviderEvent(id, appProvider));
+        ModifiedApplicationProviderEvent modifiedEvent = appProviderService.modifyApplicationProvider(new ModifyApplicationProviderEvent(id, appProvider));
 
         switch (modifiedEvent.status())
         {
