@@ -13,7 +13,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.nio.charset.StandardCharsets;
@@ -35,16 +34,27 @@ public class EmailService {
     @Autowired
     private TemplateEngine templateEngine;
 
-
-    public void sendAccountRegistrationConfirmationEmail(final String recipientName, final String recipientEmail, final String confirmationLink, Locale locale) throws MessagingException {
+    /**
+     * Builds and sends and account registration confirmation email message, using the specified Locale.
+     * @param recipientName The name of the recipient the message is intended for.
+     * @param recipientEmail The email address to send the message to.
+     * @param confirmationLink The link to embed within the email.
+     * @param locale The locale for the message (determines which resource bundle is used for multilingual support). Use Locale.ENGLISH.
+     * @throws MessagingException
+     */
+    public void sendAccountRegistrationConfirmation(final String recipientName, final String recipientEmail, final String confirmationLink, Locale locale) throws MessagingException {
         final String subject = "inBloom Developer Account Validation";
         final String replyTo = "do-notreply@inbloom.org";
         final String from = replyTo;
+        if (locale == null) {
+            locale = Locale.ENGLISH;
+        }
 
         // Prepare the evaluation context
         final Context context = new Context(locale);
         context.setVariable("name", recipientName);
         context.setVariable("link", confirmationLink);
+        context.setVariable("comma", ",");  //used by resource bundle to append punctuation.
 
         final String htmlContent = this.templateEngine.process(NotificationTemplateEnum.CONFIRM_ACCOUNT_REGISTRATION.getTemplateNameName(), context);
 
@@ -52,4 +62,5 @@ public class EmailService {
         final MimeMessage msg = msgBuilder.subject(subject).replyTo(replyTo).from(from).to(recipientEmail).body(htmlContent).isHtml(true).build();
         mailSender.send(msg);
     }
+
 }

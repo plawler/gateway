@@ -14,7 +14,7 @@ import java.util.List;
  * Encapsulates construction of mime messages using a step builder pattern.
  * Created by tfritz on 3/24/14.
  */
-public class MimeMessageBuilder {   ;
+public class MimeMessageBuilder {
     final JavaMailSender mailSender;
     final String charset;
     private String from;
@@ -27,6 +27,12 @@ public class MimeMessageBuilder {   ;
     private boolean isHtml = true;
 
     public MimeMessageBuilder(final JavaMailSender mailSender, final String charset) {
+        if (mailSender == null) {
+            throw new IllegalArgumentException("An JavaMailSender instance must be provided to the MimeMessageBuilder constructor.");
+        }
+        if (StringUtils.isEmpty(charset)) {
+            throw new IllegalArgumentException("An charset value must be provided to the MimeMessageBuilder constructor.");
+        }
         this.mailSender = mailSender;
         this.charset = charset;
     }
@@ -90,26 +96,20 @@ public class MimeMessageBuilder {   ;
      * Performs validation of parameters required by builder.
      */
     protected void validate() {
-        if (mailSender == null) {
-            throw new UnsupportedOperationException("Invalid Mime Message:  an instance must be provided to the constructor for the JavaMailSender.");
-        }
-        if (StringUtils.isEmpty(charset)) {
-            throw new UnsupportedOperationException("Invalid Mime Message:  an instance must be provided to the constructor for the CharSet.");
-        }
         if (StringUtils.isEmpty(subject)) {
-            throw new UnsupportedOperationException("Invalid Mime Message:  a value is required for subject.");
+            throw new IllegalArgumentException("Invalid Mime Message:  a value is required for subject.");
         }
         if (to == null || to.size() == 0) {
-            throw new UnsupportedOperationException("Invalid Mime Message:  at least one To recipient is required.");
+            throw new IllegalArgumentException("Invalid Mime Message:  at least one To recipient is required.");
         }
         if (StringUtils.isEmpty(from)) {
-            throw new UnsupportedOperationException("Invalid Mime Message:  from is required.");
+            throw new IllegalArgumentException("Invalid Mime Message:  from is required.");
         }
         if (StringUtils.isEmpty(replyTo)) {
-            throw new UnsupportedOperationException("Invalid Mime Message:  a replyTo is required.");
+            throw new IllegalArgumentException("Invalid Mime Message:  a replyTo is required.");
         }
         if (StringUtils.isEmpty(body)) {
-            throw new UnsupportedOperationException("Invalid Mime Message:  message text is required.");
+            throw new IllegalArgumentException("Invalid Mime Message:  message text is required.");
         }
     }
 
