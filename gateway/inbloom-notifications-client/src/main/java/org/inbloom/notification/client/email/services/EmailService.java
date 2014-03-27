@@ -4,6 +4,7 @@ package org.inbloom.notification.client.email.services;
  * Created by tfritz on 3/24/14.
  */
 
+import org.inbloom.notification.client.NotificationException;
 import org.inbloom.notification.client.email.messages.MimeMessageBuilder;
 import org.inbloom.notification.domain.NotificationTemplateEnum;
 import org.slf4j.Logger;
@@ -13,7 +14,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-import javax.mail.MessagingException;
+
 import javax.mail.internet.MimeMessage;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
@@ -40,9 +41,9 @@ public class EmailService {
      * @param recipientEmail The email address to send the message to.
      * @param confirmationLink The link to embed within the email.
      * @param locale The locale for the message (determines which resource bundle is used for multilingual support). Use Locale.ENGLISH.
-     * @throws MessagingException
+     * @throws NotificationException
      */
-    public void sendAccountRegistrationConfirmation(final String recipientName, final String recipientEmail, final String confirmationLink, Locale locale) throws MessagingException {
+    public void sendAccountRegistrationConfirmation(final String recipientName, final String recipientEmail, final String confirmationLink, Locale locale) throws NotificationException {
         final String subject = "inBloom Developer Account Validation";
         final String replyTo = "do-notreply@inbloom.org";
         final String from = replyTo;

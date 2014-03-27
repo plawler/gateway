@@ -3,7 +3,6 @@ package org.inbloom.notification.client;
 import org.inbloom.notification.client.email.services.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.mail.MessagingException;
 import java.util.Locale;
 
 /**
@@ -21,10 +20,10 @@ public class NotificationServiceFacade {
      * @param recipientEmail The email address to send the message to.
      * @param confirmationLink The link to embed within the email.
      * @param locale The locale for the message (determines which resource bundle is used for multilingual support). Use Locale.ENGLISH.
-     * @throws javax.mail.MessagingException
+     * @throws NotificationException
      */
     public void sendAccountRegistrationConfirmation(final NotificationTypeEnum notificationTypeEnum, final String recipientName,
-                                                    final String recipientEmail, final String confirmationLink, Locale locale) throws MessagingException {
+                                                    final String recipientEmail, final String confirmationLink, Locale locale) throws NotificationException {
         if (notificationTypeEnum == null) {
             throw new IllegalStateException("A Notification Type must be provided.");
         }

@@ -3,6 +3,7 @@ package org.inbloom.notification.client.email.messages;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.inbloom.notification.client.AppConfig;
+import org.inbloom.notification.client.NotificationException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -61,7 +62,7 @@ public class TestMimeMessageBuilder {
     }
 
     @Test
-    public void testMimeMessageBuilderConstructor() {
+    public void testMimeMessageBuilderConstructor() throws NotificationException {
         MimeMessageBuilder builder = new MimeMessageBuilder(this.mailSender, StandardCharsets.UTF_8.name());
     }
 

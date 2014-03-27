@@ -1,5 +1,6 @@
 package org.inbloom.notification.client.email.messages;
 
+import org.inbloom.notification.client.NotificationException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.util.StringUtils;
@@ -10,6 +11,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.ArrayList;
 import java.util.List;
+
+
 /**
  * Encapsulates construction of mime messages using a step builder pattern.
  * Created by tfritz on 3/24/14.
@@ -26,12 +29,12 @@ public class MimeMessageBuilder {
     private String replyTo;
     private boolean isHtml = true;
 
-    public MimeMessageBuilder(final JavaMailSender mailSender, final String charset) {
+    public MimeMessageBuilder(final JavaMailSender mailSender, final String charset) throws NotificationException {
         if (mailSender == null) {
-            throw new IllegalArgumentException("An JavaMailSender instance must be provided to the MimeMessageBuilder constructor.");
+            throw new NotificationException("An JavaMailSender instance must be provided to the MimeMessageBuilder constructor.");
         }
         if (StringUtils.isEmpty(charset)) {
-            throw new IllegalArgumentException("An charset value must be provided to the MimeMessageBuilder constructor.");
+            throw new NotificationException("An charset value must be provided to the MimeMessageBuilder constructor.");
         }
         this.mailSender = mailSender;
         this.charset = charset;
@@ -95,53 +98,61 @@ public class MimeMessageBuilder {
     /**
      * Performs validation of parameters required by builder.
      */
-    protected void validate() {
+    protected void validate() throws NotificationException {
         if (StringUtils.isEmpty(subject)) {
-            throw new IllegalArgumentException("Invalid Mime Message:  a value is required for subject.");
+            throw new NotificationException("Invalid Mime Message:  a value is required for subject.");
         }
         if (to == null || to.size() == 0) {
-            throw new IllegalArgumentException("Invalid Mime Message:  at least one To recipient is required.");
+            throw new NotificationException("Invalid Mime Message:  at least one To recipient is required.");
         }
         if (StringUtils.isEmpty(from)) {
-            throw new IllegalArgumentException("Invalid Mime Message:  from is required.");
+            throw new NotificationException("Invalid Mime Message:  from is required.");
         }
         if (StringUtils.isEmpty(replyTo)) {
-            throw new IllegalArgumentException("Invalid Mime Message:  a replyTo is required.");
+            throw new NotificationException("Invalid Mime Message:  a replyTo is required.");
         }
         if (StringUtils.isEmpty(body)) {
-            throw new IllegalArgumentException("Invalid Mime Message:  message text is required.");
+            throw new NotificationException("Invalid Mime Message:  message text is required.");
         }
     }
 
-    public MimeMessage build() throws MessagingException {
+    /**
+     * Builds the MimeMessage from provided values.
+     * @return
+     * @throws NotificationException
+     */
+    public MimeMessage build() throws NotificationException {
         /* Perform validations on params supplied to builder before attempting to construct mime message. */
         validate();
 
         final MimeMessage mimeMessage = mailSender.createMimeMessage();
         final MimeMessageHelper msg = new MimeMessageHelper(mimeMessage, charset);
 
+        try {
+            msg.setSubject(subject);
+            msg.setFrom(createInternetAddress(from));
+            msg.setReplyTo(createInternetAddress(replyTo));
 
-        msg.setSubject(subject);
-        msg.setFrom(createInternetAddress(from));
-        msg.setReplyTo(createInternetAddress(replyTo));
-
-        for (String recipient : to) {
-            msg.addTo(createInternetAddress(recipient));
-        }
-
-        if (cc != null && cc.size() > 0) {
-            for (String recipient : cc) {
-                msg.addCc(createInternetAddress(recipient));
+            for (String recipient : to) {
+                msg.addTo(createInternetAddress(recipient));
             }
-        }
 
-        if (bcc != null && bcc.size() > 0) {
-            for (String recipient : bcc) {
-                msg.addBcc(createInternetAddress(recipient));
+            if (cc != null && cc.size() > 0) {
+                for (String recipient : cc) {
+                    msg.addCc(createInternetAddress(recipient));
+                }
             }
-        }
 
-        msg.setText(body, isHtml);
+            if (bcc != null && bcc.size() > 0) {
+                for (String recipient : bcc) {
+                    msg.addBcc(createInternetAddress(recipient));
+                }
+            }
+
+            msg.setText(body, isHtml);
+        } catch (MessagingException me) {
+            throw new NotificationException(me);
+        }
 
         return mimeMessage;
     }
