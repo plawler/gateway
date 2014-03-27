@@ -20,11 +20,12 @@ public class NotificationClient {
     private static class SingletonHolder {
         private static  NotificationServiceFacade INSTANCE;
         static {
-            AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
-            NotificationServiceFacade notificationServiceFacade = (NotificationServiceFacade)ctx.getBean("notificationServiceFacade");
-            INSTANCE = notificationServiceFacade;
+            synchronized(NotificationClient.class) {
+                AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
+                NotificationServiceFacade notificationServiceFacade = (NotificationServiceFacade) ctx.getBean("notificationServiceFacade");
+                INSTANCE = notificationServiceFacade;
+            }
         }
-
     }
 
     public static NotificationServiceFacade getInstance() {
