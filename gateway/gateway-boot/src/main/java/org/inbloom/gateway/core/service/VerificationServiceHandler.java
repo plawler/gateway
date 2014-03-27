@@ -1,14 +1,19 @@
 package org.inbloom.gateway.core.service;
 
+import org.inbloom.gateway.core.domain.User;
 import org.inbloom.gateway.core.domain.Verification;
 import org.inbloom.gateway.core.event.*;
 import org.inbloom.gateway.persistence.service.VerificationPersistenceService;
 import org.inbloom.gateway.util.keyService.KeyGenerator;
+import org.inbloom.notification.client.NotificationClient;
+import org.inbloom.notification.client.NotificationException;
+import org.inbloom.notification.client.NotificationTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created with IntelliJ IDEA.
@@ -34,6 +39,8 @@ public class VerificationServiceHandler implements VerificationService{
 
         Verification verification = createEvent.getData();
 
+        User user = verification.getUser();
+
         //TODO: delete other verifications?
 
         //generate verification token
@@ -50,7 +57,16 @@ public class VerificationServiceHandler implements VerificationService{
         CreatedVerificationEvent createdEvent = verificationPersistenceService.createVerification(createEvent);
 
         if(createdEvent.status() == ResponseEvent.Status.SUCCESS) {
-            //TODO: send verification email
+
+            //send email verification
+            String confirmationLink = "https://portal.something.inbloom.org/email_confirmation?token="+token;
+            try {
+                NotificationClient.getInstance().sendAccountRegistrationConfirmation(NotificationTypeEnum.EMAIL, user.getFirstName(), user.getEmail(), confirmationLink, Locale.ENGLISH);
+            } catch (NotificationException e) {
+                return CreatedVerificationEvent.fail("Notification Client failed to send email: " + e.getMessage());
+            }
+
+
             System.out.println("sending verification email w/ token: " + token);
         }
         return createdEvent;
