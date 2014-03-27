@@ -13,7 +13,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.nio.charset.StandardCharsets;
@@ -43,7 +42,7 @@ public class EmailService {
      * @param locale The locale for the message (determines which resource bundle is used for multilingual support). Use Locale.ENGLISH.
      * @throws MessagingException
      */
-    public void sendAccountRegistrationConfirmationEmail(final String recipientName, final String recipientEmail, final String confirmationLink, Locale locale) throws MessagingException {
+    public void sendAccountRegistrationConfirmation(final String recipientName, final String recipientEmail, final String confirmationLink, Locale locale) throws MessagingException {
         final String subject = "inBloom Developer Account Validation";
         final String replyTo = "do-notreply@inbloom.org";
         final String from = replyTo;
@@ -63,4 +62,5 @@ public class EmailService {
         final MimeMessage msg = msgBuilder.subject(subject).replyTo(replyTo).from(from).to(recipientEmail).body(htmlContent).isHtml(true).build();
         mailSender.send(msg);
     }
+
 }

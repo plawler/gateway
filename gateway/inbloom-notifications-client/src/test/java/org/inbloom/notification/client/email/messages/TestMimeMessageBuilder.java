@@ -2,6 +2,7 @@ package org.inbloom.notification.client.email.messages;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.inbloom.notification.client.AppConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.util.Assert;
 import org.thymeleaf.TemplateEngine;
 
@@ -21,7 +23,7 @@ import java.util.List;
  * Created by tfritz on 3/26/14.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:notificationClientApplicationContext.xml" })
+@ContextConfiguration(classes=AppConfig.class, loader=AnnotationConfigContextLoader.class)
 public class TestMimeMessageBuilder {
     final Logger log = LoggerFactory.getLogger(TestMimeMessageBuilder.class);   //IOC friendly to use instance variable for logger.
 

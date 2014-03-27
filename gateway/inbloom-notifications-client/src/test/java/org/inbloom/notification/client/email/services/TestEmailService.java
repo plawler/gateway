@@ -1,5 +1,6 @@
 package org.inbloom.notification.client.email.services;
 
+import org.inbloom.notification.client.AppConfig;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import javax.mail.Message;
 import java.util.List;
@@ -18,7 +20,7 @@ import java.util.Locale;
  * Created by tfritz on 3/25/14.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:notificationClientApplicationContext.xml" })
+@ContextConfiguration(classes=AppConfig.class, loader=AnnotationConfigContextLoader.class)
 public class TestEmailService {
     final Logger log = LoggerFactory.getLogger(TestEmailService.class);   //IOC friendly to use instance variable for logger.
 
@@ -35,7 +37,7 @@ public class TestEmailService {
 
         try {
             Mailbox.clearAll();
-            emailService.sendAccountRegistrationConfirmationEmail(recipientName, recipientEmail, confirmationLink, locale);
+            emailService.sendAccountRegistrationConfirmation(recipientName, recipientEmail, confirmationLink, locale);
             List<Message> inbox = Mailbox.get(recipientEmail);
             log.info("   # of messages within mailbox: " + inbox.size());
             for (Message msg : inbox) {
@@ -60,7 +62,7 @@ public class TestEmailService {
 
         try {
             Mailbox.clearAll();
-            emailService.sendAccountRegistrationConfirmationEmail(recipientName, recipientEmail, confirmationLink, locale);
+            emailService.sendAccountRegistrationConfirmation(recipientName, recipientEmail, confirmationLink, locale);
             List<Message> inbox = Mailbox.get(recipientEmail);
             log.info("   # of messages within mailbox: " + inbox.size());
             for (Message msg : inbox) {

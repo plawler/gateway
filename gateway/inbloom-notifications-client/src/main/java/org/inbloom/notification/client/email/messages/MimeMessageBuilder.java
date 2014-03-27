@@ -3,7 +3,6 @@ package org.inbloom.notification.client.email.messages;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.util.StringUtils;
-import sun.plugin.dom.exception.InvalidStateException;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
@@ -15,7 +14,7 @@ import java.util.List;
  * Encapsulates construction of mime messages using a step builder pattern.
  * Created by tfritz on 3/24/14.
  */
-public class MimeMessageBuilder {   ;
+public class MimeMessageBuilder {
     final JavaMailSender mailSender;
     final String charset;
     private String from;
@@ -29,10 +28,10 @@ public class MimeMessageBuilder {   ;
 
     public MimeMessageBuilder(final JavaMailSender mailSender, final String charset) {
         if (mailSender == null) {
-            throw new InvalidStateException("An JavaMailSender instance must be provided to the MimeMessageBuilder constructor.");
+            throw new IllegalArgumentException("An JavaMailSender instance must be provided to the MimeMessageBuilder constructor.");
         }
         if (StringUtils.isEmpty(charset)) {
-            throw new InvalidStateException("An charset value must be provided to the MimeMessageBuilder constructor.");
+            throw new IllegalArgumentException("An charset value must be provided to the MimeMessageBuilder constructor.");
         }
         this.mailSender = mailSender;
         this.charset = charset;
@@ -98,19 +97,19 @@ public class MimeMessageBuilder {   ;
      */
     protected void validate() {
         if (StringUtils.isEmpty(subject)) {
-            throw new InvalidStateException("Invalid Mime Message:  a value is required for subject.");
+            throw new IllegalArgumentException("Invalid Mime Message:  a value is required for subject.");
         }
         if (to == null || to.size() == 0) {
-            throw new InvalidStateException("Invalid Mime Message:  at least one To recipient is required.");
+            throw new IllegalArgumentException("Invalid Mime Message:  at least one To recipient is required.");
         }
         if (StringUtils.isEmpty(from)) {
-            throw new InvalidStateException("Invalid Mime Message:  from is required.");
+            throw new IllegalArgumentException("Invalid Mime Message:  from is required.");
         }
         if (StringUtils.isEmpty(replyTo)) {
-            throw new InvalidStateException("Invalid Mime Message:  a replyTo is required.");
+            throw new IllegalArgumentException("Invalid Mime Message:  a replyTo is required.");
         }
         if (StringUtils.isEmpty(body)) {
-            throw new InvalidStateException("Invalid Mime Message:  message text is required.");
+            throw new IllegalArgumentException("Invalid Mime Message:  message text is required.");
         }
     }
 
