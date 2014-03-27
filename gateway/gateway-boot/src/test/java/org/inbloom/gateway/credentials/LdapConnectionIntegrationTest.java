@@ -18,7 +18,14 @@ import static org.junit.Assert.*;
 @ContextConfiguration(classes = LdapConfiguration.class)
 public class LdapConnectionIntegrationTest {
 
-    private static final String TEST_DN = "cn=sonny.corleone@mailinator.com,ou=people,ou=LocalNew,ou=DevTest,dc=slidev,dc=org";
+    private static final String PEOPLE_BASE_DN = "ou=people,ou=LocalNew,ou=DevTest,dc=slidev,dc=org";
+    private static final String GROUP_BASE_DN = "ou=groups,ou=LocalNew,ou=DevTest,dc=slidev,dc=org";
+
+    private static final String PERSON_CN = "cn=sonny.corleone@mailinator.com";
+    private static final String GROUP_CN = "cn=application_developer";
+
+    private static final String TEST_PERSON_DN = PERSON_CN + "," + PEOPLE_BASE_DN;
+    private static final String TEST_GROUP_DN = GROUP_CN + "," + GROUP_BASE_DN;
 
     @Autowired
     private LDAPConnection connection;
@@ -33,7 +40,7 @@ public class LdapConnectionIntegrationTest {
         LDAPResult added = connection.add(addRequest());
         assertEquals(0, added.getResultCode().intValue());
 
-        SearchResult result = connection.search(searchRequest());
+        SearchResult result = connection.search(searchRequest(PEOPLE_BASE_DN, "mail=sonny.corleone@mailinator.com"));
         assertEquals(1, result.getEntryCount());
 
         SearchResultEntry entry = result.getSearchEntries().get(0);
@@ -44,32 +51,64 @@ public class LdapConnectionIntegrationTest {
         assertEquals("Corleone", entry.getAttributeValue("sn"));
         assertEquals("s@ntin0rul3z", entry.getAttributeValue("userPassword"));
 
-        LDAPResult modified = connection.modify(modifyRequest());
+        LDAPResult modified = connection.modify(modifySonnyRequest());
         assertEquals(0, modified.getResultCode().intValue());
 
-        DeleteRequest request = new DeleteRequest(TEST_DN);
+        DeleteRequest request = new DeleteRequest(TEST_PERSON_DN);
         LDAPResult deleted = connection.delete(request);
         assertEquals(0, deleted.getResultCode().intValue());
     }
 
-    private String[] attributes() {
-        return new String[] {"cn", "objectClass", "givenName", "sn", "uid", "userPassword", "displayName",
-                "destinationIndicator", "homeDirectory", "uidNumber", "gidNumber", "mail", "loginShell", "gecos", "createdTimestamp", "modifyTimestamp"};
+    @Test
+    public void shouldManageEntriesInAGroup() throws LDAPException, LDIFException {
+        connection.add(addRequest());
+
+        LDAPResult groupModified = connection.modify(modifyGroupAddSonnyRequest());
+        assertEquals(0, groupModified.getResultCode().intValue());
+
+        LDAPResult groupModified2 = connection.modify(modifyGroupRemoveSonnyRequest());
+        assertEquals(0, groupModified2.getResultCode().intValue());
+
+        connection.delete(new DeleteRequest(TEST_PERSON_DN));
     }
 
-    private ModifyRequest modifyRequest() throws LDIFException {
+    private String[] attributes() {
+        return new String[] {"cn", "objectClass", "givenName", "sn", "uid", "userPassword", "displayName",
+                "destinationIndicator", "homeDirectory", "uidNumber", "gidNumber", "mail", "loginShell", "gecos",
+                "createdTimestamp", "modifyTimestamp"};
+    }
+
+    private ModifyRequest modifySonnyRequest() throws LDIFException {
         return new ModifyRequest(
-            "dn: " + TEST_DN,
+            "dn: " + TEST_PERSON_DN,
             "changetype: modify",
             "replace: givenName",
             "givenName: Sonny"
         );
     }
 
+    private ModifyRequest modifyGroupAddSonnyRequest() throws LDIFException {
+        return new ModifyRequest(
+                "dn: " + TEST_GROUP_DN,
+                "changetype: modify",
+                "add: memberUid",
+                "memberUid: sonny.corleone@mailinator.com"
+        );
+    }
+
+    private ModifyRequest modifyGroupRemoveSonnyRequest() throws LDIFException {
+        return new ModifyRequest(
+                "dn: " + TEST_GROUP_DN,
+                "changetype: modify",
+                "delete: memberUid",
+                "memberUid: sonny.corleone@mailinator.com"
+        );
+    }
+
     private AddRequest addRequest() {
         try {
             return new AddRequest(
-                "dn: " + TEST_DN,
+                "dn: " + TEST_PERSON_DN,
                 "objectClass: inetOrgPerson",
                 "objectClass: posixAccount",
                 "objectClass: top",
@@ -91,9 +130,8 @@ public class LdapConnectionIntegrationTest {
         throw new IllegalArgumentException("Your add request is jacked up, Holmes.");
     }
 
-    private SearchRequest searchRequest() throws LDAPException {
-        return new SearchRequest("ou=people,ou=LocalNew,ou=DevTest,dc=slidev,dc=org", SearchScope.SUB,
-                "mail=sonny.corleone@mailinator.com", attributes());
+    private SearchRequest searchRequest(String baseDn, String filter) throws LDAPException {
+        return new SearchRequest(baseDn, SearchScope.SUB, filter, attributes());
     }
 
 }
