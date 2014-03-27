@@ -1,7 +1,6 @@
 package org.inbloom.gateway.core.service;
 
 import org.inbloom.gateway.Gateway;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -25,6 +24,6 @@ public class ApplicationProviderServiceTest {
     ApplicationProviderService appProviderService;
 
 
-    @Test
+    //@Test
 
 }
