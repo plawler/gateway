@@ -90,6 +90,11 @@ public class ApplicationProviderPersistenceHandler implements ApplicationProvide
         }
     }
 
+    public UserEntity getUserByEmail(String email)
+    {
+        return userRepository.findByEmail(email);
+    }
+
     private void setCreateData(BaseEntity entity){
         entity.setCreatedAt(new Date());
         entity.setCreatedBy("System"); //TODO replace with actual user info after security model is implemented

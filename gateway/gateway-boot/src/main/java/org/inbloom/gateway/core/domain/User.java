@@ -1,5 +1,9 @@
 package org.inbloom.gateway.core.domain;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+
 /**
  * Created by lloydengebretsen on 3/21/14.
  */
@@ -7,8 +11,17 @@ public class User {
 
     private Long userId;
 
+    @Email
+    @NotEmpty
+    @Length(max = 128, message = "Length may not exceed 128 characters")
     private String email;
+
+    @NotEmpty
+    @Length(max = 128, message = "Length may not exceed 128 characters")
     private String firstName;
+
+    @NotEmpty
+    @Length(max = 128, message = "Length may not exceed 128 characters")
     private String lastName;
 
     public Long getUserId() {

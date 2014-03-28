@@ -1,5 +1,11 @@
 package org.inbloom.gateway.core.domain;
 
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 /**
  * Created by lloydengebretsen on 3/21/14.
  */
@@ -7,8 +13,16 @@ public class ApplicationProvider {
 
     private Long applicationProviderId;
 
+    @NotEmpty
+    @Length(max = 128, message = "Length may not exceed 128 characters")
     private String applicationProviderName;
+
+    @NotEmpty
+    @Length(max = 128, message = "Length may not exceed 128 characters")
     private String organizationName;
+
+    @Valid
+    @NotNull
     private User user;
 
     public Long getApplicationProviderId() {

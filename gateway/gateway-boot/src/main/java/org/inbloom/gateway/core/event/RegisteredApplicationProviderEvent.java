@@ -9,17 +9,30 @@ public class RegisteredApplicationProviderEvent implements ResponseEvent{
 
     private final ApplicationProvider data;
     private final Status status;
+    private final String errorMessage;
 
     private RegisteredApplicationProviderEvent(ApplicationProvider data, Status status) {
         this.data = data;
         this.status = status;
+        this.errorMessage = null;
+    }
+
+    private RegisteredApplicationProviderEvent(String errorMessage)
+    {
+        this.data = null;
+        this.status = Status.FAILED;
+        this.errorMessage = errorMessage;
     }
 
     public static RegisteredApplicationProviderEvent success(ApplicationProvider data){
         return new RegisteredApplicationProviderEvent(data, Status.SUCCESS);
     }
 
-    public ApplicationProvider getData(){
+    public static RegisteredApplicationProviderEvent fail(String message) {
+        return new RegisteredApplicationProviderEvent(message);
+    }
+
+    public ApplicationProvider getData() {
         return data;
     }
 
@@ -30,5 +43,10 @@ public class RegisteredApplicationProviderEvent implements ResponseEvent{
 
     public ApplicationProvider getApplicationProvider() {
         return data;
+    }
+
+    public String getErrorMessage()
+    {
+        return errorMessage;
     }
 }

@@ -20,8 +20,9 @@ public class VerificationEntity extends BaseEntity{
 
     private String clientIpAddress;
 
-    private Long tokenId;
+    private String token;
     private Long userId;
+
 
     public Long getVerificationId() {
         return verificationId;
@@ -71,11 +72,11 @@ public class VerificationEntity extends BaseEntity{
         this.userId = userId;
     }
 
-    public Long getTokenId() {
-        return tokenId;
+    public String getToken() {
+        return token;
     }
 
-    public void setTokenId(Long tokenId) {
-        this.tokenId = tokenId;
+    public void setToken(String token) {
+        this.token = token;
     }
 }
