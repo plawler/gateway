@@ -42,21 +42,19 @@ public class RestErrorHandler {
     }
 
 
-    @ExceptionHandler(ValidationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public GatewayError handleValidationException(ValidationException error)
-    {
-        //TODO: log?
-        return error.getGatewayError();
-    }
-
+    /**
+     * this consumes errors from the api, logs them
+     * and prevents the stack trace from showing up
+     * in the response.
+     * @param error - the exception thrown
+     * @return - the message returned to the client
+     */
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     public String handleValidationException(Exception error)
     {
-        //TODO: log?
+        logger.error("Bad News Api Exception:", error);
         return error.getMessage();
     }
 
