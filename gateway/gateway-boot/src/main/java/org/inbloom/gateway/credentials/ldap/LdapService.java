@@ -13,15 +13,15 @@ public class LdapService {
     @Autowired
     LDAPConnection connection;
 
-    public void addEntry(Entry entry) throws LDAPException {
-        LDAPResult added = connection.add(new AddRequest(entry));
+    public void add(AddRequest request) throws LDAPException {
+        LDAPResult added = connection.add(request);
     }
 
-    public Entry findEntry() {
+    public Entry find(SearchRequest request) {
         return null;
     }
 
-    public void modifyEntry(Entry entry) {
-
+    public void modify(ModifyRequest request) throws LDAPException {
+        LDAPResult modified = connection.modify(request);
     }
 }

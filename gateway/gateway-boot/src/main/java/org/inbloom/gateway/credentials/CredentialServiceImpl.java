@@ -6,7 +6,7 @@ import com.unboundid.ldif.LDIFException;
 import org.inbloom.gateway.core.event.AuthenticateUserEvent;
 import org.inbloom.gateway.core.event.CreateCredentialsEvent;
 import org.inbloom.gateway.core.event.CreatedCredentialsEvent;
-import org.inbloom.gateway.credentials.ldap.LdapEntryFactory;
+import org.inbloom.gateway.credentials.ldap.LdapRequestFactory;
 import org.inbloom.gateway.credentials.ldap.LdapService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +22,7 @@ public class CredentialServiceImpl implements CredentialService {
     private static final Logger logger = LoggerFactory.getLogger(CredentialServiceImpl.class);
 
     private final LdapService ldapService;
+    private LDAPConnection connection;
 
     @Autowired
     public CredentialServiceImpl(LdapService ldapService) {
@@ -31,20 +32,20 @@ public class CredentialServiceImpl implements CredentialService {
     @Override
     public CreatedCredentialsEvent createCredentials(CreateCredentialsEvent event) {
         try {
-            ldapService.addEntry(LdapEntryFactory.newPersonEntry(event));
-        } catch (LDIFException e) {
-            logger.error("Formatting credentials failed:" + e.getExceptionMessage());
-            return CreatedCredentialsEvent.failed("An LDIFException was thrown due to a malformed Entry");
+            ldapService.add(LdapRequestFactory.newPersonRequest(event.getFirstName(), event.getLastName(),
+                    event.getEmailAddress(), event.getPassword()));
+            ldapService.modify(LdapRequestFactory.newAddToAppDeveloperGroupRequest(event.getEmailAddress()));
+            ldapService.modify(LdapRequestFactory.newAddToSanboxAdminRequest(event.getEmailAddress()));
         } catch (LDAPException e) {
             logger.error("Adding credentials failed:" + e.getExceptionMessage());
-            return CreatedCredentialsEvent.failed("An LDAPException was thrown most likely due to a failed add request");
+            return CreatedCredentialsEvent.failed("An LDAPException was thrown most likely due to a malformed request");
         }
         return CreatedCredentialsEvent.success();
     }
 
     @Override
     public void authenticate(AuthenticateUserEvent event) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        throw new UnsupportedOperationException("When SimpleIDP goes away, implement me!");
     }
 
 }

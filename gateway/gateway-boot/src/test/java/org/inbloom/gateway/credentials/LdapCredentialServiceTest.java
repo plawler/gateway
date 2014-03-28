@@ -1,14 +1,11 @@
 package org.inbloom.gateway.credentials;
 
-import com.unboundid.ldap.sdk.Entry;
+import com.unboundid.ldap.sdk.AddRequest;
 import com.unboundid.ldap.sdk.LDAPException;
+import com.unboundid.ldap.sdk.ModifyRequest;
 import com.unboundid.ldif.LDIFException;
-import org.inbloom.gateway.Gateway;
-import org.inbloom.gateway.configuration.LdapConfiguration;
 import org.inbloom.gateway.core.event.CreateCredentialsEvent;
 import org.inbloom.gateway.core.event.ResponseEvent;
-import org.inbloom.gateway.core.event.VerboseResponseEvent;
-import org.inbloom.gateway.credentials.ldap.LdapEntryFactory;
 import org.inbloom.gateway.credentials.ldap.LdapService;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,8 +15,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 /**
  * Created By: paullawler
@@ -39,12 +36,28 @@ public class LdapCredentialServiceTest {
 
     @Test
     public void shouldCreateCredentials() throws LDAPException, LDIFException {
-        CreateCredentialsEvent command = new CreateCredentialsEvent("sonny.corleone@mailinator.com", "Santino", "Corleone", "s@ntin0rul3z");
-        VerboseResponseEvent response = service.createCredentials(command);
-        verify(ldap).addEntry(LdapEntryFactory.newPersonEntry(command));
-//        verify(ldap).addEntry(LdapEntryFactory.newGroupEntry(command));
+        ResponseEvent response = service.createCredentials(sonnysCredentialsEvent());
+
+        verify(ldap).add(any(AddRequest.class));
+        verify(ldap, times(2)).modify(any(ModifyRequest.class));
 
         assertEquals(ResponseEvent.Status.SUCCESS, response.status());
+    }
+
+    @Test(expected = Exception.class)
+    public void shouldFailOnMalformedRequest() throws LDAPException {
+        ResponseEvent response = service.createCredentials(malformedCredentialsEvent());
+        verify(ldap).add(any(AddRequest.class));
+        verify(ldap, times(2)).modify(any(ModifyRequest.class));
+        assertEquals(ResponseEvent.Status.FAILED, response.status());
+    }
+
+    private CreateCredentialsEvent malformedCredentialsEvent() {
+        return new CreateCredentialsEvent("Santino", "Corleone", null, "s@ntin0rul3z");
+    }
+
+    private CreateCredentialsEvent sonnysCredentialsEvent() {
+        return new CreateCredentialsEvent("Santino", "Corleone", "sonny.corleone@mailinator.com", "s@ntin0rul3z");
     }
 
 }

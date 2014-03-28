@@ -3,6 +3,7 @@ package org.inbloom.gateway.credentials;
 import com.unboundid.ldap.sdk.*;
 import com.unboundid.ldif.LDIFException;
 import org.inbloom.gateway.configuration.LdapConfiguration;
+import org.inbloom.gateway.credentials.ldap.LdapRequestFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class LdapConnectionIntegrationTest {
 
     @Test
     public void shouldCrudEntries() throws LDAPException, LDIFException {
-        LDAPResult added = connection.add(addRequest());
+        LDAPResult added = connection.add(addSonny());
         assertEquals(0, added.getResultCode().intValue());
 
         SearchResult result = connection.search(searchRequest(PEOPLE_BASE_DN, "mail=sonny.corleone@mailinator.com"));
@@ -47,7 +48,7 @@ public class LdapConnectionIntegrationTest {
 
         assertEquals("sonny.corleone@mailinator.com", entry.getAttributeValue("cn"));
         assertEquals("sonny.corleone@mailinator.com", entry.getAttributeValue("mail"));
-        assertEquals("Santino", entry.getAttributeValue("givenname"));
+        assertEquals("Santino", entry.getAttributeValue("givenName"));
         assertEquals("Corleone", entry.getAttributeValue("sn"));
         assertEquals("s@ntin0rul3z", entry.getAttributeValue("userPassword"));
 
@@ -78,6 +79,11 @@ public class LdapConnectionIntegrationTest {
                 "createdTimestamp", "modifyTimestamp"};
     }
 
+    private AddRequest addSonny() throws LDAPException {
+        return LdapRequestFactory.newPersonRequest("Santino", "Corleone", "sonny.corleone@mailinator.com", "s@ntin0rul3z");
+    }
+
+
     private ModifyRequest modifySonnyRequest() throws LDIFException {
         return new ModifyRequest(
             "dn: " + TEST_PERSON_DN,
@@ -87,13 +93,8 @@ public class LdapConnectionIntegrationTest {
         );
     }
 
-    private ModifyRequest modifyGroupAddSonnyRequest() throws LDIFException {
-        return new ModifyRequest(
-                "dn: " + TEST_GROUP_DN,
-                "changetype: modify",
-                "add: memberUid",
-                "memberUid: sonny.corleone@mailinator.com"
-        );
+    private ModifyRequest modifyGroupAddSonnyRequest() throws LDAPException {
+        return LdapRequestFactory.newAddToAppDeveloperGroupRequest("sonny.corleone@mailinator.com");
     }
 
     private ModifyRequest modifyGroupRemoveSonnyRequest() throws LDIFException {

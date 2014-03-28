@@ -11,7 +11,7 @@ public class CreateCredentialsEvent implements RequestEvent {
     private String lastName;
     private String password;
 
-    public CreateCredentialsEvent(String emailAddress, String firstName, String lastName, String password) {
+    public CreateCredentialsEvent(String firstName, String lastName, String emailAddress, String password) {
         this.emailAddress = emailAddress;
         this.firstName = firstName;
         this.lastName = lastName;
