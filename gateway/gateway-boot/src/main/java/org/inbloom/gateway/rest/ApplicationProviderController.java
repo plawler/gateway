@@ -39,13 +39,21 @@ public class ApplicationProviderController {
     {
         RegisteredApplicationProviderEvent createdEvent = appProviderService.registerApplicationProvider(new RegisterApplicationProviderEvent(appProvider));
 
-        ApplicationProvider newAppProvider = createdEvent.getApplicationProvider();
+        switch(createdEvent.status()) {
+            case SUCCESS:
+                ApplicationProvider newAppProvider = createdEvent.getApplicationProvider();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(componentsBuilder.path("/applicationProviders/{id}")
-                .buildAndExpand(newAppProvider.getApplicationProviderId()).toUri());
+                HttpHeaders headers = new HttpHeaders();
+                headers.setLocation(componentsBuilder.path("/applicationProviders/{id}")
+                        .buildAndExpand(newAppProvider.getApplicationProviderId()).toUri());
 
-        return new ResponseEntity<ApplicationProvider>(newAppProvider, headers, HttpStatus.CREATED);
+                return new ResponseEntity<ApplicationProvider>(newAppProvider, headers, HttpStatus.CREATED);
+
+
+            default:
+                String message = createdEvent.message();
+                return new ResponseEntity(message, HttpStatus.BAD_REQUEST);
+        }
     }
 
 

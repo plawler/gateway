@@ -6,10 +6,12 @@ import org.inbloom.gateway.persistence.domain.UserEntity;
 import org.inbloom.gateway.persistence.service.ApplicationProviderPersistenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * created by benjaminmorgan on 3/24/14
  */
+@Transactional
 @Service
 public class ApplicationProviderServiceHandler implements ApplicationProviderService {
 
@@ -52,6 +54,7 @@ public class ApplicationProviderServiceHandler implements ApplicationProviderSer
         return appProviderPersistenceService.modifyApplicationProvider(modifyAppProviderEvent);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public RetrievedApplicationProviderEvent retrieveApplicationProvider(RetrieveApplicationProviderEvent retrieveAppProviderEvent) {
 

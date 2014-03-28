@@ -32,7 +32,11 @@ public class VerificationServiceHandler implements VerificationService{
     @Autowired
     KeyGenerator keyGenerator;
 
-    static final int VERIFICATION_TIMEOUT = 4*24*60*60*1000; //4 days
+
+    //TODO: externalize the configuration of these two vars
+    int VERIFICATION_TIMEOUT = 4*24*60*60*1000; //4 days
+    String emailLinkTarget = "https://portal.stuff.inbloom.org/email_validation";
+
 
     @Override
     public CreatedVerificationEvent createVerification(CreateVerificationEvent createEvent) {
@@ -59,21 +63,18 @@ public class VerificationServiceHandler implements VerificationService{
         if(createdEvent.status() == ResponseEvent.Status.SUCCESS) {
 
             //send email verification
-            String confirmationLink = "https://portal.something.inbloom.org/email_confirmation?token="+token;
+            String confirmationLink = emailLinkTarget + "?token="+token;
             try {
                 NotificationClient.getInstance().sendAccountRegistrationConfirmation(NotificationTypeEnum.EMAIL, user.getFirstName(), user.getEmail(), confirmationLink, Locale.ENGLISH);
             } catch (NotificationException e) {
                 return CreatedVerificationEvent.fail("Notification Client failed to send email: " + e.getMessage());
             }
-
-
-            System.out.println("sending verification email w/ token: " + token);
         }
         return createdEvent;
     }
 
     @Override
-    public ModifiedVerificationEvent modifyVerification(ModifyVerificationEvent modifyEvent) {
+    public VerifiedEmailEvent verifyEmail(VerifyEmailEvent modifyEvent) {
 
         //TODO: update verification status to set "is_verified" to true
 
@@ -84,6 +85,7 @@ public class VerificationServiceHandler implements VerificationService{
         return null;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public RetrievedVerificationEvent retrieveVerification(RetrieveVerificationEvent retrieveEvent) {
         return verificationPersistenceService.retrieveVerification(retrieveEvent);

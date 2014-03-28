@@ -15,7 +15,7 @@ public class VerificationEventFixtures {
     }
 
     /**modify**/
-    public static ModifyVerificationEvent buildModifyVerificationEvent() {
+    public static VerifyEmailEvent buildModifyVerificationEvent() {
         return null; //TODO:
     }
 

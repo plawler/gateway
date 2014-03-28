@@ -5,7 +5,7 @@ import org.inbloom.gateway.core.domain.ApplicationProvider;
 /**
  * Created by lloydengebretsen on 3/24/14.
  */
-public class RegisteredApplicationProviderEvent implements ResponseEvent{
+public class RegisteredApplicationProviderEvent implements VerboseResponseEvent{
 
     private final ApplicationProvider data;
     private final Status status;
@@ -45,8 +45,8 @@ public class RegisteredApplicationProviderEvent implements ResponseEvent{
         return data;
     }
 
-    public String getErrorMessage()
-    {
+    @Override
+    public String message() {
         return errorMessage;
     }
 }
