@@ -1,4 +1,4 @@
-package com.inbloom.portal.web;
+package org.inbloom.portal.web;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;

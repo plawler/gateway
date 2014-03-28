@@ -14,6 +14,12 @@ public class LdapRequestFactory {
     private static final String PEOPLE_BASE_DN = "ou=people,ou=LocalNew,ou=DevTest,dc=slidev,dc=org";
     private static final String GROUP_BASE_DN = "ou=groups,ou=LocalNew,ou=DevTest,dc=slidev,dc=org";
 
+    private static final String LOGIN_SHELL = "/sbin/nologin";
+    private static final String HOME_DIRECTORY = "/dev/null";
+    private static final String USER_ID_NUMBER = "500";
+    private static final String GROUP_ID_NUMBER = "113";
+
+
     public static AddRequest newPersonRequest(String firstName, String lastName, String email, String password)
             throws LDAPException {
         DN dn = new DN("cn=" + email + "," + PEOPLE_BASE_DN);
@@ -27,10 +33,10 @@ public class LdapRequestFactory {
         // standard stuff
         entry.addAttribute("objectClass", "inetOrgPerson", "posixAccount", "top");
         entry.addAttribute("uid", email);
-        entry.addAttribute("uidNumber", "500");
-        entry.addAttribute("gidNumber", "113");
-        entry.addAttribute("loginShell", "/sbin/nologin");
-        entry.addAttribute("homeDirectory", "/dev/null");
+        entry.addAttribute("uidNumber", USER_ID_NUMBER);
+        entry.addAttribute("gidNumber", GROUP_ID_NUMBER);
+        entry.addAttribute("loginShell", LOGIN_SHELL);
+        entry.addAttribute("homeDirectory", HOME_DIRECTORY);
 
         return new AddRequest(entry);
     }

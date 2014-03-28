@@ -1,4 +1,4 @@
-package com.inbloom.portal.configuration;
+package org.inbloom.portal.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
