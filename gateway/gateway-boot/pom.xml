@@ -77,6 +77,13 @@
             <artifactId>modelmapper</artifactId>
             <version>${modelmapper.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.unboundid</groupId>
+            <artifactId>unboundid-ldapsdk</artifactId>
+            <version>${unbounded.ldap.version}</version>
+        </dependency>
+
         
         <!-- Apache Commons Codec -->
         <dependency>

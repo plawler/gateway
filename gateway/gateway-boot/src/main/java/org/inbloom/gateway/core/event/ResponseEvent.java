@@ -21,6 +21,6 @@ public interface ResponseEvent {
         }
     }
 
-    public Status status();
+    Status status();
 
 }

@@ -43,6 +43,7 @@
         <spring.version>4.0.2.RELEASE</spring.version>
         <swagger.version>0.6.5</swagger.version>
         <thymeleaf.version>2.1.2.RELEASE</thymeleaf.version>
+        <unbounded.ldap.version>2.3.5</unbounded.ldap.version>
     </properties>
 
     <modules>
