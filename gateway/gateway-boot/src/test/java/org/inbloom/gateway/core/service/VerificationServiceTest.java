@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.core.env.Environment;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
@@ -21,7 +22,14 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.jvnet.mock_javamail.Mailbox;
+import javax.mail.Message;
+import javax.mail.internet.AddressException;
 
+
+import java.util.List;
+
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
@@ -45,6 +53,9 @@ public class VerificationServiceTest {
     @Mock
     VerificationPersistenceService verificationPersistenceService;
 
+    @Mock
+    Environment env;
+
     @InjectMocks
     VerificationService verificationService = new VerificationServiceHandler();
 
@@ -58,7 +69,10 @@ public class VerificationServiceTest {
     }
 
     @Test
-    public void testCreateVerification() {
+    public void testCreateVerification() throws AddressException {
+
+        Mailbox.clearAll();
+
         when(verificationPersistenceService.createVerification(any(CreateVerificationEvent.class)))
                 .thenReturn(VerificationEventFixtures.buildSuccessCreatedVerificationEvent(1l, 1l));
 
@@ -71,6 +85,12 @@ public class VerificationServiceTest {
         assertNotNull(createdEvent.getData().getToken());
         assertNotNull(createdEvent.getData().getValidFrom());
         assertNotNull(createdEvent.getData().getValidUntil());
+
+        //check that in-memory email server received email
+        List<Message> inbox = Mailbox.get(createdEvent.getData().getUser().getEmail());
+        assertEquals(inbox.size(), 1);
+
+
     }
 
 
