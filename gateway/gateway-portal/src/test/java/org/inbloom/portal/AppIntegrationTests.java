@@ -1,6 +1,5 @@
 package org.inbloom.portal;
 
-import com.inbloom.portal.Application;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
