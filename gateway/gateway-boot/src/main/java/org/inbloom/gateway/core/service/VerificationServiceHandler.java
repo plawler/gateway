@@ -19,15 +19,20 @@ import java.util.Date;
  */
 @Service
 @Transactional
-public class VerificationServiceHandler implements VerificationService{
+public class VerificationServiceHandler implements VerificationService {
 
-    @Autowired
-    VerificationPersistenceService verificationPersistenceService;
+
+    private final VerificationPersistenceService persistenceService;
 
     @Autowired
     KeyGenerator keyGenerator;
 
     static final int VERIFICATION_TIMEOUT = 4*24*60*60*1000; //4 days
+
+    @Autowired
+    public VerificationServiceHandler(VerificationPersistenceService persistenceService) {
+        this.persistenceService = persistenceService;
+    }
 
     @Override
     public CreatedVerificationEvent createVerification(CreateVerificationEvent createEvent) {
@@ -45,13 +50,29 @@ public class VerificationServiceHandler implements VerificationService{
         verification.setValidUntil(until);
 
         //persist verification
-        CreatedVerificationEvent createdEvent = verificationPersistenceService.createVerification(createEvent);
+        CreatedVerificationEvent createdEvent = persistenceService.createVerification(createEvent);
 
         if(createdEvent.status() == ResponseEvent.Status.SUCCESS) {
             //TODO: send verification email
             System.out.println("sending verification email w/ token: " + token);
         }
         return createdEvent;
+    }
+
+    @Override
+    public ValidatedAccountSetupEvent validateAccountSetup(ValidateAccountSetupEvent validateEvent) {
+        RetrievedVerificationEvent retrieved = persistenceService.retrieveForAccountValidation(validateEvent);
+        if (retrieved.status().equals(ResponseEvent.Status.NOT_FOUND)) {
+            return ValidatedAccountSetupEvent.failed("The verification could not be found. Either an invalid token was supplied or the account does not exist.");
+        } else {
+            Verification verification = retrieved.getData();
+            if (verification.isExpired()) {
+                return ValidatedAccountSetupEvent.failed("The verification has expired.");
+            }
+        }
+
+        return ValidatedAccountSetupEvent.success();
+
     }
 
     @Override
@@ -67,7 +88,8 @@ public class VerificationServiceHandler implements VerificationService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public RetrievedVerificationEvent retrieveVerification(RetrieveVerificationEvent retrieveEvent) {
-        return verificationPersistenceService.retrieveVerification(retrieveEvent);
+        return persistenceService.retrieveVerification(retrieveEvent);
     }
 }

@@ -37,7 +37,8 @@ public class VerificationController {
     @ApiOperation(value = "Verify User's email and set their password")
     public ResponseEntity<Verification> register(@Valid @RequestBody Verification verification, UriComponentsBuilder componentsBuilder) {
 
-        ModifiedVerificationEvent modifiedEvent = verificationService.modifyVerification(new ModifyVerificationEvent());
+        // todo: need to get the password as well
+        ModifiedVerificationEvent modifiedEvent = verificationService.modifyVerification(new ModifyVerificationEvent(verification));
 
 
         return new ResponseEntity<Verification>(HttpStatus.OK);

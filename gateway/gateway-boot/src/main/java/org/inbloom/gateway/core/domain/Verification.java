@@ -6,9 +6,9 @@ import java.util.Date;
  * Created by lloydengebretsen on 3/21/14.
  */
 public class Verification {
-    private Long verificationId;
 
-    private Boolean verified;
+    private Long verificationId;
+    private Boolean verified = Boolean.FALSE;
     private Date validFrom;
     private Date validUntil;
     private String clientIpAddress;
@@ -70,4 +70,9 @@ public class Verification {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public boolean isExpired() {
+        return !verified && new Date().after(validUntil);
+    }
+
 }

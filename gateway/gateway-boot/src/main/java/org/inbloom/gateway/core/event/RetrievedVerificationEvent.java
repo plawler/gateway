@@ -8,9 +8,11 @@ import org.inbloom.gateway.core.domain.Verification;
 public class RetrievedVerificationEvent implements ResponseEvent{
 
     private final Verification data;
+    private final Status status;
 
-    public RetrievedVerificationEvent(Verification data) {
+    public RetrievedVerificationEvent(Verification data, Status status) {
         this.data = data;
+        this.status = status;
     }
 
     public Verification getData() {
@@ -19,6 +21,6 @@ public class RetrievedVerificationEvent implements ResponseEvent{
 
     @Override
     public Status status() {
-        return null;
+        return status;
     }
 }

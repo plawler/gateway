@@ -37,6 +37,11 @@ public class VerificationPersistenceHandler implements VerificationPersistenceSe
     }
 
     @Override
+    public RetrievedVerificationEvent retrieveForAccountValidation(ValidateAccountSetupEvent validateAccountSetupEvent) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public ModifiedVerificationEvent modifyVerification(ModifyVerificationEvent modifyVerificationEvent) {
 
         VerificationEntity verificationEntity = verificationRepository.findOne(modifyVerificationEvent.getVerificationId());
@@ -52,6 +57,6 @@ public class VerificationPersistenceHandler implements VerificationPersistenceSe
     @Override
     public RetrievedVerificationEvent retrieveVerification(RetrieveVerificationEvent retrieveVerificationEvent) {
         VerificationEntity verificationEntity = verificationRepository.findOne(retrieveVerificationEvent.getVerificationId());
-        return new RetrievedVerificationEvent(conversionService.convert(verificationEntity, Verification.class));
+        return new RetrievedVerificationEvent(conversionService.convert(verificationEntity, Verification.class), ResponseEvent.Status.SUCCESS);
     }
 }
