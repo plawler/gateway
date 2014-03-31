@@ -9,6 +9,8 @@ import org.inbloom.notification.client.NotificationClient;
 import org.inbloom.notification.client.NotificationException;
 import org.inbloom.notification.client.NotificationTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +26,11 @@ import java.util.Locale;
  */
 @Service
 @Transactional
+@PropertySource("classpath:application.properties")
 public class VerificationServiceHandler implements VerificationService{
+
+    @Autowired
+    Environment env;
 
     @Autowired
     VerificationPersistenceService verificationPersistenceService;
@@ -32,10 +38,12 @@ public class VerificationServiceHandler implements VerificationService{
     @Autowired
     KeyGenerator keyGenerator;
 
-
-    //TODO: externalize the configuration of these two vars
     int VERIFICATION_TIMEOUT = 4*24*60*60*1000; //4 days
-    String emailLinkTarget = "https://portal.stuff.inbloom.org/email_validation";
+
+    private String getEmailTarget()
+    {
+        return env.getProperty("emailVerificationLinkTarget","https://portal.inbloom.org/email_verification");
+    }
 
 
     @Override
@@ -63,7 +71,7 @@ public class VerificationServiceHandler implements VerificationService{
         if(createdEvent.status() == ResponseEvent.Status.SUCCESS) {
 
             //send email verification
-            String confirmationLink = emailLinkTarget + "?token="+token;
+            String confirmationLink = getEmailTarget() + "?token="+token;
             try {
                 NotificationClient.getInstance().sendAccountRegistrationConfirmation(NotificationTypeEnum.EMAIL, user.getFirstName(), user.getEmail(), confirmationLink, Locale.ENGLISH);
             } catch (NotificationException e) {

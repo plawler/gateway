@@ -37,9 +37,17 @@ public class VerificationController {
     @ApiOperation(value = "Verify User's email and set their password")
     public ResponseEntity<Verification> register(@Valid @RequestBody Verification verification, UriComponentsBuilder componentsBuilder) {
 
-        VerifiedEmailEvent modifiedEvent = verificationService.verifyEmail(new VerifyEmailEvent());
+        VerifiedEmailEvent modifiedEvent = verificationService.verifyEmail(new VerifyEmailEvent(verification.getToken(), verification.getClientIpAddress()));
 
+        switch(modifiedEvent.status())
+        {
+            case SUCCESS:
+                return new ResponseEntity<Verification>(HttpStatus.OK);
+            case NOT_FOUND:
+                return new ResponseEntity<Verification>(HttpStatus.NOT_FOUND);
+            default:
+                return new ResponseEntity<Verification>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
-        return new ResponseEntity<Verification>(HttpStatus.OK);
     }
 }

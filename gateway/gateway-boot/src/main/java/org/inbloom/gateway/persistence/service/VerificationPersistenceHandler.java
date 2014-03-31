@@ -39,11 +39,11 @@ public class VerificationPersistenceHandler implements VerificationPersistenceSe
     @Override
     public VerifiedEmailEvent modifyVerification(VerifyEmailEvent modifyVerificationEvent) {
 
-        VerificationEntity verificationEntity = verificationRepository.findOne(modifyVerificationEvent.getVerificationId());
+        VerificationEntity verificationEntity = verificationRepository.findByToken(modifyVerificationEvent.getVerificationToken());
         if(verificationEntity == null){
             return VerifiedEmailEvent.notFound();
         }
-        verificationEntity.setVerified(modifyVerificationEvent.isVerified());
+        verificationEntity.setVerified(true);
         verificationEntity.setClientIpAddress(modifyVerificationEvent.getClientIpAddress());
         verificationRepository.save(verificationEntity);
         return VerifiedEmailEvent.success(conversionService.convert(verificationEntity, Verification.class));
