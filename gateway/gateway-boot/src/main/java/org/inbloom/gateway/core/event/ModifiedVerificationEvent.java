@@ -27,4 +27,8 @@ public class ModifiedVerificationEvent implements ResponseEvent{
     public static ModifiedVerificationEvent notFound(){
         return new ModifiedVerificationEvent(null, Status.NOT_FOUND);
     }
+
+    public boolean successful() {
+        return Status.SUCCESS.equals(status());
+    }
 }

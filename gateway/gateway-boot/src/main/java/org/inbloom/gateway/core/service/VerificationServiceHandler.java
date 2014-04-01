@@ -65,20 +65,14 @@ public class VerificationServiceHandler implements VerificationService{
         verification.setToken(token);
 
         //set valid time range
-        Date now = new Date();
-        Date until = new Date(now.getTime() + VERIFICATION_TIMEOUT);
-        verification.setValidFrom(now);
-        verification.setValidUntil(until);
+        verification.activate(VERIFICATION_TIMEOUT);
 
         //persist verification
         CreatedVerificationEvent createdEvent = persistenceService.createVerification(createEvent);
 
-        if(createdEvent.status() == ResponseEvent.Status.SUCCESS) {
-
-            //send email verification
-            String confirmationLink = getEmailTarget() + "?token="+token;
+        if(createdEvent.successful()) {
             try {
-                NotificationClient.getInstance().sendAccountRegistrationConfirmation(NotificationTypeEnum.EMAIL, user.getFirstName(), user.getEmail(), confirmationLink, Locale.ENGLISH);
+                sendNotification(user, token); //send email verification
             } catch (NotificationException e) {
                 return CreatedVerificationEvent.fail("Notification Client failed to send email: " + e.getMessage());
             }
@@ -101,22 +95,24 @@ public class VerificationServiceHandler implements VerificationService{
         if (!processCredentials(verification.createCredentials(validateEvent.getPassword())))
             return ValidatedAccountSetupEvent.failed("Storing the user credentials failed.");
 
-        // bootstrap step
+        // bootstrap step calls TenantService
+
+//        verification.validate();
+//        if (modifyVerification(new ModifyVerificationEvent(verification)).successful()) {
+//            return ValidatedAccountSetupEvent.failed("Updating the verification failed.");
+//        }
 
         return ValidatedAccountSetupEvent.success();
-
     }
 
     @Override
     public ModifiedVerificationEvent modifyVerification(ModifyVerificationEvent modifyEvent) {
+        return persistenceService.modifyVerification(modifyEvent);
+    }
 
-        //TODO: update verification status to set "is_verified" to true
-
-        //TODO: add user to LDAP
-
-        //TODO: provision sandbox tenant
-
-        return null;
+    private void sendNotification(User user, String token) throws NotificationException {
+        String confirmationLink = getEmailTarget() + "?token="+token;
+        NotificationClient.getInstance().sendAccountRegistrationConfirmation(NotificationTypeEnum.EMAIL, user.getFirstName(), user.getEmail(), confirmationLink, Locale.ENGLISH);
     }
 
     @Override
