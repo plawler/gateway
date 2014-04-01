@@ -46,6 +46,9 @@ public class AppConfig {
     @Value("${mail.smtp.quitwait}")
     private String mailSmtpQuitwait;
 
+    @Value("${saveEmailToFile:false}")
+    boolean saveEmailToFile;
+
     @Bean
     public ResourceBundleMessageSource messageSource() {
         ResourceBundleMessageSource resourceBundleMessageSource = new ResourceBundleMessageSource();
@@ -98,7 +101,9 @@ public class AppConfig {
 
     @Bean
     public EmailService emailService() {
-        return new EmailService();
+        EmailService service = new EmailService();
+        service.setSaveEmailToFile(saveEmailToFile);
+        return service;
     }
 
     @Bean
