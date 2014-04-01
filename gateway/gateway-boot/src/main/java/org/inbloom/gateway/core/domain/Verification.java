@@ -8,6 +8,7 @@ import java.util.Date;
 public class Verification {
 
     private Long verificationId;
+    private Long userId;
     private Boolean verified = Boolean.FALSE;
     private Date validFrom;
     private Date validUntil;
@@ -21,6 +22,14 @@ public class Verification {
 
     public void setVerificationId(Long verificationId) {
         this.verificationId = verificationId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Boolean getVerified() {
@@ -73,6 +82,14 @@ public class Verification {
 
     public boolean isExpired() {
         return !verified && new Date().after(validUntil);
+    }
+
+    public Credentials createCredentials(String password) {
+        return new Credentials(getUser().getFirstName(), getUser().getLastName(), getUser().getEmail(), password);
+    }
+
+    public boolean invalid() {
+        return isExpired() || getVerified();
     }
 
 }

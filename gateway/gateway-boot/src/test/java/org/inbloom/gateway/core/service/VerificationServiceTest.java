@@ -2,8 +2,11 @@ package org.inbloom.gateway.core.service;
 
 
 import org.inbloom.gateway.core.domain.AccountValidation;
+import org.inbloom.gateway.core.domain.User;
 import org.inbloom.gateway.core.domain.Verification;
 import org.inbloom.gateway.core.event.*;
+import org.inbloom.gateway.credentials.CredentialService;
+import org.inbloom.gateway.fixture.VerificationFixture;
 import org.inbloom.gateway.persistence.service.VerificationPersistenceService;
 import org.joda.time.DateTime;
 import org.junit.Before;
@@ -16,6 +19,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
 
 /**
  * Created By: paullawler
@@ -26,11 +31,14 @@ public class VerificationServiceTest {
     @Mock
     private VerificationPersistenceService verificationPersistence;
 
+    @Mock
+    private CredentialService credentialService;
+
     private VerificationServiceHandler verificationService;
 
     @Before
     public void setUp() {
-        verificationService = new VerificationServiceHandler(verificationPersistence);
+        verificationService = new VerificationServiceHandler(verificationPersistence, credentialService);
     }
 
     @Test
@@ -41,8 +49,20 @@ public class VerificationServiceTest {
                 .thenReturn(expiredVerificationEvent(validate.getValidationDate()));
 
         ValidatedAccountSetupEvent validated = verificationService.validateAccountSetup(validate);
-
         assertEquals(ResponseEvent.Status.FAILED, validated.status());
+    }
+
+    @Test
+    public void shouldBootstrapValidatedAccount() {
+        ValidateAccountSetupEvent validate = new ValidateAccountSetupEvent(accountValidation());
+
+        Mockito.when(verificationPersistence.retrieveForAccountValidation(validate))
+                .thenReturn(validVerificationEvent(validate.getValidationDate()));
+        Mockito.when(credentialService.createCredentials(any(CreateCredentialsEvent.class)))
+                .thenReturn(CreatedCredentialsEvent.success());
+
+        ValidatedAccountSetupEvent validated = verificationService.validateAccountSetup(validate);
+        assertTrue(validated.successful());
     }
 
     // FIXTURES
@@ -52,15 +72,11 @@ public class VerificationServiceTest {
     }
 
     private RetrievedVerificationEvent expiredVerificationEvent(Date validationDate) {
-        DateTime validFromDate = new DateTime(validationDate).minusDays(5);
-        DateTime validUntilDate = validFromDate.plus(3);
+        return new RetrievedVerificationEvent(VerificationFixture.expiredVerification(validationDate), ResponseEvent.Status.SUCCESS);
+    }
 
-        Verification expired = new Verification();
-        expired.setVerificationId(123456L);
-        expired.setValidFrom(validFromDate.toDate());
-        expired.setValidUntil(validUntilDate.toDate());
-
-        return new RetrievedVerificationEvent(expired, ResponseEvent.Status.SUCCESS);
+    private RetrievedVerificationEvent validVerificationEvent(Date validationDate) {
+        return new RetrievedVerificationEvent(VerificationFixture.validVerification(validationDate), ResponseEvent.Status.SUCCESS);
     }
 
 }

@@ -1,7 +1,9 @@
 package org.inbloom.gateway.core.service;
 
+import org.inbloom.gateway.core.domain.Credentials;
 import org.inbloom.gateway.core.domain.Verification;
 import org.inbloom.gateway.core.event.*;
+import org.inbloom.gateway.credentials.CredentialService;
 import org.inbloom.gateway.persistence.service.VerificationPersistenceService;
 import org.inbloom.gateway.util.keyService.KeyGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +23,8 @@ import java.util.Date;
 @Transactional
 public class VerificationServiceHandler implements VerificationService {
 
-
     private final VerificationPersistenceService persistenceService;
+    private final CredentialService credentialService;
 
     @Autowired
     KeyGenerator keyGenerator;
@@ -30,8 +32,9 @@ public class VerificationServiceHandler implements VerificationService {
     static final int VERIFICATION_TIMEOUT = 4*24*60*60*1000; //4 days
 
     @Autowired
-    public VerificationServiceHandler(VerificationPersistenceService persistenceService) {
+    public VerificationServiceHandler(VerificationPersistenceService persistenceService, CredentialService credentialService) {
         this.persistenceService = persistenceService;
+        this.credentialService = credentialService;
     }
 
     @Override
@@ -64,12 +67,17 @@ public class VerificationServiceHandler implements VerificationService {
         RetrievedVerificationEvent retrieved = persistenceService.retrieveForAccountValidation(validateEvent);
         if (retrieved.status().equals(ResponseEvent.Status.NOT_FOUND)) {
             return ValidatedAccountSetupEvent.failed("The verification could not be found. Either an invalid token was supplied or the account does not exist.");
-        } else {
-            Verification verification = retrieved.getData();
-            if (verification.isExpired()) {
-                return ValidatedAccountSetupEvent.failed("The verification has expired.");
-            }
         }
+
+        Verification verification = retrieved.getData();
+        if (verification.invalid()) {
+            return ValidatedAccountSetupEvent.failed("The verification is no longer valid");
+        }
+
+        if (!processCredentials(verification.createCredentials(validateEvent.getPassword())))
+            return ValidatedAccountSetupEvent.failed("Storing the user credentials failed.");
+
+        // bootstrap step
 
         return ValidatedAccountSetupEvent.success();
 
@@ -92,4 +100,10 @@ public class VerificationServiceHandler implements VerificationService {
     public RetrievedVerificationEvent retrieveVerification(RetrieveVerificationEvent retrieveEvent) {
         return persistenceService.retrieveVerification(retrieveEvent);
     }
+
+    private boolean processCredentials(Credentials credentials) {
+        CreatedCredentialsEvent created = credentialService.createCredentials(new CreateCredentialsEvent(credentials));
+        return created.successful();
+    }
+
 }

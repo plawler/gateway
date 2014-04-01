@@ -35,4 +35,7 @@ public class ValidatedAccountSetupEvent implements VerboseResponseEvent {
         return new ValidatedAccountSetupEvent(Status.SUCCESS);
     }
 
+    public boolean successful() {
+        return Status.SUCCESS.equals(status());
+    }
 }

@@ -1,5 +1,7 @@
 package org.inbloom.gateway.core.event;
 
+import org.inbloom.gateway.core.domain.Credentials;
+
 /**
  * Created By: paullawler
  */
@@ -16,6 +18,13 @@ public class CreateCredentialsEvent implements RequestEvent {
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
+    }
+
+    public CreateCredentialsEvent(Credentials credentials) {
+        this.emailAddress = credentials.getEmail();
+        this.firstName = credentials.getFirstName();
+        this.lastName = credentials.getLastName();
+        this.password = credentials.getPassword();
     }
 
     public String getEmailAddress() {

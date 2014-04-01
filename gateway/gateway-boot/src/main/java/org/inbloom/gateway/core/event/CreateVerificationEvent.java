@@ -14,6 +14,7 @@ public class CreateVerificationEvent implements RequestEvent{
         data = new Verification();
         data.setVerified(false);
         data.setUser(user);
+        data.setUserId(user.getUserId());
     }
 
     public Verification getData(){
