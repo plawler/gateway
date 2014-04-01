@@ -2,9 +2,12 @@ package org.inbloom.gateway.rest;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+import org.inbloom.gateway.core.domain.AccountValidation;
 import org.inbloom.gateway.core.domain.Verification;
 import org.inbloom.gateway.core.event.ModifiedVerificationEvent;
 import org.inbloom.gateway.core.event.ModifyVerificationEvent;
+import org.inbloom.gateway.core.event.ValidateAccountSetupEvent;
+import org.inbloom.gateway.core.event.ValidatedAccountSetupEvent;
 import org.inbloom.gateway.core.service.VerificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.
@@ -33,15 +37,14 @@ public class VerificationController {
     @Autowired
     VerificationService verificationService;
 
-    @RequestMapping(value = "/verifications", method = RequestMethod.POST)
+    @RequestMapping(value = "/verifications/validate", method = RequestMethod.POST)
     @ApiOperation(value = "Verify User's email and set their password")
-    public ResponseEntity<Verification> register(@Valid @RequestBody Verification verification, UriComponentsBuilder componentsBuilder) {
+    public ResponseEntity<Verification> register(@Valid @RequestBody AccountValidation validation) {
 
-        // todo: need to get the password as well
-        ModifiedVerificationEvent modifiedEvent = verificationService.modifyVerification(new ModifyVerificationEvent(verification));
+        validation.setValidationDate(new Date());
+        ValidatedAccountSetupEvent validated = verificationService.validateAccountSetup(new ValidateAccountSetupEvent(validation));
 
-        switch(modifiedEvent.status())
-        {
+        switch(validated.status()) {
             case SUCCESS:
                 return new ResponseEntity<Verification>(HttpStatus.OK);
             case NOT_FOUND:
@@ -49,6 +52,6 @@ public class VerificationController {
             default:
                 return new ResponseEntity<Verification>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
+
 }
