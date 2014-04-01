@@ -1,27 +1,53 @@
 package org.inbloom.gateway.fixture;
 
-import org.inbloom.gateway.core.domain.ApplicationProvider;
-import org.inbloom.gateway.core.event.ModifyApplicationProviderEvent;
-import org.inbloom.gateway.core.event.RegisterApplicationProviderEvent;
+import org.inbloom.gateway.core.event.*;
 
 /**
  * Created by lloydengebretsen on 3/24/14.
  */
 public class ApplicationProviderEventFixtures {
 
-    public static RegisterApplicationProviderEvent buildRegisterApplicationProviderEvent(){
-        return buildRegisterApplicationProviderEvent(ApplicationProviderFixture.buildApplicationProvider());
+    /**register**/
+    public static RegisterApplicationProviderEvent buildRegisterAppProviderEvent() {
+        return new RegisterApplicationProviderEvent(ApplicationProviderFixture.buildAppProvider1(null));
     }
 
-    public static RegisterApplicationProviderEvent buildRegisterApplicationProviderEvent(ApplicationProvider applicationProvider){
-        return new RegisterApplicationProviderEvent(applicationProvider);
+    /**modify**/
+    public static ModifyApplicationProviderEvent buildModifyAppProviderEvent(Long id) {
+        return new ModifyApplicationProviderEvent(id, ApplicationProviderFixture.buildAppProvider2(id));
     }
 
-    public static ModifyApplicationProviderEvent buildModifyApplicationProviderEvent(Long appProviderId) {
-        return buildModifyApplicationProviderEvent(appProviderId, ApplicationProviderFixture.modifyApplicationProvider(appProviderId));
+    /**retrieve**/
+    public static RetrieveApplicationProviderEvent buildRetrieveAppProviderEvent(Long id) {
+        return new RetrieveApplicationProviderEvent(id);
     }
 
-    public static ModifyApplicationProviderEvent buildModifyApplicationProviderEvent(Long appProviderId, ApplicationProvider applicationProvider) {
-        return new ModifyApplicationProviderEvent(appProviderId, applicationProvider);
+    /**registered**/
+    public static RegisteredApplicationProviderEvent buildSuccessRegisteredAppProviderEvent(Long id){
+        return RegisteredApplicationProviderEvent.success(ApplicationProviderFixture.buildAppProvider1(id));
     }
+
+    public static RegisteredApplicationProviderEvent buildFailRegisteredAppProviderEvent() {
+        return RegisteredApplicationProviderEvent.fail("fail");
+    }
+
+    /**modified**/
+    public static ModifiedApplicationProviderEvent buildSuccessModifiedAppProviderEvent(Long id) {
+        return ModifiedApplicationProviderEvent.success(ApplicationProviderFixture.buildAppProvider2(id));
+    }
+
+    public static ModifiedApplicationProviderEvent buildNotFoundModifiedApplicationProviderEvent() {
+        return ModifiedApplicationProviderEvent.notFound();
+    }
+
+    /**retrieved**/
+    public static RetrievedApplicationProviderEvent buildSuccessRetrievedAppProviderEvent(Long id) {
+        return RetrievedApplicationProviderEvent.success(ApplicationProviderFixture.buildAppProvider2(id));
+    }
+
+    public static RetrievedApplicationProviderEvent buildNotFoundRetrievedAppProviderEvent() {
+        return RetrievedApplicationProviderEvent.notFound();
+    }
+
+
 }

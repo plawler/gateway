@@ -39,13 +39,21 @@ public class ApplicationProviderController {
     {
         RegisteredApplicationProviderEvent createdEvent = appProviderService.registerApplicationProvider(new RegisterApplicationProviderEvent(appProvider));
 
-        ApplicationProvider newAppProvider = createdEvent.getApplicationProvider();
+        switch(createdEvent.status()) {
+            case SUCCESS:
+                ApplicationProvider newAppProvider = createdEvent.getApplicationProvider();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(componentsBuilder.path("/applicationProviders/{id}")
-                .buildAndExpand(newAppProvider.getApplicationProviderId()).toUri());
+                HttpHeaders headers = new HttpHeaders();
+                headers.setLocation(componentsBuilder.path("/applicationProviders/{id}")
+                        .buildAndExpand(newAppProvider.getApplicationProviderId()).toUri());
 
-        return new ResponseEntity<ApplicationProvider>(newAppProvider, headers, HttpStatus.CREATED);
+                return new ResponseEntity<ApplicationProvider>(newAppProvider, headers, HttpStatus.CREATED);
+
+
+            default:
+                String message = createdEvent.message();
+                return new ResponseEntity(message, HttpStatus.BAD_REQUEST);
+        }
     }
 
 
@@ -76,12 +84,12 @@ public class ApplicationProviderController {
         if(id == null) {
             //fail fast if this came in without a valid Id
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        } else if (appProvider.getApplicationProviderId() != null && !id.equals(appProvider.getApplicationProviderId())) {
+        } else if (appProvider.getApplicationProviderId() == null || !id.equals(appProvider.getApplicationProviderId())) {
             //fail fast if the id from endpoint does not match the one passed in the request body
             return new ResponseEntity<ApplicationProvider>(appProvider, HttpStatus.CONFLICT);
         }
 
-        ModifiedApplicationProviderEvent modifiedEvent = appProviderService.modifyApplicationProvicer(new ModifyApplicationProviderEvent(id, appProvider));
+        ModifiedApplicationProviderEvent modifiedEvent = appProviderService.modifyApplicationProvider(new ModifyApplicationProviderEvent(id, appProvider));
 
         switch (modifiedEvent.status())
         {

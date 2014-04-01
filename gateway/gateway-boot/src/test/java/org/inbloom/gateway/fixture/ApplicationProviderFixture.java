@@ -7,19 +7,21 @@ import org.inbloom.gateway.core.domain.ApplicationProvider;
  */
 public class ApplicationProviderFixture {
 
-    public static ApplicationProvider buildApplicationProvider(){
+    public static ApplicationProvider buildAppProvider1(Long id){
         ApplicationProvider applicationProvider = new ApplicationProvider();
+        applicationProvider.setApplicationProviderId(id);
         applicationProvider.setUser(UserFixture.buildUser());
         applicationProvider.setApplicationProviderName("Worlds greatest application provider");
         applicationProvider.setOrganizationName("#1 App Provider Inc.");
         return applicationProvider;
     }
 
-    public static ApplicationProvider modifyApplicationProvider(Long appProviderId){
-        ApplicationProvider applicationProvider = buildApplicationProvider();
-        applicationProvider.setApplicationProviderId(appProviderId);
+    public static ApplicationProvider buildAppProvider2(Long id){
+        ApplicationProvider applicationProvider = buildAppProvider1(id);
         applicationProvider.setApplicationProviderName("Some different Name");
         applicationProvider.getUser().setLastName("Some-New-Name");
         return applicationProvider;
     }
+
+
 }

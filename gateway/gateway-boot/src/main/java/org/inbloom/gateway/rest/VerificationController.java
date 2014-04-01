@@ -40,7 +40,15 @@ public class VerificationController {
         // todo: need to get the password as well
         ModifiedVerificationEvent modifiedEvent = verificationService.modifyVerification(new ModifyVerificationEvent(verification));
 
+        switch(modifiedEvent.status())
+        {
+            case SUCCESS:
+                return new ResponseEntity<Verification>(HttpStatus.OK);
+            case NOT_FOUND:
+                return new ResponseEntity<Verification>(HttpStatus.NOT_FOUND);
+            default:
+                return new ResponseEntity<Verification>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
-        return new ResponseEntity<Verification>(HttpStatus.OK);
     }
 }

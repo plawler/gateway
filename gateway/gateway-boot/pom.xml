@@ -98,6 +98,29 @@
             <version>2.3</version>
         </dependency>
 
+
+        <!--notifications client-->
+        <dependency>
+            <groupId>${parent.groupId}</groupId>
+            <artifactId>inbloom-notifications-client</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <!-- This magic swaps out javamail for an in-memory javamail replacement, for testing purposes. -->
+        <dependency>
+            <groupId>org.jvnet.mock-javamail</groupId>
+            <artifactId>mock-javamail</artifactId>
+            <version>${mock.javamail.version}</version>
+            <scope>test</scope>
+            <exclusions>
+                <!--Exclude regular javamail-->
+                <exclusion>
+                    <groupId>javax.mail</groupId>
+                    <artifactId>mail</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        
     </dependencies>
 
     <build>

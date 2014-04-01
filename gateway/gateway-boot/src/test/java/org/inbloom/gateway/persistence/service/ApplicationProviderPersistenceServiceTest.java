@@ -30,7 +30,7 @@ public class ApplicationProviderPersistenceServiceTest {
 
     @Test
     public void shouldCreateAnApplicationProvider(){
-        RegisterApplicationProviderEvent request = ApplicationProviderEventFixtures.buildRegisterApplicationProviderEvent();
+        RegisterApplicationProviderEvent request = ApplicationProviderEventFixtures.buildRegisterAppProviderEvent();
         RegisteredApplicationProviderEvent response = applicationProviderPersistenceService.createApplicationProvider(request);
 
         assertEquals(ResponseEvent.Status.SUCCESS, response.status());
@@ -44,7 +44,7 @@ public class ApplicationProviderPersistenceServiceTest {
 
     @Test
     public void shouldRetrieveAnApplicationProvider(){
-        RegisterApplicationProviderEvent registerRequest = ApplicationProviderEventFixtures.buildRegisterApplicationProviderEvent();
+        RegisterApplicationProviderEvent registerRequest = ApplicationProviderEventFixtures.buildRegisterAppProviderEvent();
         RegisteredApplicationProviderEvent registerResponse = applicationProviderPersistenceService.createApplicationProvider(registerRequest);
         Long appProviderId = registerResponse.getData().getApplicationProviderId();
 
@@ -60,11 +60,11 @@ public class ApplicationProviderPersistenceServiceTest {
 
     @Test
     public void shouldModifyAnApplicationProvider(){
-        RegisterApplicationProviderEvent registerRequest = ApplicationProviderEventFixtures.buildRegisterApplicationProviderEvent();
+        RegisterApplicationProviderEvent registerRequest = ApplicationProviderEventFixtures.buildRegisterAppProviderEvent();
         RegisteredApplicationProviderEvent registerResponse = applicationProviderPersistenceService.createApplicationProvider(registerRequest);
         Long appProviderId = registerResponse.getData().getApplicationProviderId();
 
-        ModifyApplicationProviderEvent modifyRequest = ApplicationProviderEventFixtures.buildModifyApplicationProviderEvent(appProviderId);
+        ModifyApplicationProviderEvent modifyRequest = ApplicationProviderEventFixtures.buildModifyAppProviderEvent(appProviderId);
         ModifiedApplicationProviderEvent modifyResponse = applicationProviderPersistenceService.modifyApplicationProvider(modifyRequest);
 
         assertEquals(ResponseEvent.Status.SUCCESS, modifyResponse.status());

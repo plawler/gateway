@@ -4,14 +4,14 @@ import org.inbloom.gateway.core.domain.User;
 import org.inbloom.gateway.core.event.*;
 import org.inbloom.gateway.persistence.domain.UserEntity;
 import org.inbloom.gateway.persistence.service.ApplicationProviderPersistenceService;
-import org.inbloom.gateway.rest.validation.GatewayError;
-import org.inbloom.gateway.rest.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * created by benjaminmorgan on 3/24/14
  */
+@Transactional
 @Service
 public class ApplicationProviderServiceHandler implements ApplicationProviderService {
 
@@ -27,8 +27,9 @@ public class ApplicationProviderServiceHandler implements ApplicationProviderSer
         //validate unique email
         String email = registerAppProviderEvent.getData().getUser().getEmail();
         UserEntity dbUser = appProviderPersistenceService.getUserByEmail(email);
+
         if(dbUser != null) {
-            throw new ValidationException(GatewayError.USER_ALREADY_REGISTERED);
+            return RegisteredApplicationProviderEvent.fail("A User with that email has already registered");
         }
 
         //persist the User and AppProvider
@@ -48,11 +49,12 @@ public class ApplicationProviderServiceHandler implements ApplicationProviderSer
     }
 
     @Override
-    public ModifiedApplicationProviderEvent modifyApplicationProvicer(ModifyApplicationProviderEvent modifyAppProviderEvent) {
+    public ModifiedApplicationProviderEvent modifyApplicationProvider(ModifyApplicationProviderEvent modifyAppProviderEvent) {
 
         return appProviderPersistenceService.modifyApplicationProvider(modifyAppProviderEvent);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public RetrievedApplicationProviderEvent retrieveApplicationProvider(RetrieveApplicationProviderEvent retrieveAppProviderEvent) {
 

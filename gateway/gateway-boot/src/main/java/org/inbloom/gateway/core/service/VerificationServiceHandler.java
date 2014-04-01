@@ -1,9 +1,7 @@
 package org.inbloom.gateway.core.service;
 
-import org.inbloom.gateway.core.domain.Credentials;
 import org.inbloom.gateway.core.domain.Verification;
 import org.inbloom.gateway.core.event.*;
-import org.inbloom.gateway.credentials.CredentialService;
 import org.inbloom.gateway.persistence.service.VerificationPersistenceService;
 import org.inbloom.gateway.util.keyService.KeyGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +19,16 @@ import java.util.Date;
  */
 @Service
 @Transactional
-public class VerificationServiceHandler implements VerificationService {
+@PropertySource("classpath:application.properties")
+public class VerificationServiceHandler implements VerificationService{
 
     private final VerificationPersistenceService persistenceService;
     private final CredentialService credentialService;
+    @Autowired
+    Environment env;
+
+    @Autowired
+    VerificationPersistenceService verificationPersistenceService;
 
     @Autowired
     KeyGenerator keyGenerator;
@@ -37,10 +41,20 @@ public class VerificationServiceHandler implements VerificationService {
         this.credentialService = credentialService;
     }
 
+    private String getEmailTarget()
+    {
+        return env.getProperty("emailVerificationLinkTarget","https://portal.inbloom.org/email_verification");
+    }
+
+
     @Override
     public CreatedVerificationEvent createVerification(CreateVerificationEvent createEvent) {
 
         Verification verification = createEvent.getData();
+
+        User user = verification.getUser();
+
+        //TODO: delete other verifications?
 
         //generate verification token
         String token = keyGenerator.generateKey();
@@ -56,8 +70,14 @@ public class VerificationServiceHandler implements VerificationService {
         CreatedVerificationEvent createdEvent = persistenceService.createVerification(createEvent);
 
         if(createdEvent.status() == ResponseEvent.Status.SUCCESS) {
-            //TODO: send verification email
-            System.out.println("sending verification email w/ token: " + token);
+
+            //send email verification
+            String confirmationLink = getEmailTarget() + "?token="+token;
+            try {
+                NotificationClient.getInstance().sendAccountRegistrationConfirmation(NotificationTypeEnum.EMAIL, user.getFirstName(), user.getEmail(), confirmationLink, Locale.ENGLISH);
+            } catch (NotificationException e) {
+                return CreatedVerificationEvent.fail("Notification Client failed to send email: " + e.getMessage());
+            }
         }
         return createdEvent;
     }
