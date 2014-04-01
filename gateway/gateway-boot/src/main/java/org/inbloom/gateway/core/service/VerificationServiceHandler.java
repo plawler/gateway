@@ -1,8 +1,10 @@
 package org.inbloom.gateway.core.service;
 
+import org.inbloom.gateway.core.domain.Credentials;
 import org.inbloom.gateway.core.domain.User;
 import org.inbloom.gateway.core.domain.Verification;
 import org.inbloom.gateway.core.event.*;
+import org.inbloom.gateway.credentials.CredentialService;
 import org.inbloom.gateway.persistence.service.VerificationPersistenceService;
 import org.inbloom.gateway.util.keyService.KeyGenerator;
 import org.inbloom.notification.client.NotificationClient;
@@ -29,22 +31,25 @@ import java.util.Locale;
 @PropertySource("classpath:application.properties")
 public class VerificationServiceHandler implements VerificationService{
 
-    @Autowired
-    Environment env;
+    private final VerificationPersistenceService persistenceService;
+    private final CredentialService credentialService;
+    private final KeyGenerator keyGenerator;
+    private final Environment env;
+
+    static final int VERIFICATION_TIMEOUT = 4*24*60*60*1000; //4 days
 
     @Autowired
-    VerificationPersistenceService verificationPersistenceService;
-
-    @Autowired
-    KeyGenerator keyGenerator;
-
-    int VERIFICATION_TIMEOUT = 4*24*60*60*1000; //4 days
-
-    private String getEmailTarget()
-    {
-        return env.getProperty("emailVerificationLinkTarget","https://portal.inbloom.org/email_verification");
+    public VerificationServiceHandler(VerificationPersistenceService persistenceService, CredentialService credentialService,
+                                      KeyGenerator keyGenerator, Environment env) {
+        this.persistenceService = persistenceService;
+        this.credentialService = credentialService;
+        this.keyGenerator = keyGenerator;
+        this.env = env;
     }
 
+    private String getEmailTarget() {
+        return env.getProperty("emailVerificationLinkTarget","https://portal.inbloom.org/email_verification");
+    }
 
     @Override
     public CreatedVerificationEvent createVerification(CreateVerificationEvent createEvent) {
@@ -66,7 +71,7 @@ public class VerificationServiceHandler implements VerificationService{
         verification.setValidUntil(until);
 
         //persist verification
-        CreatedVerificationEvent createdEvent = verificationPersistenceService.createVerification(createEvent);
+        CreatedVerificationEvent createdEvent = persistenceService.createVerification(createEvent);
 
         if(createdEvent.status() == ResponseEvent.Status.SUCCESS) {
 
@@ -82,7 +87,28 @@ public class VerificationServiceHandler implements VerificationService{
     }
 
     @Override
-    public VerifiedEmailEvent verifyEmail(VerifyEmailEvent modifyEvent) {
+    public ValidatedAccountSetupEvent validateAccountSetup(ValidateAccountSetupEvent validateEvent) {
+        RetrievedVerificationEvent retrieved = persistenceService.retrieveForAccountValidation(validateEvent);
+        if (retrieved.status().equals(ResponseEvent.Status.NOT_FOUND)) {
+            return ValidatedAccountSetupEvent.failed("The verification could not be found. Either an invalid token was supplied or the account does not exist.");
+        }
+
+        Verification verification = retrieved.getData();
+        if (verification.invalid()) {
+            return ValidatedAccountSetupEvent.failed("The verification is no longer valid");
+        }
+
+        if (!processCredentials(verification.createCredentials(validateEvent.getPassword())))
+            return ValidatedAccountSetupEvent.failed("Storing the user credentials failed.");
+
+        // bootstrap step
+
+        return ValidatedAccountSetupEvent.success();
+
+    }
+
+    @Override
+    public ModifiedVerificationEvent modifyVerification(ModifyVerificationEvent modifyEvent) {
 
         //TODO: update verification status to set "is_verified" to true
 
@@ -93,9 +119,15 @@ public class VerificationServiceHandler implements VerificationService{
         return null;
     }
 
-    @Transactional(readOnly = true)
     @Override
+    @Transactional(readOnly = true)
     public RetrievedVerificationEvent retrieveVerification(RetrieveVerificationEvent retrieveEvent) {
-        return verificationPersistenceService.retrieveVerification(retrieveEvent);
+        return persistenceService.retrieveVerification(retrieveEvent);
     }
+
+    private boolean processCredentials(Credentials credentials) {
+        CreatedCredentialsEvent created = credentialService.createCredentials(new CreateCredentialsEvent(credentials));
+        return created.successful();
+    }
+
 }

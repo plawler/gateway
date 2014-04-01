@@ -1,97 +1,87 @@
 package org.inbloom.gateway.core.service;
 
-import org.inbloom.gateway.Gateway;
-import org.inbloom.gateway.core.event.CreateVerificationEvent;
-import org.inbloom.gateway.core.event.CreatedVerificationEvent;
-import org.inbloom.gateway.fixture.VerificationEventFixtures;
+
+import org.inbloom.gateway.core.domain.AccountValidation;
+import org.inbloom.gateway.core.event.*;
+import org.inbloom.gateway.credentials.CredentialService;
+import org.inbloom.gateway.fixture.VerificationFixture;
 import org.inbloom.gateway.persistence.service.VerificationPersistenceService;
-import org.inbloom.gateway.rest.util.TestUtil;
 import org.inbloom.gateway.util.keyService.KeyGenerator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.core.env.Environment;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
-import org.jvnet.mock_javamail.Mailbox;
-import javax.mail.Message;
-import javax.mail.internet.AddressException;
 
+import java.util.Date;
 
-import java.util.List;
-
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.when;
 
 /**
- * @author benjaminmorgan
- *         Date: 3/27/14
+ * Created By: paullawler
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Gateway.class)
-@WebAppConfiguration
-@Transactional
-@TransactionConfiguration(defaultRollback = true)
+@RunWith(MockitoJUnitRunner.class)
 public class VerificationServiceTest {
 
-    private MockMvc mockMvc;
+    @Mock
+    private VerificationPersistenceService persistence;
 
     @Mock
-    KeyGenerator keyGenerator;
+    private CredentialService credentialer;
 
     @Mock
-    VerificationPersistenceService verificationPersistenceService;
+    private KeyGenerator keyGenerator;
 
     @Mock
-    Environment env;
+    private Environment env;
 
-    @InjectMocks
-    VerificationService verificationService = new VerificationServiceHandler();
+    private VerificationServiceHandler verificationService;
 
     @Before
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        this.mockMvc = MockMvcBuilders.standaloneSetup(verificationService)
-                .setMessageConverters(new MappingJackson2HttpMessageConverter())
-                .setHandlerExceptionResolvers(TestUtil.createExceptionResolver())
-                .build();
+    public void setUp() {
+        verificationService = new VerificationServiceHandler(persistence, credentialer, keyGenerator, env);
     }
 
     @Test
-    public void testCreateVerification() throws AddressException {
+    public void shouldFailIfVerificationHasExpired() {
+        ValidateAccountSetupEvent validate = new ValidateAccountSetupEvent(accountValidation());
 
-        Mailbox.clearAll();
+        Mockito.when(persistence.retrieveForAccountValidation(validate))
+                .thenReturn(expiredVerificationEvent(validate.getValidationDate()));
 
-        when(verificationPersistenceService.createVerification(any(CreateVerificationEvent.class)))
-                .thenReturn(VerificationEventFixtures.buildSuccessCreatedVerificationEvent(1l, 1l));
-
-        when(keyGenerator.generateKey()).thenReturn("XXSecretKeyXX");
-
-        CreatedVerificationEvent createdEvent = verificationService.createVerification(VerificationEventFixtures.buildCreateVerificationEvent());
-
-        assertNotNull(createdEvent);
-        assertNotNull(createdEvent.getData());
-        assertNotNull(createdEvent.getData().getToken());
-        assertNotNull(createdEvent.getData().getValidFrom());
-        assertNotNull(createdEvent.getData().getValidUntil());
-
-        //check that in-memory email server received email
-        List<Message> inbox = Mailbox.get(createdEvent.getData().getUser().getEmail());
-        assertEquals(inbox.size(), 1);
-
-
+        ValidatedAccountSetupEvent validated = verificationService.validateAccountSetup(validate);
+        assertEquals(ResponseEvent.Status.FAILED, validated.status());
     }
 
+    @Test
+    public void shouldBootstrapValidatedAccount() {
+        ValidateAccountSetupEvent validate = new ValidateAccountSetupEvent(accountValidation());
+
+        Mockito.when(persistence.retrieveForAccountValidation(validate))
+                .thenReturn(validVerificationEvent(validate.getValidationDate()));
+        Mockito.when(credentialer.createCredentials(any(CreateCredentialsEvent.class)))
+                .thenReturn(CreatedCredentialsEvent.success());
+
+        ValidatedAccountSetupEvent validated = verificationService.validateAccountSetup(validate);
+        assertTrue(validated.successful());
+    }
+
+    // FIXTURES
+
+    private AccountValidation accountValidation() {
+        return new AccountValidation("sdf090923940290u92", "password", new Date());
+    }
+
+    private RetrievedVerificationEvent expiredVerificationEvent(Date validationDate) {
+        return RetrievedVerificationEvent.success(VerificationFixture.expiredVerification(validationDate));
+    }
+
+    private RetrievedVerificationEvent validVerificationEvent(Date validationDate) {
+        return RetrievedVerificationEvent.success(VerificationFixture.validVerification(validationDate));
+    }
 
 }

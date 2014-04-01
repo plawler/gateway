@@ -22,7 +22,7 @@ public class VerificationEventFixtures {
 
     /**retrieve**/
     public static RetrieveVerificationEvent buildRetrieveVerificationEvent(String token) {
-        return new RetrieveVerificationEvent(token);
+        return new RetrieveVerificationEvent(null, token); // todo: fix this after merge
     }
 
     /**created**/

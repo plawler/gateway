@@ -6,9 +6,10 @@ import java.util.Date;
  * Created by lloydengebretsen on 3/21/14.
  */
 public class Verification {
-    private Long verificationId;
 
-    private Boolean verified;
+    private Long verificationId;
+    private Long userId;
+    private Boolean verified = Boolean.FALSE;
     private Date validFrom;
     private Date validUntil;
     private String clientIpAddress;
@@ -21,6 +22,14 @@ public class Verification {
 
     public void setVerificationId(Long verificationId) {
         this.verificationId = verificationId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Boolean getVerified() {
@@ -70,4 +79,17 @@ public class Verification {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public boolean isExpired() {
+        return !verified && new Date().after(validUntil);
+    }
+
+    public Credentials createCredentials(String password) {
+        return new Credentials(getUser().getFirstName(), getUser().getLastName(), getUser().getEmail(), password);
+    }
+
+    public boolean invalid() {
+        return isExpired() || getVerified();
+    }
+
 }

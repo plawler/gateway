@@ -9,6 +9,7 @@ import org.inbloom.gateway.core.event.*;
 public interface VerificationPersistenceService {
 
     public CreatedVerificationEvent createVerification(CreateVerificationEvent createVerificationEvent);
-    public VerifiedEmailEvent modifyVerification(VerifyEmailEvent modifyVerificationEvent);
+    public RetrievedVerificationEvent retrieveForAccountValidation(ValidateAccountSetupEvent validateAccountSetupEvent);
     public RetrievedVerificationEvent retrieveVerification(RetrieveVerificationEvent retrieveVerificationEvent);
+    public ModifiedVerificationEvent modifyVerification(ModifyVerificationEvent modifyVerificationEvent);
 }

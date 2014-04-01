@@ -3,8 +3,8 @@ package org.inbloom.gateway.rest;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.inbloom.gateway.core.domain.Verification;
-import org.inbloom.gateway.core.event.VerifiedEmailEvent;
-import org.inbloom.gateway.core.event.VerifyEmailEvent;
+import org.inbloom.gateway.core.event.ModifiedVerificationEvent;
+import org.inbloom.gateway.core.event.ModifyVerificationEvent;
 import org.inbloom.gateway.core.service.VerificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -37,7 +37,8 @@ public class VerificationController {
     @ApiOperation(value = "Verify User's email and set their password")
     public ResponseEntity<Verification> register(@Valid @RequestBody Verification verification, UriComponentsBuilder componentsBuilder) {
 
-        VerifiedEmailEvent modifiedEvent = verificationService.verifyEmail(new VerifyEmailEvent(verification.getToken(), verification.getClientIpAddress()));
+        // todo: need to get the password as well
+        ModifiedVerificationEvent modifiedEvent = verificationService.modifyVerification(new ModifyVerificationEvent(verification));
 
         switch(modifiedEvent.status())
         {
