@@ -43,8 +43,10 @@ public class VerificationPersistenceHandler implements VerificationPersistenceSe
 
     @Override
     public ModifiedVerificationEvent modifyVerification(ModifyVerificationEvent modifyVerificationEvent) {
-    public VerifiedEmailEvent modifyVerification(VerifyEmailEvent modifyVerificationEvent) {
+        throw new UnsupportedOperationException("You are not quite done with the conflict merge");
+    }
 
+    public VerifiedEmailEvent modifyVerification(VerifyEmailEvent modifyVerificationEvent) {
         VerificationEntity verificationEntity = verificationRepository.findByToken(modifyVerificationEvent.getVerificationToken());
         if(verificationEntity == null){
             return VerifiedEmailEvent.notFound();
@@ -58,6 +60,6 @@ public class VerificationPersistenceHandler implements VerificationPersistenceSe
     @Override
     public RetrievedVerificationEvent retrieveVerification(RetrieveVerificationEvent retrieveVerificationEvent) {
         VerificationEntity verificationEntity = verificationRepository.findOne(retrieveVerificationEvent.getVerificationId());
-        return new RetrievedVerificationEvent(conversionService.convert(verificationEntity, Verification.class), ResponseEvent.Status.SUCCESS);
+        return RetrievedVerificationEvent.success(conversionService.convert(verificationEntity, Verification.class));
     }
 }

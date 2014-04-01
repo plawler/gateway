@@ -2,19 +2,18 @@ package org.inbloom.gateway.core.service;
 
 
 import org.inbloom.gateway.core.domain.AccountValidation;
-import org.inbloom.gateway.core.domain.User;
-import org.inbloom.gateway.core.domain.Verification;
 import org.inbloom.gateway.core.event.*;
 import org.inbloom.gateway.credentials.CredentialService;
 import org.inbloom.gateway.fixture.VerificationFixture;
 import org.inbloom.gateway.persistence.service.VerificationPersistenceService;
-import org.joda.time.DateTime;
+import org.inbloom.gateway.util.keyService.KeyGenerator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.core.env.Environment;
 
 import java.util.Date;
 
@@ -29,23 +28,29 @@ import static org.mockito.Matchers.any;
 public class VerificationServiceTest {
 
     @Mock
-    private VerificationPersistenceService verificationPersistence;
+    private VerificationPersistenceService persistence;
 
     @Mock
-    private CredentialService credentialService;
+    private CredentialService credentialer;
+
+    @Mock
+    private KeyGenerator keyGenerator;
+
+    @Mock
+    private Environment env;
 
     private VerificationServiceHandler verificationService;
 
     @Before
     public void setUp() {
-        verificationService = new VerificationServiceHandler(verificationPersistence, credentialService);
+        verificationService = new VerificationServiceHandler(persistence, credentialer, keyGenerator, env);
     }
 
     @Test
     public void shouldFailIfVerificationHasExpired() {
         ValidateAccountSetupEvent validate = new ValidateAccountSetupEvent(accountValidation());
 
-        Mockito.when(verificationPersistence.retrieveForAccountValidation(validate))
+        Mockito.when(persistence.retrieveForAccountValidation(validate))
                 .thenReturn(expiredVerificationEvent(validate.getValidationDate()));
 
         ValidatedAccountSetupEvent validated = verificationService.validateAccountSetup(validate);
@@ -56,9 +61,9 @@ public class VerificationServiceTest {
     public void shouldBootstrapValidatedAccount() {
         ValidateAccountSetupEvent validate = new ValidateAccountSetupEvent(accountValidation());
 
-        Mockito.when(verificationPersistence.retrieveForAccountValidation(validate))
+        Mockito.when(persistence.retrieveForAccountValidation(validate))
                 .thenReturn(validVerificationEvent(validate.getValidationDate()));
-        Mockito.when(credentialService.createCredentials(any(CreateCredentialsEvent.class)))
+        Mockito.when(credentialer.createCredentials(any(CreateCredentialsEvent.class)))
                 .thenReturn(CreatedCredentialsEvent.success());
 
         ValidatedAccountSetupEvent validated = verificationService.validateAccountSetup(validate);
@@ -72,11 +77,11 @@ public class VerificationServiceTest {
     }
 
     private RetrievedVerificationEvent expiredVerificationEvent(Date validationDate) {
-        return new RetrievedVerificationEvent(VerificationFixture.expiredVerification(validationDate), ResponseEvent.Status.SUCCESS);
+        return RetrievedVerificationEvent.success(VerificationFixture.expiredVerification(validationDate));
     }
 
     private RetrievedVerificationEvent validVerificationEvent(Date validationDate) {
-        return new RetrievedVerificationEvent(VerificationFixture.validVerification(validationDate), ResponseEvent.Status.SUCCESS);
+        return RetrievedVerificationEvent.success(VerificationFixture.validVerification(validationDate));
     }
 
 }

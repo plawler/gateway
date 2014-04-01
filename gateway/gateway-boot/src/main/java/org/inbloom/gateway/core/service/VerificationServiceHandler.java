@@ -1,14 +1,23 @@
 package org.inbloom.gateway.core.service;
 
+import org.inbloom.gateway.core.domain.Credentials;
+import org.inbloom.gateway.core.domain.User;
 import org.inbloom.gateway.core.domain.Verification;
 import org.inbloom.gateway.core.event.*;
+import org.inbloom.gateway.credentials.CredentialService;
 import org.inbloom.gateway.persistence.service.VerificationPersistenceService;
 import org.inbloom.gateway.util.keyService.KeyGenerator;
+import org.inbloom.notification.client.NotificationClient;
+import org.inbloom.notification.client.NotificationException;
+import org.inbloom.notification.client.NotificationTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,28 +33,23 @@ public class VerificationServiceHandler implements VerificationService{
 
     private final VerificationPersistenceService persistenceService;
     private final CredentialService credentialService;
-    @Autowired
-    Environment env;
-
-    @Autowired
-    VerificationPersistenceService verificationPersistenceService;
-
-    @Autowired
-    KeyGenerator keyGenerator;
+    private final KeyGenerator keyGenerator;
+    private final Environment env;
 
     static final int VERIFICATION_TIMEOUT = 4*24*60*60*1000; //4 days
 
     @Autowired
-    public VerificationServiceHandler(VerificationPersistenceService persistenceService, CredentialService credentialService) {
+    public VerificationServiceHandler(VerificationPersistenceService persistenceService, CredentialService credentialService,
+                                      KeyGenerator keyGenerator, Environment env) {
         this.persistenceService = persistenceService;
         this.credentialService = credentialService;
+        this.keyGenerator = keyGenerator;
+        this.env = env;
     }
 
-    private String getEmailTarget()
-    {
+    private String getEmailTarget() {
         return env.getProperty("emailVerificationLinkTarget","https://portal.inbloom.org/email_verification");
     }
-
 
     @Override
     public CreatedVerificationEvent createVerification(CreateVerificationEvent createEvent) {
