@@ -16,7 +16,7 @@ public class ValidateAccountSetupEvent {
     public ValidateAccountSetupEvent(AccountValidation validation) {
         this.validationToken = validation.getValidationToken();
         this.password = validation.getPassword();
-        this.validationDate = new Date();
+        this.validationDate = validation.getValidationDate();
     }
 
     public String getValidationToken() {

@@ -1,5 +1,7 @@
 package org.inbloom.gateway.core.domain;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.util.Date;
 
 /**
@@ -7,14 +9,18 @@ import java.util.Date;
  */
 public class AccountValidation {
 
+    @NotEmpty
     private String validationToken;
+
+    @NotEmpty
     private String password;
+
     private Date validationDate;
 
-    public AccountValidation(String validationToken, String password, Date validationDate) {
+    public AccountValidation(String validationToken, String password) {
         this.validationToken = validationToken;
         this.password = password;
-        this.validationDate = validationDate;
+        this.validationDate = new Date();
     }
 
     public String getValidationToken() {

@@ -16,7 +16,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -95,14 +94,12 @@ public class VerificationServiceHandler implements VerificationService{
         if (!processCredentials(verification.createCredentials(validateEvent.getPassword())))
             return ValidatedAccountSetupEvent.failed("Storing the user credentials failed.");
 
-        // bootstrap step calls TenantService
+        verification.validate();
+        if (!modifyVerification(new ModifyVerificationEvent(verification)).successful()) {
+            return ValidatedAccountSetupEvent.failed("Updating the verification failed.");
+        }
 
-//        verification.validate();
-//        if (modifyVerification(new ModifyVerificationEvent(verification)).successful()) {
-//            return ValidatedAccountSetupEvent.failed("Updating the verification failed.");
-//        }
-
-        return ValidatedAccountSetupEvent.success();
+        return ValidatedAccountSetupEvent.success(verification);
     }
 
     @Override

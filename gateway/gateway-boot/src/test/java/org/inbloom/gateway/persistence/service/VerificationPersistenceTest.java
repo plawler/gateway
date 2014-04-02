@@ -46,7 +46,7 @@ public class VerificationPersistenceTest {
 
     @Test
     public void shouldRetrieveAVerificationForAccountValidation() {
-        AccountValidation accountValidation = new AccountValidation(created.getData().getToken(), "passwerd", new Date());
+        AccountValidation accountValidation = new AccountValidation(created.getData().getToken(), "passwerd");
         RetrievedVerificationEvent retrieved = verificationService.retrieveForAccountValidation(new ValidateAccountSetupEvent(accountValidation));
         assertNotNull(retrieved.getData().getUser());
     }

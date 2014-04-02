@@ -2,6 +2,7 @@ package org.inbloom.gateway.core.service;
 
 
 import org.inbloom.gateway.core.domain.AccountValidation;
+import org.inbloom.gateway.core.domain.Verification;
 import org.inbloom.gateway.core.event.*;
 import org.inbloom.gateway.credentials.CredentialService;
 import org.inbloom.gateway.fixture.VerificationFixture;
@@ -58,22 +59,27 @@ public class VerificationServiceTest {
     }
 
     @Test
-    public void shouldBootstrapValidatedAccount() {
+    public void shouldValidateAnAppProviderAccount() {
         ValidateAccountSetupEvent validate = new ValidateAccountSetupEvent(accountValidation());
 
         Mockito.when(persistence.retrieveForAccountValidation(validate))
                 .thenReturn(validVerificationEvent(validate.getValidationDate()));
+
         Mockito.when(credentialer.createCredentials(any(CreateCredentialsEvent.class)))
                 .thenReturn(CreatedCredentialsEvent.success());
 
+        Mockito.when(persistence.modifyVerification(any(ModifyVerificationEvent.class)))
+                .thenReturn(modifiedVerificationEvent(validate.getValidationDate()));
+
         ValidatedAccountSetupEvent validated = verificationService.validateAccountSetup(validate);
         assertTrue(validated.successful());
+        assertTrue(validated.getData().getVerified());
     }
 
     // FIXTURES
 
     private AccountValidation accountValidation() {
-        return new AccountValidation("sdf090923940290u92", "password", new Date());
+        return new AccountValidation("sdf090923940290u92", "password");
     }
 
     private RetrievedVerificationEvent expiredVerificationEvent(Date validationDate) {
@@ -82,6 +88,12 @@ public class VerificationServiceTest {
 
     private RetrievedVerificationEvent validVerificationEvent(Date validationDate) {
         return RetrievedVerificationEvent.success(VerificationFixture.validVerification(validationDate));
+    }
+
+    private ModifiedVerificationEvent modifiedVerificationEvent(Date validationDate) {
+        Verification v = VerificationFixture.validVerification(validationDate);
+        v.validate();
+        return ModifiedVerificationEvent.success(v);
     }
 
 }

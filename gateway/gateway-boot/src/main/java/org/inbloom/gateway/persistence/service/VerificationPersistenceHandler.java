@@ -60,7 +60,6 @@ public class VerificationPersistenceHandler implements VerificationPersistenceSe
         if(verificationEntity == null){
             return ModifiedVerificationEvent.notFound();
         }
-        verificationEntity.setVerified(true);
         verificationEntity.setClientIpAddress(modifyVerificationEvent.getClientIpAddress());
         verificationRepository.save(verificationEntity);
         return ModifiedVerificationEvent.success(conversionService.convert(verificationEntity, Verification.class));
@@ -68,7 +67,7 @@ public class VerificationPersistenceHandler implements VerificationPersistenceSe
 
     @Override
     public RetrievedVerificationEvent retrieveVerification(RetrieveVerificationEvent retrieveVerificationEvent) {
-        VerificationEntity verificationEntity = verificationRepository.findOne(retrieveVerificationEvent.getVerificationId());
+        VerificationEntity verificationEntity = verificationRepository.findByToken(retrieveVerificationEvent.getVerificationToken());
         return RetrievedVerificationEvent.success(conversionService.convert(verificationEntity, Verification.class));
     }
 }
