@@ -26,7 +26,8 @@ public class TestUtil {
             }
         };
 
-        exceptionResolver.getMessageConverters().add(new MappingJackson2HttpMessageConverter()); // without this will throw org.springframework.web.HttpMediaTypeNotAcceptableException
+        // without this will throw org.springframework.web.HttpMediaTypeNotAcceptableException
+        exceptionResolver.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
         exceptionResolver.afterPropertiesSet();
 
         return exceptionResolver;

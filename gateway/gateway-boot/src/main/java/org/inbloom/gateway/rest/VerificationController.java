@@ -6,6 +6,8 @@ import org.inbloom.gateway.core.domain.AccountValidation;
 import org.inbloom.gateway.core.domain.Verification;
 import org.inbloom.gateway.core.event.*;
 import org.inbloom.gateway.core.service.VerificationService;
+import org.inbloom.gateway.rest.validation.ValidationException;
+import org.inbloom.gateway.rest.validation.VerificationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
@@ -40,18 +42,20 @@ public class VerificationController {
     public ResponseEntity<Verification> register(@Valid @RequestBody AccountValidation validation) {
         ValidatedAccountSetupEvent validated = verificationService.validateAccountSetup(new ValidateAccountSetupEvent(validation));
         switch(validated.status()) {
-            case SUCCESS:
-                return new ResponseEntity<Verification>(validated.getData(), HttpStatus.OK);
-            case NOT_FOUND:
-                return new ResponseEntity(HttpStatus.NOT_FOUND);
-            default:
-                return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            case SUCCESS: return new ResponseEntity<Verification>(validated.getData(), HttpStatus.OK);
+            case FAILED: throw new VerificationException(validated.message());
+            default: return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @RequestMapping(value = "/verifications/{token}", method = RequestMethod.GET)
     public ResponseEntity<Verification> retrieve(@PathVariable String token) {
-        return new ResponseEntity<Verification>(HttpStatus.NOT_FOUND);
+        RetrievedVerificationEvent retrieved = verificationService.retrieveVerification(new RetrieveVerificationEvent(token));
+        switch (retrieved.status()) {
+            case SUCCESS: return new ResponseEntity<Verification>(retrieved.getData(), HttpStatus.OK);
+            case NOT_FOUND: return new ResponseEntity(HttpStatus.NOT_FOUND);
+            default: return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }

@@ -17,6 +17,8 @@ public class AccountValidation {
 
     private Date validationDate;
 
+    private AccountValidation() {}
+
     public AccountValidation(String validationToken, String password) {
         this.validationToken = validationToken;
         this.password = password;
@@ -27,7 +29,7 @@ public class AccountValidation {
         return validationToken;
     }
 
-    public void setValidationToken(String validationToken) {
+    private void setValidationToken(String validationToken) {
         this.validationToken = validationToken;
     }
 
@@ -35,7 +37,7 @@ public class AccountValidation {
         return password;
     }
 
-    public void setPassword(String password) {
+    private void setPassword(String password) {
         this.password = password;
     }
 
@@ -43,7 +45,7 @@ public class AccountValidation {
         return validationDate;
     }
 
-    public void setValidationDate(Date validationDate) {
+    private void setValidationDate(Date validationDate) {
         this.validationDate = validationDate;
     }
 
