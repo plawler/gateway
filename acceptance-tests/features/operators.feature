@@ -9,7 +9,8 @@ Background:
 Scenario: inBloom admin registers an operator
   When I POST to the operators resource
   Then the response status should be 201 Created
-    And the operator has an identifier
+  And the response contains an operator
+  And the operator has an identifier
   
 Scenario: inBloom admin can retrieve an operator that has been registered
   Given I POST to the operators resource
@@ -19,7 +20,8 @@ Scenario: inBloom admin can retrieve an operator that has been registered
 Scenario: inBloom admin can modify an operator that has been registered
   Given I POST to the operators resource
     And I GET that operator resource
-    And I modify that resource
+    And the response contains an operator
+    And I modify that operator resource
   When I PUT that operator resource
   Then the response status should be 204 No Content
     And the operator should be modified
@@ -30,14 +32,17 @@ Scenario: Gateway will reject an invalid operator
   Then the response status should be 400 Bad Request
 
 Scenario: Operator updates will fail if ids conflict
-  Given I POST to the operators resource
+  Given I have a JSON representation of an operator
+   Then I POST to the operators resource
     And I GET that operator resource
+    And the response contains an operator
   When I PUT that operator resource with the wrong id on the URL
   Then the response status should be 409 Conflict
 
 Scenario: Operator updates will not complete if the resource is not found
   Given I POST to the operators resource
     And I GET that operator resource
+    And the response contains an operator
     And I modify that resource with an unknown id
   When I PUT that operator resource
   Then the response status should be 404 Not Found

@@ -24,7 +24,6 @@ public class RetrievedVerificationEvent implements ResponseEvent{
         return status;
     }
 
-
     public static RetrievedVerificationEvent success(Verification verification)
     {
         return new RetrievedVerificationEvent(verification, Status.SUCCESS);

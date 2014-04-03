@@ -55,9 +55,26 @@ public class OperatorFixture {
        return buildOperator("Fixture Data Operator");
     }
 
+    public static Operator buildOperator(Long id) {
+        Operator operator =  buildOperator("Fixture Data Operator");
+        operator.setOperatorId(id);
+        return operator;
+    }
+
+
+
     public static String buildOperatorJson(){
         try {
             return stringify(buildOperator());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String buildOperatorJson(Long id){
+        try {
+            return stringify(buildOperator(id));
         } catch (IOException e) {
             e.printStackTrace();
         }

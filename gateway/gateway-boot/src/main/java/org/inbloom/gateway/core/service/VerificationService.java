@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 public interface VerificationService {
 
     public CreatedVerificationEvent createVerification(CreateVerificationEvent createEvent);
-    public VerifiedEmailEvent verifyEmail(VerifyEmailEvent modifyEvent);
+    public ValidatedAccountSetupEvent validateAccountSetup(ValidateAccountSetupEvent validateEvent);
+    public ModifiedVerificationEvent modifyVerification(ModifyVerificationEvent modifyEvent);
     public RetrievedVerificationEvent retrieveVerification(RetrieveVerificationEvent retrieveEvent);
 }

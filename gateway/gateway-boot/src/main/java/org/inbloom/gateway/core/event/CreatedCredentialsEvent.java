@@ -30,4 +30,9 @@ public class CreatedCredentialsEvent implements VerboseResponseEvent {
     public static CreatedCredentialsEvent success() {
         return new CreatedCredentialsEvent(Status.SUCCESS, null);
     }
+
+    public boolean successful() {
+        return status.equals(Status.SUCCESS);
+    }
+
 }
