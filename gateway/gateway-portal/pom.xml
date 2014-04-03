@@ -67,6 +67,12 @@
             <version>${jquery.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jqbootstrapvalidation</artifactId>
+            <version>${jqbootstrapvalidation.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
