@@ -13,7 +13,7 @@ class Gateway < Thor
 
   def start_command
     path = File.join(APP_ROOT,'..','gateway','gateway-boot')
-    mvn_command = "mvn -Dspring.datasource.url=jdbc:mysql://localhost:3306/#{ENV['DB_NAME']}_test spring-boot:run"
+    mvn_command = "mvn -DsaveEmailToFile=true -Dspring.datasource.url=jdbc:mysql://localhost:3306/#{ENV['DB_NAME']}_test spring-boot:run"
     "cd #{path} && #{mvn_command}"
   end
 
