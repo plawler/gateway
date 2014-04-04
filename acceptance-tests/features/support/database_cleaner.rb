@@ -1,4 +1,4 @@
-# Recreate a new empty test database based on an existing database
+# Recreate a new empty test database
 class DatabaseCleaner
 
   attr_reader :database, :test_database

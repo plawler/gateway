@@ -9,7 +9,7 @@ class Test < Thor
   private
 
   def cucumber_command
-    "cd #{APP_ROOT} && cucumber --color"
+    "cd #{APP_ROOT} && cucumber --color --tags ~@wip"
   end
 
   def run_command(command)
