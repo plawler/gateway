@@ -54,6 +54,8 @@ end
 When(/^I POST to the applicationProviders resource without (.*)$/) do |field|
   resource = appProvider_resource
   case field
+    when 'organizationName'
+      resource['organizationName'] = nil
     when 'firstName'
       resource['user']['firstName'] = nil
     when 'lastName'

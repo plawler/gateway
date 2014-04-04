@@ -29,3 +29,10 @@ Scenario Outline: An App Provider leaves off required attributes
    | lastName  |
    | email     |
 
+Scenario Outline: An App Provider leaves off optional attributes
+  When I POST to the applicationProviders resource without <field>
+  Then the response status should be 201 Created
+
+Examples:
+  | field            |
+  | organizationName |
