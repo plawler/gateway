@@ -25,6 +25,16 @@ Then /^the response contains a location header for the app provider$/ do
   @response.headers[:location].should == path_for('applicationProviders',app_provider['applicationProviderId'])
 end
 
+Then(/^the app provider receives an email with a verification link$/) do
+  email_to = appProvider_resource['user']['email']
+  dir = File.expand_path File.dirname(__FILE__)
+  mail_file = File.join(dir,'..','..','..','gateway','gateway-boot','temp', "#{email_to}.eml")
+  File.exists?(mail_file).should be_true
+  # Verify that the file contains a link with the correct token
+end
+
+def verify_email(file, link)
+end
 
 def appProvider_resource
   {
