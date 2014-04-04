@@ -8,6 +8,8 @@ require 'webmock/cucumber'
 WebMock.allow_net_connect!
 
 require 'rest-client'
+require 'mysql2'
+
 require_relative 'paths'
 
 class TestWorld

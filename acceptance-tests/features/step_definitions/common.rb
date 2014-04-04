@@ -18,6 +18,10 @@ When /^I POST to the (.*?) resource$/ do |resource|
   end
 end
 
+def db_client
+  @db_client ||= Mysql2::Client.new(:host => 'localhost', :username => ENV['DB_USERNAME'], :database => "#{ENV['DB_NAME']}_test")
+end
+
 
 
 

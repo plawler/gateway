@@ -26,14 +26,25 @@ Then /^the response contains a location header for the app provider$/ do
 end
 
 Then(/^the app provider receives an email with a verification link$/) do
+  user_id = JSON.parse(@response)['user']['userId']
+  user_id.should_not be_nil
+
   email_to = appProvider_resource['user']['email']
   dir = File.expand_path File.dirname(__FILE__)
   mail_file = File.join(dir,'..','..','..','gateway','gateway-boot','temp', "#{email_to}.eml")
   File.exists?(mail_file).should be_true
-  # Verify that the file contains a link with the correct token
+
+  verify_email_verification_link(mail_file, user_id)
 end
 
-def verify_email(file, link)
+def verify_email_verification_link(email_file, user_id)
+  results = db_client.query("SELECT token FROM verifications WHERE user_id=#{db_client.escape(user_id.to_s)}")
+  token = results.first['token']
+  token.should_not be_nil, "Verification token not found for user #{user_id}"
+
+  # Verify that the file contains a link with the correct token
+  link_regex = /<a href=".+\/email_validation\?token=#{Regexp.escape(token)}/
+  File.open(email_file).read.should match(link_regex)
 end
 
 def appProvider_resource
