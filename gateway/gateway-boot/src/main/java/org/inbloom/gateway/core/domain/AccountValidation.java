@@ -42,6 +42,9 @@ public class AccountValidation {
     }
 
     public Date getValidationDate() {
+        if (validationDate == null) {
+            validationDate = new Date();
+        }
         return validationDate;
     }
 

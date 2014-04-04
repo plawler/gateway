@@ -51,4 +51,9 @@ public class VerificationPersistenceTest {
         assertNotNull(retrieved.getData().getUser());
     }
 
+    @Test
+    public void shouldModifyAVerification() {
+        //todo
+    }
+
 }

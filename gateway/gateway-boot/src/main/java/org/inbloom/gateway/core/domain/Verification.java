@@ -88,7 +88,7 @@ public class Verification {
     }
 
     public boolean isExpired() {
-        return !verified && new Date().after(validUntil);
+        return new Date().after(validUntil);
     }
 
     public Credentials createCredentials(String password) {
@@ -96,7 +96,7 @@ public class Verification {
     }
 
     public boolean invalid() {
-        return isExpired() || getVerified();
+        return getVerified() || isExpired();
     }
 
     public void validate() {

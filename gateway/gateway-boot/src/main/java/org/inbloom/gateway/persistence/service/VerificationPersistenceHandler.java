@@ -61,6 +61,7 @@ public class VerificationPersistenceHandler implements VerificationPersistenceSe
             return ModifiedVerificationEvent.notFound();
         }
         verificationEntity.setClientIpAddress(modifyVerificationEvent.getClientIpAddress());
+        verificationEntity.setVerified(modifyVerificationEvent.getVerified());
         verificationRepository.save(verificationEntity);
         return ModifiedVerificationEvent.success(conversionService.convert(verificationEntity, Verification.class));
     }

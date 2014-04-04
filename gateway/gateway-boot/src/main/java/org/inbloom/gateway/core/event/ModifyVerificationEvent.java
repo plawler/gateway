@@ -24,10 +24,6 @@ public class ModifyVerificationEvent implements RequestEvent {
         return verificationId;
     }
 
-    public Boolean isVerified() {
-        return verified;
-    }
-
     public String getClientIpAddress() {
         return clientIpAddress;
     }
@@ -36,4 +32,7 @@ public class ModifyVerificationEvent implements RequestEvent {
         return token;
     }
 
+    public Boolean getVerified() {
+        return verified;
+    }
 }
