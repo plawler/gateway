@@ -2,6 +2,10 @@ Given /^I have a JSON representation of an appProvider$/ do
   @request_json = appProvider_resource.to_json
 end
 
+Given(/^I have already registered as an app provider$/) do
+  RestClient.post(path_for('applicationProviders'), @request_json, :content_type => :json)
+end
+
 Then /^the response contains a link to the new app provider$/ do
   @app_provider = JSON.parse(@response)
   puts @app_provider
@@ -45,6 +49,24 @@ def verify_email_verification_link(email_file, user_id)
   # Verify that the file contains a link with the correct token
   link_regex = /<a href=".+\/email_validation\?token=#{Regexp.escape(token)}/
   File.open(email_file).read.should match(link_regex)
+end
+
+When(/^I POST to the applicationProviders resource without (.*)$/) do |field|
+  resource = appProvider_resource
+  case field
+    when 'firstName'
+      resource['user']['firstName'] = nil
+    when 'lastName'
+      resource['user']['lastName'] = nil
+    when 'email'
+      resource['user']['email'] = nil
+    else
+      fail("Unexpected field #{field}")
+  end
+  @request_json = resource.to_json
+  RestClient.post(path_for('applicationProviders'), @request_json, :content_type => :json) do |response, request, result|
+    @response = response
+  end
 end
 
 def appProvider_resource

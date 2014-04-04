@@ -15,7 +15,17 @@ Scenario: An Appplicaion Provider registers for an account
    And the app provider receives an email with a verification link
 
 Scenario: An App Provider cannot register twice
-  When I POST to the applicationProviders resource
-  Then the response status should be 201 Created
-  And I POST to the applicationProviders resource
-  Then the response status should be 400 Conflict
+  Given I have already registered as an app provider
+   When I POST to the applicationProviders resource
+   Then the response status should be 400 Bad Request
+
+Scenario Outline: An App Provider leaves off required attributes
+   When I POST to the applicationProviders resource without <field>
+   Then the response status should be 400 Bad Request
+
+  Examples:
+   | field     |
+   | firstName |
+   | lastName  |
+   | email     |
+
