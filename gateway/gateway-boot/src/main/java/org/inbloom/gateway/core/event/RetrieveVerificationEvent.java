@@ -10,9 +10,10 @@ public class RetrieveVerificationEvent implements RequestEvent{
     private final String token;
     private final Long verificationId;
 
-    public RetrieveVerificationEvent(Long verificationId, String token) {
-        this.token=token;
-        this.verificationId = verificationId;
+
+    public RetrieveVerificationEvent(String token) {
+        this.token = token;
+        this.verificationId = null;
     }
 
     public String getVerificationToken() {
@@ -22,4 +23,5 @@ public class RetrieveVerificationEvent implements RequestEvent{
     public Long getVerificationId() {
         return verificationId;
     }
+
 }

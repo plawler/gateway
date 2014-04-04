@@ -31,6 +31,6 @@ public class RetrievedVerificationEvent implements ResponseEvent{
 
     public static RetrievedVerificationEvent notFound()
     {
-        return new RetrievedVerificationEvent(null, Status.FAILED);
+        return new RetrievedVerificationEvent(null, Status.NOT_FOUND);
     }
 }

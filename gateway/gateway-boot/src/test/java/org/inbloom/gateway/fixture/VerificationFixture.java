@@ -1,5 +1,6 @@
 package org.inbloom.gateway.fixture;
 
+import org.inbloom.gateway.core.domain.AccountValidation;
 import org.inbloom.gateway.core.domain.User;
 import org.inbloom.gateway.core.domain.Verification;
 import org.joda.time.DateTime;
@@ -63,6 +64,10 @@ public class VerificationFixture {
         verification.setVerified(true);
         verification.setClientIpAddress("192.168.1.1");
         return verification;
+    }
+
+    public static AccountValidation accountValidation() {
+        return new AccountValidation("sdf090923940290u92", "password");
     }
 
 }

@@ -37,7 +37,7 @@ import static org.inbloom.gateway.fixture.OperatorFixture.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Gateway.class)
 @WebAppConfiguration
-public class CreateOperatorIntegrationTest {
+public class OperatorControllerTest {
 
     private MockMvc mockMvc;
 

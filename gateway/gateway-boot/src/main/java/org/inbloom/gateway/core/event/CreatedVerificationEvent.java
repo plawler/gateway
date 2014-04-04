@@ -26,6 +26,10 @@ public class CreatedVerificationEvent implements ResponseEvent{
         return status;
     }
 
+    public boolean successful() {
+        return Status.SUCCESS.equals(status());
+    }
+
     public static CreatedVerificationEvent notFound() {
         return new CreatedVerificationEvent(null, Status.NOT_FOUND, null);
     }

@@ -14,15 +14,9 @@ public class VerificationEventFixtures {
         return new CreateVerificationEvent(UserFixture.buildUser());
     }
 
-    /**modify**/
-    public static VerifyEmailEvent buildModifyVerificationEvent() {
-        return null; //TODO:
-    }
-
-
     /**retrieve**/
     public static RetrieveVerificationEvent buildRetrieveVerificationEvent(String token) {
-        return new RetrieveVerificationEvent(null, token); // todo: fix this after merge
+        return new RetrieveVerificationEvent(token); // todo: fix this after merge
     }
 
     /**created**/
@@ -32,6 +26,11 @@ public class VerificationEventFixtures {
 
     public static CreatedVerificationEvent buildNotFoundCreatedVerificationEvent() {
         return CreatedVerificationEvent.notFound();
+    }
+
+    /**modify**/
+    public static ModifyVerificationEvent buildModifyVerificationEvent() {
+        return null; //TODO:
     }
 
     /**modified**/
