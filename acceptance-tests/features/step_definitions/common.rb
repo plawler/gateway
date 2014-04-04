@@ -8,11 +8,9 @@ Then /^I get a list of (.*)$/ do |resource_type|
   instance_variable_set("@#{resource_type}", body)
 end
 
-
 Then /^the response status should be (\d+)/ do |code|
   @response.code.should == code.to_i
 end
-
 
 When /^I POST to the (.*?) resource$/ do |resource|
   RestClient.post(path_for(resource), @request_json, :content_type => :json) do |response, request, result|
