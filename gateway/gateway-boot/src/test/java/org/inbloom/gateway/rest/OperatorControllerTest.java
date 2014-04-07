@@ -96,7 +96,7 @@ public class OperatorControllerTest {
 
     @Test
     public void shouldHandleRetrieveOperatorNotFound() throws Exception {
-        Long operatorId = new Long(-1L);
+        Long operatorId = new Long(1L);
         when(operatorService.retrieveOperator(any(RetrieveOperatorEvent.class))).thenReturn(operatorNotFound());
 
         this.mockMvc.perform(get("/operators/{id}", operatorId.toString())
@@ -113,7 +113,7 @@ public class OperatorControllerTest {
         when(operatorService.modifyOperator(any(ModifyOperatorEvent.class))).thenReturn(operatorModified(1L));
 
         this.mockMvc.perform(put("/operators/{id}", operatorId.toString())
-                .content(buildOperatorJson())
+                .content(buildOperatorJson(1l))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -122,11 +122,11 @@ public class OperatorControllerTest {
 
     @Test
     public void shouldHandleModifyOperatorNotFound() throws Exception {
-        Long operatorId = new Long(-1L);
+        Long operatorId = new Long(1L);
         when(operatorService.modifyOperator(any(ModifyOperatorEvent.class))).thenReturn(operatorModifiedNotFound(operatorId));
 
         this.mockMvc.perform(put("/operators/{id}", operatorId.toString())
-                .content(buildOperatorJson())
+                .content(buildOperatorJson(1l))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())

@@ -3,7 +3,7 @@
 ##Assumptions
 
 1. the mysql database has been created and the mysql server is running (`mysql.server start`)
-2. the application is running on the localhost at port 9001 (`cd gateway/gateway-core && mvn jetty:run`)
+2. the application is running on the localhost at port 9001 against the test database (`thor gateway:start`)
 
 ## Environment Variables
 
@@ -12,12 +12,16 @@ The tests make use of the following environment variables for parameterizing ext
 the tests are specified in the `.env` file.
 
 - **GATEWAY_URL** - the full URL to the gateway (e.g. `http://localhost:9001/gateway`)
+- **DB_USERNAME** - the MySQL database username (e.g. `root`)
+- **DB_NAME**     - the name of the development database (e.g. `gateway`); the test datbase name is derived by adding `_test`
 
 ##Running the tests
 
-Execute the following command from the acceptance-tests directory:
+You can execute the following commands from the acceptance-tests directory:
 
-    thor test:features
+- `thor test:features # Runs all features (except those tagged as *@wip*)`
+- `thor test:feature app_providers # Runs all scenarios in the *app_providers* feature`
+- `thor test:feature app_providers:17 # Runs the scenario on line 17 of the *app_providers* feature`
 
 ## Writing tests
 

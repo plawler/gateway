@@ -63,12 +63,12 @@ public class OperatorController {
     @ApiErrors(value = { @ApiError(code = 404, reason = "Operator not found for given id"),
             @ApiError(code = 400, reason = "Id can not be null"),
             @ApiError(code = 409, reason = "Returned id did not match passed in id")})
-    public ResponseEntity modify(@RequestBody Operator operator, @PathVariable Long id) {
+    public ResponseEntity modify(@Valid @RequestBody Operator operator, @PathVariable Long id) {
 
         if(id == null) {
             //fail fast if this came in without a valid Id
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        } else if (operator.getOperatorId() != null && !id.equals(operator.getOperatorId())) {
+        } else if (operator.getOperatorId() == null || !id.equals(operator.getOperatorId())) {
             //fail fast if the id from endpoint does not match the one passed in the request body
             // (i.e. can't update the operatorId)
             return new ResponseEntity<Operator>(operator, HttpStatus.CONFLICT);

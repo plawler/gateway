@@ -17,7 +17,6 @@ public class ApplicationProvider {
     @Length(max = 128, message = "Length may not exceed 128 characters")
     private String applicationProviderName;
 
-    @NotEmpty
     @Length(max = 128, message = "Length may not exceed 128 characters")
     private String organizationName;
 

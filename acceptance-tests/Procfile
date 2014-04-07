@@ -1,1 +1,0 @@
-app: sh -c 'cd ../gateway/gateway-core && mvn jetty:run 2>&1>../../acceptance-tests/log/gateway-test.log &'
