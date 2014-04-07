@@ -10,11 +10,9 @@ import java.util.Date;
 public class AccountValidation {
 
     @NotEmpty
-    private String validationToken;
-
-    @NotEmpty
     private String password;
 
+    private String validationToken;
     private Date validationDate;
 
     private AccountValidation() {}
@@ -29,7 +27,7 @@ public class AccountValidation {
         return validationToken;
     }
 
-    private void setValidationToken(String validationToken) {
+    public void setValidationToken(String validationToken) {
         this.validationToken = validationToken;
     }
 
