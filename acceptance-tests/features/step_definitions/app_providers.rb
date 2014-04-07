@@ -80,6 +80,7 @@ end
 
 When /^I POST to the verifications resource with a valid token$/ do
   user_id = JSON.parse(@response)['user']['userId']
+  @app_provider_email = JSON.parse(@response)['user']['email']
   results = db_client.query("SELECT token FROM verifications WHERE user_id=#{db_client.escape(user_id.to_s)}")
   token = results.first['token']
   resource = "verifications/#{token}"
@@ -88,12 +89,9 @@ When /^I POST to the verifications resource with a valid token$/ do
   end
 end
 
-Then /^the response contains a representation of the verification$/ do
-  pending # express the regexp above with the code you wish you had
-end
-
-Then /^the response contains a location header for the verification$/ do
-  pending # express the regexp above with the code you wish you had
+Then /^the response contains a representation of a validated verification$/ do
+  verification = JSON.parse(@response)
+  verification['verified'].should == true
 end
 
 def appProvider_resource

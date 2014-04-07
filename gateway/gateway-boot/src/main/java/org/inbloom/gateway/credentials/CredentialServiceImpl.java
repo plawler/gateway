@@ -22,7 +22,6 @@ public class CredentialServiceImpl implements CredentialService {
     private static final Logger logger = LoggerFactory.getLogger(CredentialServiceImpl.class);
 
     private final LdapService ldapService;
-    private LDAPConnection connection;
 
     @Autowired
     public CredentialServiceImpl(LdapService ldapService) {

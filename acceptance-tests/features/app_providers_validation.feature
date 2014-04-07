@@ -8,10 +8,10 @@ Feature:
     And I have already registered as an app provider
     And I have JSON representation of an account validation
 
+  @LDAPCleanup
   Scenario: An application provider validates his account
     When I POST to the verifications resource with a valid token
     Then the response status should be 200 OK
-    And the response contains a representation of the verification
-    And the response contains a location header for the verification
+    And the response contains a representation of a validated verification
 
 
