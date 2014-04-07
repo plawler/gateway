@@ -24,12 +24,20 @@ public class RetrievedVerificationEvent implements ResponseEvent{
         return status;
     }
 
+    public boolean notFound() {
+        return Status.NOT_FOUND.equals(status());
+    }
+
+    public boolean success() {
+        return Status.SUCCESS.equals(status());
+    }
+
     public static RetrievedVerificationEvent success(Verification verification)
     {
         return new RetrievedVerificationEvent(verification, Status.SUCCESS);
     }
 
-    public static RetrievedVerificationEvent notFound()
+    public static RetrievedVerificationEvent newNotFound()
     {
         return new RetrievedVerificationEvent(null, Status.NOT_FOUND);
     }

@@ -3,7 +3,9 @@ package org.inbloom.gateway.persistence.service;
 
 import org.inbloom.gateway.Gateway;
 import org.inbloom.gateway.core.domain.AccountValidation;
+import org.inbloom.gateway.core.domain.Verification;
 import org.inbloom.gateway.core.event.*;
+import org.inbloom.gateway.core.service.VerificationService;
 import org.inbloom.gateway.fixture.ApplicationProviderFixture;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,9 +17,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
  * Created By: paullawler
@@ -52,8 +52,17 @@ public class VerificationPersistenceTest {
     }
 
     @Test
+    public void shouldReturnNotFoundIfInvalidToken() {
+        RetrievedVerificationEvent retrieved = verificationService.retrieveVerification(new RetrieveVerificationEvent("i-am-an-invalid-token"));
+        assertTrue(retrieved.notFound());
+    }
+
+    @Test
     public void shouldModifyAVerification() {
-        //todo
+        Verification verification = created.getData();
+        verification.activate(VerificationService.VERIFICATION_TIMEOUT);
+        ModifiedVerificationEvent modified = verificationService.modifyVerification(new ModifyVerificationEvent(verification));
+        assertTrue(modified.successful());
     }
 
 }

@@ -44,7 +44,7 @@ public class VerificationPersistenceHandler implements VerificationPersistenceSe
     public RetrievedVerificationEvent retrieveForAccountValidation(ValidateAccountSetupEvent validateAccountSetupEvent) {
         VerificationEntity verificationEntity = verificationRepository.findByToken(validateAccountSetupEvent.getValidationToken());
         if (verificationEntity == null) {
-            return RetrievedVerificationEvent.notFound();
+            return RetrievedVerificationEvent.newNotFound();
         }
 
         Verification verification = conversionService.convert(verificationEntity, Verification.class);
@@ -69,6 +69,9 @@ public class VerificationPersistenceHandler implements VerificationPersistenceSe
     @Override
     public RetrievedVerificationEvent retrieveVerification(RetrieveVerificationEvent retrieveVerificationEvent) {
         VerificationEntity verificationEntity = verificationRepository.findByToken(retrieveVerificationEvent.getVerificationToken());
+        if (verificationEntity == null)
+            return RetrievedVerificationEvent.newNotFound();
+
         return RetrievedVerificationEvent.success(conversionService.convert(verificationEntity, Verification.class));
     }
 }
