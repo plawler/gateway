@@ -19,6 +19,7 @@ public class ApplicationProviderFixture {
     public static ApplicationProvider buildAppProvider2(Long id){
         ApplicationProvider applicationProvider = buildAppProvider1(id);
         applicationProvider.setApplicationProviderName("Some different Name");
+        applicationProvider.setOrganizationName("A Brand New Organization");
         applicationProvider.getUser().setLastName("Some-New-Name");
         return applicationProvider;
     }
