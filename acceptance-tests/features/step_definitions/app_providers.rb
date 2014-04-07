@@ -1,7 +1,3 @@
-Given /^I have a JSON representation of an appProvider$/ do
-  @request_json = appProvider_resource.to_json
-end
-
 Given(/^I have already registered as an app provider$/) do
   @response = RestClient.post(path_for('applicationProviders'), @request_json, :content_type => :json)
 end
@@ -97,16 +93,4 @@ And /^my account information should be modified$/ do
 
   modified = JSON.parse(@response)
   modified.should eq(@app_provider)
-end
-
-def appProvider_resource
-  {
-      'applicationProviderName' => 'Math Cats LLC',
-      'organizationName' => 'Learning Kitties Holdings Inc',
-      'user' => {
-          'email' => 'john.smith@inbloom.org',
-          'firstName' => 'John',
-          'lastName' => 'Smith'
-      }
-  }
 end
