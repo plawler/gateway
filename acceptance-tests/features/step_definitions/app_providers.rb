@@ -3,7 +3,9 @@ Given /^I have a JSON representation of an appProvider$/ do
 end
 
 Given(/^I have already registered as an app provider$/) do
-  RestClient.post(path_for('applicationProviders'), @request_json, :content_type => :json)
+  RestClient.post(path_for('applicationProviders'), @request_json, :content_type => :json) do |response, request, result|
+    @response = response
+  end
 end
 
 Then /^the response contains a link to the new app provider$/ do
@@ -71,6 +73,29 @@ When(/^I POST to the applicationProviders resource without (.*)$/) do |field|
   end
 end
 
+Given(/^I have JSON representation of an account validation$/) do
+  resource = account_validation_resource
+  @request_json = resource.to_json
+end
+
+When /^I POST to the verifications resource with a valid token$/ do
+  user_id = JSON.parse(@response)['user']['userId']
+  results = db_client.query("SELECT token FROM verifications WHERE user_id=#{db_client.escape(user_id.to_s)}")
+  token = results.first['token']
+  resource = "verifications/#{token}"
+  RestClient.post(path_for(resource), @request_json, :content_type => :json) do |response, request, result|
+    @response = response
+  end
+end
+
+Then /^the response contains a representation of the verification$/ do
+  pending # express the regexp above with the code you wish you had
+end
+
+Then /^the response contains a location header for the verification$/ do
+  pending # express the regexp above with the code you wish you had
+end
+
 def appProvider_resource
   {
     'applicationProviderName' => 'Math Cats LLC',
@@ -80,5 +105,11 @@ def appProvider_resource
       'firstName' => 'John',
       'lastName' => 'Smith'
     }
+  }
+end
+
+def account_validation_resource
+  {
+      'password' => "PAssw0rd"
   }
 end

@@ -37,9 +37,10 @@ public class VerificationController {
     @Autowired
     VerificationService verificationService;
 
-    @RequestMapping(value = "/verifications/validate", method = RequestMethod.POST)
+    @RequestMapping(value = "/verifications/{token}", method = RequestMethod.POST)
     @ApiOperation(value = "Validates User's email and sets their password")
-    public ResponseEntity<Verification> register(@Valid @RequestBody AccountValidation validation) {
+    public ResponseEntity<Verification> validate(@Valid @RequestBody AccountValidation validation, @PathVariable String token) {
+        validation.setValidationToken(token);
         ValidatedAccountSetupEvent validated = verificationService.validateAccountSetup(new ValidateAccountSetupEvent(validation));
         switch(validated.status()) {
             case SUCCESS: return new ResponseEntity<Verification>(validated.getData(), HttpStatus.OK);

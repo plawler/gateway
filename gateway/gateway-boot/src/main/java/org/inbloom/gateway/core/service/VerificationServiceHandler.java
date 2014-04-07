@@ -35,8 +35,6 @@ public class VerificationServiceHandler implements VerificationService{
     private final KeyGenerator keyGenerator;
     private final Environment env;
 
-    static final int VERIFICATION_TIMEOUT = 4*24*60*60*1000; //4 days
-
     @Autowired
     public VerificationServiceHandler(VerificationPersistenceService persistenceService, CredentialService credentialService,
                                       KeyGenerator keyGenerator, Environment env) {

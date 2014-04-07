@@ -42,7 +42,7 @@ public class VerificationEventFixtures {
     }
 
     public static RetrievedVerificationEvent buildNotFoundRetrievedVerificationEvent() {
-        return RetrievedVerificationEvent.notFound();
+        return RetrievedVerificationEvent.newNotFound();
     }
 
 }

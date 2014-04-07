@@ -3,8 +3,6 @@ Given /^I have a JSON representation of an operator$/ do
   @request_json = operator_resource.to_json
 end
 
-
-
 Then /^the operator has an identifier$/ do
   @operator['operatorId'].should_not be_nil
 end
