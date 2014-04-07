@@ -1,5 +1,3 @@
-
-
 When /^I GET the (.*) resource$/ do |resource_type|
   @response = RestClient.get(path_for(resource_type)) { |response, request, results| response }
 end

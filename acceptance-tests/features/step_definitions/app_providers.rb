@@ -71,14 +71,42 @@ When(/^I POST to the applicationProviders resource without (.*)$/) do |field|
   end
 end
 
+When /^I GET that applicationProviders resource$/ do
+  @response = RestClient.get(@response.headers[:location], :accept => :json)
+end
+
+
+When /^I modifies that applicationProviders resource$/ do
+  @app_provider = JSON.parse(@response)
+
+  @app_provider['organizationName'] = 'Learning Forever Inc'
+  @app_provider['user']['firstName'] = 'Jane'
+  @app_provider['user']['lastName'] = 'Doe'
+  @app_provider['user']['email'] = 'jane.doe@inbloom.org'
+end
+
+When /^I POST the update to applicationProviders resource$/ do
+  @url = path_for('applicationProviders', @app_provider['applicationProviderId'])
+  RestClient.post(@url, @app_provider.to_json, :content_type => :json) do |response, request, result|
+    @response = response
+  end
+end
+
+And /^my account information should be modified$/ do
+  @response = RestClient.get(@url)
+
+  modified = JSON.parse(@response)
+  modified.should eq(@app_provider)
+end
+
 def appProvider_resource
   {
-    'applicationProviderName' => 'Math Cats LLC',
-    'organizationName' => 'Learning Kitties Holdings Inc',
-    'user' => {
-      'email' => 'john.smith@inbloom.org',
-      'firstName' => 'John',
-      'lastName' => 'Smith'
-    }
+      'applicationProviderName' => 'Math Cats LLC',
+      'organizationName' => 'Learning Kitties Holdings Inc',
+      'user' => {
+          'email' => 'john.smith@inbloom.org',
+          'firstName' => 'John',
+          'lastName' => 'Smith'
+      }
   }
 end
