@@ -3,7 +3,7 @@ Given /^I have a JSON representation of an appProvider$/ do
 end
 
 Given(/^I have already registered as an app provider$/) do
-  RestClient.post(path_for('applicationProviders'), @request_json, :content_type => :json)
+  @response = RestClient.post(path_for('applicationProviders'), @request_json, :content_type => :json)
 end
 
 Then /^the response contains a link to the new app provider$/ do
@@ -76,7 +76,7 @@ When /^I GET that applicationProviders resource$/ do
 end
 
 
-When /^I modify that applicationProviders resource$/ do
+When /^I modify my app provider information$/ do
   @app_provider = JSON.parse(@response)
 
   @app_provider['organizationName'] = 'Learning Forever Inc'

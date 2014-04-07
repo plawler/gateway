@@ -38,9 +38,8 @@ Feature:
     | organizationName |
 
 Scenario: An Application Provider modifies account information
-  When I POST to the applicationProviders resource
-  Then I GET that applicationProviders resource
-  When I modify that applicationProviders resource
+ Given I have already registered as an app provider
+  When I modify my app provider information
    And I POST the update to applicationProviders resource
   Then the response status should be 204 No Content
    And my account information should be modified
