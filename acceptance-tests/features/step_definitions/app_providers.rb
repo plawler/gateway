@@ -76,7 +76,7 @@ When /^I GET that applicationProviders resource$/ do
 end
 
 
-When /^I modifies that applicationProviders resource$/ do
+When /^I modify that applicationProviders resource$/ do
   @app_provider = JSON.parse(@response)
 
   @app_provider['organizationName'] = 'Learning Forever Inc'

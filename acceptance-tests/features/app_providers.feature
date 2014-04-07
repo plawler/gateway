@@ -40,7 +40,7 @@ Feature:
 Scenario: An Application Provider modifies account information
   When I POST to the applicationProviders resource
   Then I GET that applicationProviders resource
-  When I modifies that applicationProviders resource
+  When I modify that applicationProviders resource
    And I POST the update to applicationProviders resource
   Then the response status should be 204 No Content
    And my account information should be modified
