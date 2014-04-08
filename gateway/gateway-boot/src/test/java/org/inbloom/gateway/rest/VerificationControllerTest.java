@@ -96,4 +96,17 @@ public class VerificationControllerTest {
                 .andExpect(status().isForbidden());
     }
 
+    @Test
+    public void shouldFailValidationIfTheVerificationHasBeenRedeemed() throws Exception {
+        Mockito.when(verificationService.validateAccountSetup(any(ValidateAccountSetupEvent.class)))
+                .thenReturn(ValidatedAccountSetupEvent.failed("The verification is no longer valid"));
+
+        this.mockMvc.perform(post("/verifications/validate")
+                .content(TestUtil.stringify(accountValidation()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+    }
+
 }

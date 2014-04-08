@@ -14,11 +14,15 @@ Feature:
     Then the response status should be 200 OK
     And the response contains a representation of a validated verification
 
+  @LDAPCleanup
   Scenario: An application provider validates his account with expired verification
     Given my verification has expired
     When I POST to the verifications resource with a valid token
     Then the response status should be 403 Forbidden
 
-
-
+  @LDAPCleanup
+  Scenario: An application provider has previously validated his account
+    Given my verification has previously been redeemed
+    When I POST to the verifications resource with a valid token
+    Then the response status should be 403 Forbidden
 

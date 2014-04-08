@@ -96,6 +96,10 @@ Given /^my verification has expired$/ do
   db_client.query("update verifications set valid_from = '2014-04-08 00:00:00', valid_until = '2014-04-08 00:00:00'")
 end
 
+Given /^my verification has previously been redeemed/ do
+  db_client.query("UPDATE verifications SET is_verified=1")
+end
+
 def app_provider_resource
   {
     'applicationProviderName' => 'Math Cats LLC',
