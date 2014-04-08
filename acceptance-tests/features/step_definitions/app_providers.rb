@@ -19,7 +19,7 @@ Then /^the response contains a location header for the app provider$/ do
   @response.headers[:location].should == path_for('applicationProviders',app_provider['applicationProviderId'])
 end
 
-Then(/^the app provider receives an email with a verification link$/) do
+Then(/^the app provider receives an email with a verification link that is good for (\d+) days$/) do |days|
   user_id = JSON.parse(@response)['user']['userId']
   user_id.should_not be_nil
 
@@ -28,13 +28,18 @@ Then(/^the app provider receives an email with a verification link$/) do
   mail_file = File.join(dir,'..','..','..','gateway','gateway-boot','temp', "#{email_to}.eml")
   File.exists?(mail_file).should be_true
 
-  verify_email_verification_link(mail_file, user_id)
+  verify_email_verification_link(mail_file, user_id, days.to_i)
 end
 
-def verify_email_verification_link(email_file, user_id)
-  results = db_client.query("SELECT token FROM verifications WHERE user_id=#{db_client.escape(user_id.to_s)}")
-  token = results.first['token']
-  token.should_not be_nil, "Verification token not found for user #{user_id}"
+def verify_email_verification_link(email_file, user_id, expires_in_days)
+  results = db_client.query("SELECT * FROM verifications WHERE user_id=#{user_id}")
+  verification = results.first
+  verification.should_not be_nil, "Verification not found for user #{user_id}"
+  verification['is_verified'].should be(0), "Verification 'is_verified' flag was not false(0)"
+  verification['valid_from'].to_i.should be_within(60).of(Time.new.to_i), "'valid_from' date is not within 1 minute of now"
+  (verification['valid_until'] - verification['valid_from']).should == git 60*60*24*expires_in_days #, "Expiration period is not #{expires_in_days}"
+
+  token = verification['token']
 
   # Verify that the file contains a link with the correct token
   link_regex = /<a href=".+\/email_validation\?token=#{Regexp.escape(token)}/

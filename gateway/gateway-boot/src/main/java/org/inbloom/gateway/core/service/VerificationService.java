@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface VerificationService {
 
-    static final int VERIFICATION_TIMEOUT = 4*24*60*60*1000; //4 days
+    static final int VERIFICATION_TIMEOUT = 3*24*60*60*1000; //3 days
 
     CreatedVerificationEvent createVerification(CreateVerificationEvent createEvent);
     ValidatedAccountSetupEvent validateAccountSetup(ValidateAccountSetupEvent validateEvent);
