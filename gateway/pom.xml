@@ -2,6 +2,11 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<!-- To clean up POMs, use:
+mvn versions:display-plugin-updates
+mvn versions:display-dependency-updates
+mvn dependency:analyze
+-->
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -30,18 +35,19 @@
 
     <properties>
         <bootstrap.version>3.1.1</bootstrap.version>
+        <commons.codec>1.9</commons.codec>
         <commons.lang.version>3.3.1</commons.lang.version>
         <commons.logging.version>1.1.3</commons.logging.version>
-        <java.mail.version>1.4.7</java.mail.version>
+        <java.mail.version>1.5.0-b01</java.mail.version>
         <java.validation.version>1.1.0.Final</java.validation.version>
         <jodatime.version>2.3</jodatime.version>
         <junit.version>4.11</junit.version>
         <jquery.version>2.1.0-2</jquery.version>
-        <logback.version>1.1.1</logback.version>
+        <logback.version>1.1.2</logback.version>
         <mock.javamail.version>1.9</mock.javamail.version>
         <modelmapper.version>0.6.3</modelmapper.version>
-        <mysql.jdbc.version>5.1.29</mysql.jdbc.version>
-        <spring.version>4.0.2.RELEASE</spring.version>
+        <mysql.jdbc.version>5.1.30</mysql.jdbc.version>
+        <spring.version>4.0.3.RELEASE</spring.version>
         <swagger.version>0.6.5</swagger.version>
         <thymeleaf.version>2.1.2.RELEASE</thymeleaf.version>
         <unbounded.ldap.version>2.3.5</unbounded.ldap.version>
