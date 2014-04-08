@@ -1,6 +1,7 @@
 package org.inbloom.gateway.rest;
 
 import org.inbloom.gateway.Gateway;
+import org.inbloom.gateway.core.domain.AccountValidation;
 import org.inbloom.gateway.core.event.RetrieveVerificationEvent;
 import org.inbloom.gateway.core.event.RetrievedVerificationEvent;
 import org.inbloom.gateway.core.event.ValidateAccountSetupEvent;
@@ -60,11 +61,13 @@ public class VerificationControllerTest {
 
     @Test
     public void shouldValidateAnAccount() throws Exception {
+        AccountValidation ac = accountValidation();
+
         Mockito.when(verificationService.validateAccountSetup(any(ValidateAccountSetupEvent.class)))
                 .thenReturn(ValidatedAccountSetupEvent.success(VerificationFixture.validVerification(new Date())));
 
-        this.mockMvc.perform(post("/verifications/validate")
-                .content(TestUtil.stringify(accountValidation()))
+        this.mockMvc.perform(post("/verifications/{token}", ac.getValidationToken())
+                .content(TestUtil.stringify(ac))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -93,7 +96,7 @@ public class VerificationControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isForbidden());
     }
 
 }
