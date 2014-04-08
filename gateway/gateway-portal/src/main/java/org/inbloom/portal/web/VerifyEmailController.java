@@ -31,13 +31,11 @@ public class VerifyEmailController {
     private final Environment env;
 
     @Autowired
-    public VerifyEmailController(Environment environment)
-    {
+    public VerifyEmailController(Environment environment) {
         this.env = environment;
     }
 
-    public String getApiHost()
-    {
+    public String getApiHost() {
         return env.getProperty("apiHost", "http://localhost:9001");
     }
 

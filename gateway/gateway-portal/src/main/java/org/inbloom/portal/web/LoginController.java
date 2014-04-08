@@ -20,13 +20,11 @@ public class LoginController {
     private final Environment env;
 
     @Autowired
-    public LoginController(Environment environment)
-    {
+    public LoginController(Environment environment) {
         this.env = environment;
     }
 
-    public String getApiHost()
-    {
+    public String getApiHost() {
         return env.getProperty("apiHost", "http://localhost:9001");
     }
 
