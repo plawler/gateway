@@ -81,8 +81,24 @@ def ldap_cleanup
         ldap.replace_attribute(group_dn, :memberuid, group[:memberuid]) if removed
       end
     end
+<<<<<<< HEAD
 
     # Delete the user
     ldap.delete(:dn => "cn=#{@app_provider_email},ou=people,#{base}")
   end
 end
+=======
+  end
+end
+
+def get_DN(cn)
+  return "cn=#{cn},#{@people_base}"
+end
+
+def get_group_DN(group_id)
+  return "cn=#{group_id},#{@group_base}"
+end
+
+
+
+>>>>>>> 68602d244d734e37eaf39be32ce376e08bfbf300

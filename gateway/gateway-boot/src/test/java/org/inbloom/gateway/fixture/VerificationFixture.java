@@ -67,7 +67,7 @@ public class VerificationFixture {
     }
 
     public static AccountValidation accountValidation() {
-        return new AccountValidation("sdf090923940290u92", "password");
+        return new AccountValidation("sdf090923940290u92", "P@5Sw0rd");
     }
 
 }
