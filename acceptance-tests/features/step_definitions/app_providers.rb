@@ -98,6 +98,12 @@ Given /^my verification has expired$/ do
   db_client.query("update verifications set valid_from = '2014-04-08 00:00:00', valid_until = '2014-04-08 00:00:00'")
 end
 
+Given /^I have a JSON representation of an account validation with an invalid password$/ do
+  account_validation = account_validation_resource
+  account_validation['password'] = 'password'
+  @request_json = account_validation.to_json
+end
+
 def app_provider_resource
   {
     'applicationProviderName' => 'Math Cats LLC',
@@ -112,6 +118,6 @@ end
 
 def account_validation_resource
   {
-      'password' => "PAssw0rd"
+      'password' => 'P@5Sw0rd'
   }
 end
