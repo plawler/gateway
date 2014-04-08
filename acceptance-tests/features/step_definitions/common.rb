@@ -1,5 +1,9 @@
 require 'net-ldap'
 
+Given /^I have a JSON representation of an (.*)$/ do |resource_type|
+  @request_json = send("#{resource_type}_resource").to_json
+end
+
 When /^I GET the (.*) resource$/ do |resource_type|
   @response = RestClient.get(path_for(resource_type)) { |response, request, results| response }
 end
@@ -22,6 +26,30 @@ end
 
 def db_client
   @db_client ||= Mysql2::Client.new(:host => 'localhost', :username => ENV['DB_USERNAME'], :database => "#{ENV['DB_NAME']}_test")
+end
+
+def appProvider_resource
+  {
+      'applicationProviderName' => 'Math Cats LLC',
+      'organizationName' => 'Learning Kitties Holdings Inc',
+      'user' => {
+          'email' => 'john.smith@inbloom.org',
+          'firstName' => 'John',
+          'lastName' => 'Smith'
+      }
+  }
+end
+
+def operator_resource
+  {
+      'operatorName' => 'Illini Cloud',
+      'primaryContactName' => 'Chief Illiniwek',
+      'primaryContactEmail' => 'chief@illinicloud.edu',
+      'primaryContactPhone' => '5185551212',
+      'apiUri' => 'http://localhost:8080',
+      'connectorUri' => 'http://localhost:8080/connector',
+      'enabled' => true
+  }
 end
 
 After '@LDAPCleanup' do
@@ -90,8 +118,6 @@ end
 def get_group_DN(group_id)
   return "cn=#{group_id},#{@group_base}"
 end
-
-
 
 
 

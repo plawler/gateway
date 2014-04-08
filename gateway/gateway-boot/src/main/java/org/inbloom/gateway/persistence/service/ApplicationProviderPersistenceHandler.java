@@ -53,7 +53,7 @@ public class ApplicationProviderPersistenceHandler implements ApplicationProvide
         }
 
         retrieved.setApplicationProviderName(modifyApplicationProviderEvent.getApplicationProviderName());
-        retrieved.setApplicationProviderName(modifyApplicationProviderEvent.getOrganizationName());
+        retrieved.setOrganizationName(modifyApplicationProviderEvent.getOrganizationName());
         setUpdateData(retrieved);
         applicationProviderRepository.save(retrieved);
 
