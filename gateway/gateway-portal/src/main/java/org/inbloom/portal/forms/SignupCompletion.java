@@ -6,8 +6,18 @@ package org.inbloom.portal.forms;
  */
 public class SignupCompletion {
 
-    String token;
-    String password;
+
+    private String validationToken;
+
+    private String password;
+
+    public String getValidationToken() {
+        return validationToken;
+    }
+
+    public void setValidationToken(String validationToken) {
+        this.validationToken = validationToken;
+    }
 
     public String getPassword() {
         return password;
@@ -16,13 +26,4 @@ public class SignupCompletion {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
 }

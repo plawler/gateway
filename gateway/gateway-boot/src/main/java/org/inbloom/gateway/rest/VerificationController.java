@@ -4,9 +4,11 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.inbloom.gateway.core.domain.AccountValidation;
 import org.inbloom.gateway.core.domain.Verification;
-import org.inbloom.gateway.core.event.*;
+import org.inbloom.gateway.core.event.RetrieveVerificationEvent;
+import org.inbloom.gateway.core.event.RetrievedVerificationEvent;
+import org.inbloom.gateway.core.event.ValidateAccountSetupEvent;
+import org.inbloom.gateway.core.event.ValidatedAccountSetupEvent;
 import org.inbloom.gateway.core.service.VerificationService;
-import org.inbloom.gateway.rest.validation.ValidationException;
 import org.inbloom.gateway.rest.validation.VerificationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -17,10 +19,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.
