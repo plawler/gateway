@@ -1,4 +1,4 @@
-require 'net-ldap'
+require 'net/ldap'
 
 When /^I GET the (.*) resource$/ do |resource_type|
   @response = RestClient.get(path_for(resource_type)) { |response, request, results| response }
@@ -25,73 +25,36 @@ def db_client
 end
 
 After '@LDAPCleanup' do
-  email = @app_provider_email
-  initialize_ldap
-  remove_user_group(email, 'application_developer')
-  remove_user_group(email, 'Sandbox Administrator')
-  delete_user(email)
+  ldap_cleanup
 end
 
-# please forgive me, amplify cut, paste, wrangle and run
-def initialize_ldap
-  base = "ou=LocalNew,ou=DevTest,dc=slidev,dc=org"
-  @people_base = "ou=people,#{base}"
-  @group_base  = "ou=groups,#{base}"
-  @ldap_conf = {
-      :host => '127.0.0.1',
-      :port => 10389,
-      :base => @people_base,
-      :auth => {
-          :method => :simple,
-          :username => 'cn=Admin,dc=slidev,dc=org',
-          :password => 'test1234'
-      }
+def ldap_cleanup
+  base = 'ou=LocalNew,ou=DevTest,dc=slidev,dc=org'
+  group_base  = "ou=groups,#{base}"
+
+  ldap_config = {
+    :host => '127.0.0.1',
+    :port => 10389,
+    :base => group_base, # sets the treebase for search
+    :auth => {
+      :method => :simple,
+      :username => 'cn=Admin,dc=slidev,dc=org',
+      :password => 'test1234'
+    }
   }
-end
 
-def delete_user(email_address)
-  dn = get_DN(email_address)
-  Net::LDAP.open(@ldap_conf) do |ldap|
-    ldap.delete(:dn => dn)
-  end
-end
-
-def remove_user_group(email_address, group_id)
-  group_member_attr = :memberUid
-  # note the user is stored in the group via uid only
-  user_dn = email_address
-  group_dn = get_group_DN(group_id)
-
-  filter = Net::LDAP::Filter.eq( "cn", group_id)
-  Net::LDAP.open(@ldap_conf) do |ldap|
-    group_found = ldap.search(:base => @group_base, :filter => filter).first
-
-    if group_found
-      removed = group_found[group_member_attr].delete(user_dn)
-      if removed
-        if group_found[group_member_attr].empty?
-          if !ldap.delete(:dn => group_dn)
-            raise ldap_ex(ldap, "Could not remove user #{user_dn} for group #{group_id}")
-          end
-        else
-          if !ldap.replace_attribute(group_dn, group_member_attr, group_found[group_member_attr])
-            raise ldap_ex(ldap, "Could not remove user #{user_dn} for group #{group_id}")
-          end
-        end
+  Net::LDAP.open(ldap_config) do |ldap|
+    # Remove user from the groups
+    ['application_developer', 'Sandbox Administrator'].each do |group_id|
+      group_dn = "cn=#{group_id},#{group_base}"
+      group = ldap.search(:filter => Net::LDAP::Filter.eq('cn', group_id)).first
+      if group
+        removed = group[:memberuid].delete(@app_provider_email)
+        ldap.replace_attribute(group_dn, :memberuid, group[:memberuid]) if removed
       end
     end
+
+    # Delete the user
+    ldap.delete(:dn => "cn=#{@app_provider_email},ou=people,#{base}")
   end
 end
-
-def get_DN(cn)
-  return "cn=#{cn},#{@people_base}"
-end
-
-def get_group_DN(group_id)
-  return "cn=#{group_id},#{@group_base}"
-end
-
-
-
-
-
