@@ -5,9 +5,9 @@ Feature:
   So that I can get credentials and use the development environment within inBloom
 
   Background:
-    Given I have a JSON representation of an appProvider
+    Given I have a JSON representation of an app provider
     And I have already registered as an app provider
-    And I have JSON representation of an account validation
+    And I have a JSON representation of an account validation
 
   Scenario: An application provider validates his account
     When I POST to the verifications resource with a valid token
@@ -20,7 +20,7 @@ Feature:
     Then the response status should be 403 Forbidden
 
   Scenario: An application provider validates his account with a bad password
-    Given I have JSON representation of an account validation with an invalid password
+    Given I have a JSON representation of an account validation with an invalid password
     When I POST to the verifications resource with a valid token
     Then the response status should be 400 Bad Request
 

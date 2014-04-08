@@ -2,21 +2,15 @@ Given(/^I have already registered as an app provider$/) do
   @response = RestClient.post(path_for('applicationProviders'), @request_json, :content_type => :json)
 end
 
-Then /^the response contains a link to the new app provider$/ do
-  @app_provider = JSON.parse(@response)
-  puts @app_provider
-  puts @response.headers
-end
-
 Then /^the response contains a representation of the app provider$/ do
   app_provider = JSON.parse(@response)
   app_provider['applicationProviderId'].should_not be_nil
   %w(applicationProviderName organizationName).each do |attr|
-    app_provider[attr].should == appProvider_resource[attr]
+    app_provider[attr].should == app_provider_resource[attr]
   end
   app_provider['user']['userId'].should_not be_nil
   %w(email firstName lastName).each do |attr|
-    app_provider['user'][attr].should_not == appProvider_resource[attr]
+    app_provider['user'][attr].should_not == app_provider_resource[attr]
   end
 end
 
@@ -29,7 +23,7 @@ Then(/^the app provider receives an email with a verification link$/) do
   user_id = JSON.parse(@response)['user']['userId']
   user_id.should_not be_nil
 
-  email_to = appProvider_resource['user']['email']
+  email_to = app_provider_resource['user']['email']
   dir = File.expand_path File.dirname(__FILE__)
   mail_file = File.join(dir,'..','..','..','gateway','gateway-boot','temp', "#{email_to}.eml")
   File.exists?(mail_file).should be_true
@@ -48,7 +42,7 @@ def verify_email_verification_link(email_file, user_id)
 end
 
 When(/^I POST to the applicationProviders resource without (.*)$/) do |field|
-  resource = appProvider_resource
+  resource = app_provider_resource
   case field
     when 'organizationName'
       resource['organizationName'] = nil
@@ -65,11 +59,6 @@ When(/^I POST to the applicationProviders resource without (.*)$/) do |field|
   RestClient.post(path_for('applicationProviders'), @request_json, :content_type => :json) do |response, request, result|
     @response = response
   end
-end
-
-Given(/^I have JSON representation of an account validation$/) do
-  resource = account_validation_resource
-  @request_json = resource.to_json
 end
 
 When /^I POST to the verifications resource with a valid token$/ do
@@ -94,10 +83,8 @@ When /^I GET that applicationProviders resource$/ do
   @response = RestClient.get(@response.headers[:location], :accept => :json)
 end
 
-
 When /^I modify my app provider information$/ do
   @app_provider = JSON.parse(@response)
-
   @app_provider['organizationName'] = 'Learning Forever Inc'
   @app_provider['user']['firstName'] = 'Jane'
   @app_provider['user']['lastName'] = 'Doe'
@@ -111,9 +98,8 @@ When /^I POST the update to applicationProviders resource$/ do
   end
 end
 
-And /^my account information should be modified$/ do
+Then /^my account information should be modified$/ do
   @response = RestClient.get(@url)
-
   modified = JSON.parse(@response)
   modified.should eq(@app_provider)
 end
@@ -121,16 +107,3 @@ end
 Given /^my verification has previously been redeemed/ do
   db_client.query("UPDATE verifications SET is_verified=1")
 end
-
-Given /^I have JSON representation of an account validation with an invalid password$/ do
-  account_validation = account_validation_resource
-  account_validation['password'] = 'password'
-  @request_json = account_validation.to_json
-end
-
-def account_validation_resource
-  {
-      'password' => 'P@5Sw0rd'
-  }
-end
-

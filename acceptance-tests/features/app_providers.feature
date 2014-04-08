@@ -5,7 +5,7 @@ Feature:
   so that I can start creating apps.
 
   Background:
-    Given I have a JSON representation of an appProvider
+    Given I have a JSON representation of an app provider
 
   Scenario: An Application Provider registers for an account
     When I POST to the applicationProviders resource
