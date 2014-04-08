@@ -74,7 +74,8 @@ public class VerifyEmailController {
             Verification response = rest.postForObject(getApiHost() + "/gateway/api/verifications/{token}", entity, Verification.class, passwordAndToken.getValidationToken());
 
             if(response.getVerified()!= null && response.getVerified()) {
-                return "hello";   //TODO: redirect to signin page
+                model.addAttribute("successMessage", "Congratulations! You have succesfully validated your email and created a password");
+                return "login";
             } else {
                 model.addAttribute("errorMessage", "Danger danger!!!");
                 model.addAttribute("validationToken", passwordAndToken.getValidationToken());
