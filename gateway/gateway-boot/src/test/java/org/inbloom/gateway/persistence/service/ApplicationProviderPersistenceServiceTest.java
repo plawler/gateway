@@ -72,6 +72,7 @@ public class ApplicationProviderPersistenceServiceTest {
         RetrievedApplicationProviderEvent retrieveResponse = applicationProviderPersistenceService.retrieveApplicationProvider(new RetrieveApplicationProviderEvent(appProviderId));
         assertEquals(ResponseEvent.Status.SUCCESS, retrieveResponse.status());
         assertEquals(modifyRequest.getOrganizationName(),retrieveResponse.getData().getOrganizationName());
+        assertEquals(modifyRequest.getApplicationProviderName(), retrieveResponse.getData().getApplicationProviderName());
 
         assertEquals(modifyRequest.getUserEmail(), retrieveResponse.getData().getUser().getEmail());
         assertEquals(modifyRequest.getUserLastName(), retrieveResponse.getData().getUser().getLastName());

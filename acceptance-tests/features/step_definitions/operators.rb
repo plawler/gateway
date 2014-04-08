@@ -1,8 +1,11 @@
+<<<<<<< HEAD
 # operator registration
 Given /^I have a JSON representation of an operator$/ do
   @request_json = operator_resource.to_json
 end
 
+=======
+>>>>>>> master
 Then /^the operator has an identifier$/ do
   @operator['operatorId'].should_not be_nil
 end
@@ -48,16 +51,4 @@ end
 
 And /^the response contains an operator$/ do
   @operator = JSON.parse(@response)
-end
-
-def operator_resource
-  {
-      'operatorName' => 'Illini Cloud',
-      'primaryContactName' => 'Chief Illiniwek',
-      'primaryContactEmail' => 'chief@illinicloud.edu',
-      "primaryContactPhone" => "5185551212",
-      'apiUri' => 'http://localhost:8080',
-      'connectorUri' => 'http://localhost:8080/connector',
-      'enabled' => true
-  }
 end
