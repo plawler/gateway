@@ -81,7 +81,7 @@ end
 When /^I POST to the verifications resource with a valid token$/ do
   user_id = JSON.parse(@response)['user']['userId']
   @app_provider_email = JSON.parse(@response)['user']['email']
-  results = db_client.query("SELECT token FROM verifications WHERE user_id=#{db_client.escape(user_id.to_s)}")
+  results = db_client.query("SELECT token FROM verifications WHERE user_id=#{user_id}")
   token = results.first['token']
   resource = "verifications/#{token}"
   RestClient.post(path_for(resource), @request_json, :content_type => :json) do |response, request, result|
