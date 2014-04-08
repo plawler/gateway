@@ -11,3 +11,4 @@ gem 'rest-client'        # REST calls
 gem 'webmock'            # mocking external web calls
 gem 'mysql2'             # database access
 gem 'net-ldap'           # ldap
+gem 'pry'                # ruby repl

@@ -26,6 +26,9 @@ Feature:
     When I POST to the verifications resource with a valid token
     Then the response status should be 400 Bad Request
 
-
-
+  @LDAPCleanup
+  Scenario: An application provider has previously validated his account
+    Given my verification has previously been redeemed
+    When I POST to the verifications resource with a valid token
+    Then the response status should be 403 Forbidden
 
