@@ -92,7 +92,7 @@ def remove_user_group(email_address, group_id)
 
   filter = Net::LDAP::Filter.eq( "cn", group_id)
   Net::LDAP.open(@ldap_conf) do |ldap|
-    group_found = ldap.search(:base => @group_base, :filter => filter).to_a()[0]
+    group_found = ldap.search(:base => @group_base, :filter => filter).first
 
     if group_found
       removed = group_found[group_member_attr].delete(user_dn)

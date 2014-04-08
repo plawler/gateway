@@ -118,9 +118,19 @@ And /^my account information should be modified$/ do
   modified.should eq(@app_provider)
 end
 
+Given /^my verification has previously been redeemed/ do
+  db_client.query("UPDATE verifications SET is_verified=1")
+end
+
+Given /^I have JSON representation of an account validation with an invalid password$/ do
+  account_validation = account_validation_resource
+  account_validation['password'] = 'password'
+  @request_json = account_validation.to_json
+end
+
 def account_validation_resource
   {
-      'password' => 'PAssw0rd'
+      'password' => 'P@5Sw0rd'
   }
 end
 
