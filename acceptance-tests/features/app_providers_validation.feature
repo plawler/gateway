@@ -14,4 +14,11 @@ Feature:
     Then the response status should be 200 OK
     And the response contains a representation of a validated verification
 
+  Scenario: An application provider validates his account with expired verification
+    Given my verification has expired
+    When I POST to the verifications resource with a valid token
+    Then the response status should be 403 Forbidden
+
+
+
 

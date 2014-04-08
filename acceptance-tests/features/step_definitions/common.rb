@@ -56,11 +56,6 @@ def delete_user(email_address)
   end
 end
 
-def read_user(email_address)
-  filter = Net::LDAP::Filter.eq("mail", email_address)
-  search_map_user_fields(filter, 1)[0]
-end
-
 def remove_user_group(email_address, group_id)
   group_member_attr = :memberUid
   # note the user is stored in the group via uid only
