@@ -37,7 +37,7 @@ def verify_email_verification_link(email_file, user_id, expires_in_days)
   verification.should_not be_nil, "Verification not found for user #{user_id}"
   verification['is_verified'].should be(0), "Verification 'is_verified' flag was not false(0)"
   verification['valid_from'].to_i.should be_within(60).of(Time.new.to_i), "'valid_from' date is not within 1 minute of now"
-  (verification['valid_until'] - verification['valid_from']).should == git 60*60*24*expires_in_days #, "Expiration period is not #{expires_in_days}"
+  (verification['valid_until'] - verification['valid_from']).should == 60*60*24*expires_in_days #, "Expiration period is not #{expires_in_days}"
 
   token = verification['token']
 
