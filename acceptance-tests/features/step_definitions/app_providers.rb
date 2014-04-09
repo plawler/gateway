@@ -24,8 +24,9 @@ Then(/^the app provider receives an email with a verification link that is good 
   user_id.should_not be_nil
 
   email_to = app_provider_resource['user']['email']
-  dir = File.expand_path File.dirname(__FILE__)
-  mail_file = File.join(dir,'..','..','..','gateway','gateway-boot','temp', "#{email_to}.eml")
+  mail_file = email_file_for(email_to)
+  # dir = File.expand_path File.dirname(__FILE__)
+  # mail_file = File.join(dir,'..','..','..','gateway','gateway-boot','temp', "#{email_to}.eml")
   File.exists?(mail_file).should be_true
 
   verify_email_verification_link(mail_file, user_id, days.to_i)
@@ -42,8 +43,18 @@ def verify_email_verification_link(email_file, user_id, expires_in_days)
   token = verification['token']
 
   # Verify that the file contains a link with the correct token
-  link_regex = /<a href=".+\/email_validation\?token=#{Regexp.escape(token)}/
+  link_regex = /<a id="validate-link" href=".+\/email_validation\?token=#{Regexp.escape(token)}/
   File.open(email_file).read.should match(link_regex)
+end
+
+def verification_email_link(email)
+  link_regex = /<a id="validate-link" href="([^"]+)/
+  File.open(email_file_for(email)).read.match(link_regex).captures.first
+end
+
+def email_file_for(email)
+  dir = File.expand_path File.dirname(__FILE__)
+  File.join(dir,'..','..','..','gateway','gateway-boot','temp', "#{email}.eml")
 end
 
 When(/^I POST to the applicationProviders resource without (.*)$/) do |field|
