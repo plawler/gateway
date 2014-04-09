@@ -32,7 +32,7 @@ public class Verification {
         this.userId = userId;
     }
 
-    public Boolean getVerified() {
+    public Boolean isVerified() {
         return verified;
     }
 
@@ -93,10 +93,6 @@ public class Verification {
 
     public Credentials createCredentials(String password) {
         return new Credentials(getUser().getFirstName(), getUser().getLastName(), getUser().getEmail(), password);
-    }
-
-    public boolean invalid() {
-        return getVerified() || isExpired();
     }
 
     public void validate() {

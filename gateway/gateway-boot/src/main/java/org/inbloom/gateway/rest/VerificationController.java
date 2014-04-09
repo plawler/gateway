@@ -4,12 +4,12 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.inbloom.gateway.core.domain.AccountValidation;
 import org.inbloom.gateway.core.domain.Verification;
-import org.inbloom.gateway.core.event.RetrieveVerificationEvent;
-import org.inbloom.gateway.core.event.RetrievedVerificationEvent;
-import org.inbloom.gateway.core.event.ValidateAccountSetupEvent;
-import org.inbloom.gateway.core.event.ValidatedAccountSetupEvent;
+import org.inbloom.gateway.core.event.verification.RetrieveVerificationEvent;
+import org.inbloom.gateway.core.event.verification.RetrievedVerificationEvent;
+import org.inbloom.gateway.core.event.verification.ValidateAccountSetupEvent;
+import org.inbloom.gateway.core.event.verification.ValidatedAccountSetupEvent;
 import org.inbloom.gateway.core.service.VerificationService;
-import org.inbloom.gateway.rest.validation.VerificationException;
+import org.inbloom.gateway.common.status.VerificationStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
@@ -42,19 +42,23 @@ public class VerificationController {
     public ResponseEntity<Verification> validate(@Valid @RequestBody AccountValidation validation, @PathVariable String token) {
         validation.setValidationToken(token);
         ValidatedAccountSetupEvent validated = verificationService.validateAccountSetup(new ValidateAccountSetupEvent(validation));
-        switch(validated.status()) {
+        switch((VerificationStatus)validated.status()) {
             case SUCCESS: return new ResponseEntity<Verification>(validated.getData(), HttpStatus.OK);
-            case FAILED: throw new VerificationException(validated.message());
-            default: return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            case EXPIRED: return new ResponseEntity(validated.status(), HttpStatus.FORBIDDEN);
+            case NOT_FOUND: return new ResponseEntity(validated.status(), HttpStatus.NOT_FOUND);
+            case REDEEMED: return new ResponseEntity(validated.status(), HttpStatus.FORBIDDEN);
+            default: return new ResponseEntity(validated.status(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @RequestMapping(value = "/verifications/{token}", method = RequestMethod.GET)
     public ResponseEntity<Verification> retrieve(@PathVariable String token) {
         RetrievedVerificationEvent retrieved = verificationService.retrieveVerification(new RetrieveVerificationEvent(token));
-        switch (retrieved.status()) {
+        switch ((VerificationStatus)retrieved.status()) {
             case SUCCESS: return new ResponseEntity<Verification>(retrieved.getData(), HttpStatus.OK);
-            case NOT_FOUND: return new ResponseEntity(HttpStatus.NOT_FOUND);
+            case EXPIRED: return new ResponseEntity(retrieved.status(), HttpStatus.FORBIDDEN);
+            case NOT_FOUND: return new ResponseEntity(retrieved.status(), HttpStatus.NOT_FOUND);
+            case REDEEMED: return new ResponseEntity(retrieved.status(), HttpStatus.FORBIDDEN);
             default: return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

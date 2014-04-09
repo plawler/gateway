@@ -1,12 +1,13 @@
-package org.inbloom.gateway.core.event;
+package org.inbloom.gateway.core.event.operator;
 
 
 import org.inbloom.gateway.core.domain.Operator;
+import org.inbloom.gateway.core.event.RequestEvent;
 
 /**
  * Created by lloydengebretsen on 2/27/14.
  */
-public class ModifyOperatorEvent implements RequestEvent{
+public class ModifyOperatorEvent implements RequestEvent {
 
     private final Long id;
     private final Operator data;

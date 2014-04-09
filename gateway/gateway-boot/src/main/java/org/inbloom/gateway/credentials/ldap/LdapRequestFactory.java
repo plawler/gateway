@@ -1,10 +1,6 @@
 package org.inbloom.gateway.credentials.ldap;
 
 import com.unboundid.ldap.sdk.*;
-import com.unboundid.ldif.LDIFException;
-import org.inbloom.gateway.core.event.CreateCredentialsEvent;
-
-import java.util.Map;
 
 /**
  * Created By: paullawler
@@ -52,5 +48,4 @@ public class LdapRequestFactory {
         Modification mod = new Modification(ModificationType.ADD, "memberUid", email);
         return new ModifyRequest(dn, mod);
     }
-
 }

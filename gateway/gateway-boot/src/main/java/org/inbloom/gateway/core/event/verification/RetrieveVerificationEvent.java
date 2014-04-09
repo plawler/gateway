@@ -1,11 +1,12 @@
-package org.inbloom.gateway.core.event;
+package org.inbloom.gateway.core.event.verification;
 
 import org.inbloom.gateway.core.domain.Verification;
+import org.inbloom.gateway.core.event.RequestEvent;
 
 /**
  * Created by lloydengebretsen on 3/21/14.
  */
-public class RetrieveVerificationEvent implements RequestEvent{
+public class RetrieveVerificationEvent implements RequestEvent {
 
     private final String token;
     private final Long verificationId;

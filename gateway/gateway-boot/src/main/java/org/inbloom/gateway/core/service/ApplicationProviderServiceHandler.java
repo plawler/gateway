@@ -1,7 +1,12 @@
 package org.inbloom.gateway.core.service;
 
 import org.inbloom.gateway.core.domain.User;
-import org.inbloom.gateway.core.event.*;
+import org.inbloom.gateway.core.event.provider.*;
+import org.inbloom.gateway.core.event.verification.CreateVerificationEvent;
+import org.inbloom.gateway.core.event.verification.CreatedVerificationEvent;
+import org.inbloom.gateway.common.status.ApplicationProviderStatus;
+import org.inbloom.gateway.common.status.Status;
+import org.inbloom.gateway.common.status.VerificationStatus;
 import org.inbloom.gateway.persistence.domain.UserEntity;
 import org.inbloom.gateway.persistence.service.ApplicationProviderPersistenceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +34,7 @@ public class ApplicationProviderServiceHandler implements ApplicationProviderSer
         UserEntity dbUser = appProviderPersistenceService.getUserByEmail(email);
 
         if(dbUser != null) {
-            return RegisteredApplicationProviderEvent.fail("A User with that email has already registered");
+            return RegisteredApplicationProviderEvent.accountExists("A User with that email has already registered");
         }
 
         //persist the User and AppProvider
@@ -37,11 +42,11 @@ public class ApplicationProviderServiceHandler implements ApplicationProviderSer
         User user = registeredEvent.getData().getUser();
 
         //if we successfully created the user, create a verification
-        if(registeredEvent.status() == ResponseEvent.Status.SUCCESS && user != null) {
+        if(registeredEvent.status() == ApplicationProviderStatus.SUCCESS && user != null) {
             CreateVerificationEvent createEvent = new CreateVerificationEvent(user);
             CreatedVerificationEvent createdVerificationEvent = verificationService.createVerification(createEvent);
 
-            if(!createdVerificationEvent.status().equals(ResponseEvent.Status.SUCCESS))
+            if(!createdVerificationEvent.status().equals(VerificationStatus.SUCCESS))
                 return RegisteredApplicationProviderEvent.fail("Failed to Create Verification when registering App Provider");
         }
 

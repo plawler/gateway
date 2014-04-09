@@ -1,7 +1,7 @@
-package org.inbloom.gateway.core.event;
+package org.inbloom.gateway.core.event.verification;
 
 import org.inbloom.gateway.core.domain.Verification;
-import org.inbloom.gateway.persistence.domain.BaseEntity;
+import org.inbloom.gateway.core.event.RequestEvent;
 
 /**
  * Created by lloydengebretsen on 3/21/14.
@@ -15,7 +15,7 @@ public class ModifyVerificationEvent implements RequestEvent {
 
     public ModifyVerificationEvent(Verification verification) {
         this.verificationId = verification.getVerificationId();
-        this.verified = verification.getVerified();
+        this.verified = verification.isVerified();
         this.clientIpAddress = verification.getClientIpAddress();
         this.token = verification.getToken();
     }

@@ -1,4 +1,4 @@
-package org.inbloom.gateway.core.event;
+package org.inbloom.gateway.core.event.verification;
 
 import org.inbloom.gateway.core.domain.AccountValidation;
 

@@ -1,9 +1,11 @@
-package org.inbloom.gateway.core.event;
+package org.inbloom.gateway.core.event.operator;
+
+import org.inbloom.gateway.core.event.RequestEvent;
 
 /**
  * Created by lloydengebretsen on 2/26/14.
  */
-public class RetrieveOperatorEvent implements RequestEvent{
+public class RetrieveOperatorEvent implements RequestEvent {
 
     private final Long id;
 

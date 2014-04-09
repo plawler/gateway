@@ -1,12 +1,13 @@
-package org.inbloom.gateway.core.event;
+package org.inbloom.gateway.core.event.provider;
 
 import org.inbloom.gateway.core.domain.ApplicationProvider;
 import org.inbloom.gateway.core.domain.User;
+import org.inbloom.gateway.core.event.RequestEvent;
 
 /**
  * Created by lloydengebretsen on 3/24/14.
  */
-public class ModifyApplicationProviderEvent implements RequestEvent{
+public class ModifyApplicationProviderEvent implements RequestEvent {
 
     private final ApplicationProvider data;
     private final Long id;

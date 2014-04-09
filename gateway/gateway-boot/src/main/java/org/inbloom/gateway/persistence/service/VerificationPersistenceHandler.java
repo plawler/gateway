@@ -2,7 +2,7 @@ package org.inbloom.gateway.persistence.service;
 
 import org.inbloom.gateway.core.domain.User;
 import org.inbloom.gateway.core.domain.Verification;
-import org.inbloom.gateway.core.event.*;
+import org.inbloom.gateway.core.event.verification.*;
 import org.inbloom.gateway.persistence.domain.VerificationEntity;
 import org.inbloom.gateway.persistence.repository.UserRepository;
 import org.inbloom.gateway.persistence.repository.VerificationRepository;

@@ -5,8 +5,9 @@ import com.wordnik.swagger.annotations.ApiError;
 import com.wordnik.swagger.annotations.ApiErrors;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.inbloom.gateway.core.domain.Operator;
-import org.inbloom.gateway.core.event.*;
+import org.inbloom.gateway.core.event.operator.*;
 import org.inbloom.gateway.core.service.OperatorService;
+import org.inbloom.gateway.common.status.OperatorStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpHeaders;
@@ -76,14 +77,14 @@ public class OperatorController {
 
         ModifiedOperatorEvent modifiedEvent = operatorService.modifyOperator(new ModifyOperatorEvent(id, operator));
 
-        switch (modifiedEvent.status())
+        switch ((OperatorStatus)modifiedEvent.status())
         {
             case SUCCESS:
                 return new ResponseEntity(HttpStatus.NO_CONTENT);
             case NOT_FOUND:
                 return new ResponseEntity(HttpStatus.NOT_FOUND);
             default:
-                return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);//throw 500 error if we don't know why this failed
+                return new ResponseEntity(modifiedEvent.status(), HttpStatus.INTERNAL_SERVER_ERROR);//throw 500 error if we don't know why this failed
         }
     }
 }

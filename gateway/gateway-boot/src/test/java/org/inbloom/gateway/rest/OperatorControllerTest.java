@@ -1,9 +1,9 @@
 package org.inbloom.gateway.rest;
 
 import org.inbloom.gateway.Gateway;
-import org.inbloom.gateway.core.event.ModifyOperatorEvent;
-import org.inbloom.gateway.core.event.RegisterOperatorEvent;
-import org.inbloom.gateway.core.event.RetrieveOperatorEvent;
+import org.inbloom.gateway.core.event.operator.ModifyOperatorEvent;
+import org.inbloom.gateway.core.event.operator.RegisterOperatorEvent;
+import org.inbloom.gateway.core.event.operator.RetrieveOperatorEvent;
 import org.inbloom.gateway.core.service.OperatorService;
 import org.inbloom.gateway.rest.util.TestUtil;
 import org.junit.Before;

@@ -1,6 +1,6 @@
 package org.inbloom.gateway.core.service;
 
-import org.inbloom.gateway.core.event.*;
+import org.inbloom.gateway.core.event.provider.*;
 import org.springframework.stereotype.Service;
 
 /**

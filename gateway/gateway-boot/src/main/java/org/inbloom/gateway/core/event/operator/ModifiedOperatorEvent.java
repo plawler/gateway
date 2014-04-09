@@ -1,7 +1,10 @@
-package org.inbloom.gateway.core.event;
+package org.inbloom.gateway.core.event.operator;
 
 
 import org.inbloom.gateway.core.domain.Operator;
+import org.inbloom.gateway.core.event.ResponseEvent;
+import org.inbloom.gateway.common.status.OperatorStatus;
+import org.inbloom.gateway.common.status.Status;
 
 /**
  * Created by lloydengebretsen on 2/27/14.
@@ -10,9 +13,9 @@ public class ModifiedOperatorEvent implements ResponseEvent {
 
     private final Long id;
     private final Operator data;
-    private final Status status;
+    private final OperatorStatus status;
 
-    private ModifiedOperatorEvent(Long id, Operator data, Status status) {
+    private ModifiedOperatorEvent(Long id, Operator data, OperatorStatus status) {
         this.data = data;
         this.id = id;
         this.status = status;
@@ -28,12 +31,12 @@ public class ModifiedOperatorEvent implements ResponseEvent {
 
     public static ModifiedOperatorEvent notFound(Long id)
     {
-        return new ModifiedOperatorEvent(id, null, Status.NOT_FOUND);
+        return new ModifiedOperatorEvent(id, null, OperatorStatus.NOT_FOUND);
     }
 
     public static ModifiedOperatorEvent success(Long id, Operator modified)
     {
-        return new ModifiedOperatorEvent(id, modified, Status.SUCCESS);
+        return new ModifiedOperatorEvent(id, modified, OperatorStatus.SUCCESS);
     }
 
     @Override

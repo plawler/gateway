@@ -1,7 +1,8 @@
 package org.inbloom.gateway.persistence.service;
 
 import org.inbloom.gateway.Gateway;
-import org.inbloom.gateway.core.event.*;
+import org.inbloom.gateway.core.event.provider.*;
+import org.inbloom.gateway.common.status.ApplicationProviderStatus;
 import org.inbloom.gateway.fixture.ApplicationProviderEventFixtures;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +34,7 @@ public class ApplicationProviderPersistenceServiceTest {
         RegisterApplicationProviderEvent request = ApplicationProviderEventFixtures.buildRegisterAppProviderEvent();
         RegisteredApplicationProviderEvent response = applicationProviderPersistenceService.createApplicationProvider(request);
 
-        assertEquals(ResponseEvent.Status.SUCCESS, response.status());
+        assertEquals(ApplicationProviderStatus.SUCCESS, response.status());
         assertEquals(request.getData().getApplicationProviderName(), response.getData().getApplicationProviderName());
         assertEquals(request.getData().getOrganizationName(), response.getData().getOrganizationName());
         assertNotNull(response.getData().getApplicationProviderId());
@@ -50,7 +51,7 @@ public class ApplicationProviderPersistenceServiceTest {
 
 
         RetrievedApplicationProviderEvent retrieveResponse = applicationProviderPersistenceService.retrieveApplicationProvider(new RetrieveApplicationProviderEvent(appProviderId));
-        assertEquals(ResponseEvent.Status.SUCCESS, retrieveResponse.status());
+        assertEquals(ApplicationProviderStatus.SUCCESS, retrieveResponse.status());
         assertEquals(registerRequest.getData().getOrganizationName(),retrieveResponse.getData().getOrganizationName());
         assertEquals(registerRequest.getData().getApplicationProviderName(), retrieveResponse.getData().getApplicationProviderName());
 
@@ -67,10 +68,10 @@ public class ApplicationProviderPersistenceServiceTest {
         ModifyApplicationProviderEvent modifyRequest = ApplicationProviderEventFixtures.buildModifyAppProviderEvent(appProviderId);
         ModifiedApplicationProviderEvent modifyResponse = applicationProviderPersistenceService.modifyApplicationProvider(modifyRequest);
 
-        assertEquals(ResponseEvent.Status.SUCCESS, modifyResponse.status());
+        assertEquals(ApplicationProviderStatus.SUCCESS, modifyResponse.status());
 
         RetrievedApplicationProviderEvent retrieveResponse = applicationProviderPersistenceService.retrieveApplicationProvider(new RetrieveApplicationProviderEvent(appProviderId));
-        assertEquals(ResponseEvent.Status.SUCCESS, retrieveResponse.status());
+        assertEquals(ApplicationProviderStatus.SUCCESS, retrieveResponse.status());
         assertEquals(modifyRequest.getOrganizationName(),retrieveResponse.getData().getOrganizationName());
         assertEquals(modifyRequest.getApplicationProviderName(), retrieveResponse.getData().getApplicationProviderName());
 

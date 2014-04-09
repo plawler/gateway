@@ -1,9 +1,9 @@
 package org.inbloom.gateway.rest;
 
 import org.inbloom.gateway.Gateway;
-import org.inbloom.gateway.core.event.ModifyApplicationProviderEvent;
-import org.inbloom.gateway.core.event.RegisterApplicationProviderEvent;
-import org.inbloom.gateway.core.event.RetrieveApplicationProviderEvent;
+import org.inbloom.gateway.core.event.provider.ModifyApplicationProviderEvent;
+import org.inbloom.gateway.core.event.provider.RegisterApplicationProviderEvent;
+import org.inbloom.gateway.core.event.provider.RetrieveApplicationProviderEvent;
 import org.inbloom.gateway.core.service.ApplicationProviderService;
 import org.inbloom.gateway.fixture.ApplicationProviderEventFixtures;
 import org.inbloom.gateway.fixture.ApplicationProviderFixture;

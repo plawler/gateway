@@ -8,8 +8,8 @@ import org.inbloom.gateway.credentials.CredentialService;
 import org.junit.runner.RunWith;
 
 import org.inbloom.gateway.Gateway;
-import org.inbloom.gateway.core.event.CreateVerificationEvent;
-import org.inbloom.gateway.core.event.CreatedVerificationEvent;
+import org.inbloom.gateway.core.event.verification.CreateVerificationEvent;
+import org.inbloom.gateway.core.event.verification.CreatedVerificationEvent;
 import org.inbloom.gateway.fixture.VerificationEventFixtures;
 import org.inbloom.gateway.persistence.service.VerificationPersistenceService;
 import org.inbloom.gateway.rest.util.TestUtil;

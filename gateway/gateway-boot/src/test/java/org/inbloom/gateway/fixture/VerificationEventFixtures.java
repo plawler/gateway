@@ -1,7 +1,7 @@
 package org.inbloom.gateway.fixture;
 
 import org.inbloom.gateway.core.domain.Verification;
-import org.inbloom.gateway.core.event.*;
+import org.inbloom.gateway.core.event.verification.*;
 
 /**
  * @author benjaminmorgan

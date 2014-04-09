@@ -1,6 +1,6 @@
 package org.inbloom.gateway.persistence.service;
 
-import org.inbloom.gateway.core.event.*;
+import org.inbloom.gateway.core.event.provider.*;
 import org.inbloom.gateway.persistence.domain.UserEntity;
 
 /**

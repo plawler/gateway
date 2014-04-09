@@ -3,7 +3,10 @@ package org.inbloom.gateway.core.service;
 import org.inbloom.gateway.core.domain.Credentials;
 import org.inbloom.gateway.core.domain.User;
 import org.inbloom.gateway.core.domain.Verification;
-import org.inbloom.gateway.core.event.*;
+import org.inbloom.gateway.core.event.user.CreateCredentialsEvent;
+import org.inbloom.gateway.core.event.user.CreatedCredentialsEvent;
+import org.inbloom.gateway.core.event.verification.*;
+import org.inbloom.gateway.common.status.VerificationStatus;
 import org.inbloom.gateway.credentials.CredentialService;
 import org.inbloom.gateway.persistence.service.VerificationPersistenceService;
 import org.inbloom.gateway.util.keyService.KeyGenerator;
@@ -71,7 +74,7 @@ public class VerificationServiceHandler implements VerificationService{
             try {
                 sendNotification(user, token); //send email verification
             } catch (NotificationException e) {
-                return CreatedVerificationEvent.fail("Notification Client failed to send email: " + e.getMessage());
+                return CreatedVerificationEvent.notificationFail("Notification Client failed to send email: " + e.getMessage());
             }
         }
         return createdEvent;
@@ -80,13 +83,16 @@ public class VerificationServiceHandler implements VerificationService{
     @Override
     public ValidatedAccountSetupEvent validateAccountSetup(ValidateAccountSetupEvent validateEvent) {
         RetrievedVerificationEvent retrieved = persistenceService.retrieveForAccountValidation(validateEvent);
-        if (retrieved.status().equals(ResponseEvent.Status.NOT_FOUND)) {
-            return ValidatedAccountSetupEvent.failed("The verification could not be found. Either an invalid token was supplied or the account does not exist.");
+        if (retrieved.status().equals(VerificationStatus.NOT_FOUND)) {
+            return ValidatedAccountSetupEvent.notFound("The verification could not be found. Either an invalid token was supplied or the account does not exist.");
         }
 
         Verification verification = retrieved.getData();
-        if (verification.invalid()) {
-            return ValidatedAccountSetupEvent.failed("The verification is no longer valid");
+        if (verification.isExpired()) {
+            return ValidatedAccountSetupEvent.expired("The verification is no longer valid");
+        }
+        if(verification.isVerified()) {
+            return ValidatedAccountSetupEvent.redeemed("The verification token has already been redeemed");
         }
 
         if (!processCredentials(verification.createCredentials(validateEvent.getPassword())))

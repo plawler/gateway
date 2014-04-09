@@ -2,10 +2,10 @@ package org.inbloom.gateway.core.service;
 
 import org.inbloom.gateway.Gateway;
 import org.inbloom.gateway.core.domain.Operator;
-import org.inbloom.gateway.core.event.RegisterOperatorEvent;
-import org.inbloom.gateway.core.event.RegisteredOperatorEvent;
-import org.inbloom.gateway.core.event.RetrieveOperatorEvent;
-import org.inbloom.gateway.core.event.RetrievedOperatorEvent;
+import org.inbloom.gateway.core.event.operator.RegisterOperatorEvent;
+import org.inbloom.gateway.core.event.operator.RegisteredOperatorEvent;
+import org.inbloom.gateway.core.event.operator.RetrieveOperatorEvent;
+import org.inbloom.gateway.core.event.operator.RetrievedOperatorEvent;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

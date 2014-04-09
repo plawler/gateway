@@ -1,9 +1,10 @@
 package org.inbloom.gateway.credentials;
 
+import com.unboundid.ldap.sdk.LDAPConnection;
 import com.unboundid.ldap.sdk.LDAPException;
-import org.inbloom.gateway.core.event.AuthenticateUserEvent;
-import org.inbloom.gateway.core.event.CreateCredentialsEvent;
-import org.inbloom.gateway.core.event.CreatedCredentialsEvent;
+import org.inbloom.gateway.core.event.user.AuthenticateUserEvent;
+import org.inbloom.gateway.core.event.user.CreateCredentialsEvent;
+import org.inbloom.gateway.core.event.user.CreatedCredentialsEvent;
 import org.inbloom.gateway.credentials.ldap.LdapRequestFactory;
 import org.inbloom.gateway.credentials.ldap.LdapService;
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ public class CredentialServiceImpl implements CredentialService {
     private static final Logger logger = LoggerFactory.getLogger(CredentialServiceImpl.class);
 
     private final LdapService ldapService;
+    private LDAPConnection connection;
 
     @Autowired
     public CredentialServiceImpl(LdapService ldapService) {

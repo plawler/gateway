@@ -55,6 +55,7 @@ mvn dependency:analyze
     </properties>
 
     <modules>
+       <module>gateway-common</module>
        <module>inbloom-notifications-client</module>
        <module>gateway-boot</module>
        <module>gateway-portal</module>

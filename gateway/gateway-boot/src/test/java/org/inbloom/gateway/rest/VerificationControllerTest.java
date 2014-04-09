@@ -1,13 +1,11 @@
 package org.inbloom.gateway.rest;
 
 import org.inbloom.gateway.Gateway;
-import org.inbloom.gateway.core.domain.AccountValidation;
-import org.inbloom.gateway.core.event.RetrieveVerificationEvent;
-import org.inbloom.gateway.core.event.RetrievedVerificationEvent;
-import org.inbloom.gateway.core.event.ValidateAccountSetupEvent;
-import org.inbloom.gateway.core.event.ValidatedAccountSetupEvent;
+import org.inbloom.gateway.core.event.verification.RetrieveVerificationEvent;
+import org.inbloom.gateway.core.event.verification.RetrievedVerificationEvent;
+import org.inbloom.gateway.core.event.verification.ValidateAccountSetupEvent;
+import org.inbloom.gateway.core.event.verification.ValidatedAccountSetupEvent;
 import org.inbloom.gateway.core.service.VerificationService;
-import org.inbloom.gateway.fixture.VerificationEventFixtures;
 import org.inbloom.gateway.fixture.VerificationFixture;
 import org.inbloom.gateway.rest.util.TestUtil;
 import org.junit.Before;
@@ -61,13 +59,11 @@ public class VerificationControllerTest {
 
     @Test
     public void shouldValidateAnAccount() throws Exception {
-        AccountValidation ac = accountValidation();
-
         Mockito.when(verificationService.validateAccountSetup(any(ValidateAccountSetupEvent.class)))
                 .thenReturn(ValidatedAccountSetupEvent.success(VerificationFixture.validVerification(new Date())));
 
-        this.mockMvc.perform(post("/verifications/{token}", ac.getValidationToken())
-                .content(TestUtil.stringify(ac))
+        this.mockMvc.perform(post("/verifications/validate")
+                .content(TestUtil.stringify(accountValidation()))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -89,20 +85,7 @@ public class VerificationControllerTest {
     @Test
     public void shouldFailValidationIfTheVerificationIsNotValid() throws Exception {
         Mockito.when(verificationService.validateAccountSetup(any(ValidateAccountSetupEvent.class)))
-                .thenReturn(ValidatedAccountSetupEvent.failed("The verification expired"));
-
-        this.mockMvc.perform(post("/verifications/validate")
-                .content(TestUtil.stringify(accountValidation()))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isForbidden());
-    }
-
-    @Test
-    public void shouldFailValidationIfTheVerificationHasBeenRedeemed() throws Exception {
-        Mockito.when(verificationService.validateAccountSetup(any(ValidateAccountSetupEvent.class)))
-                .thenReturn(ValidatedAccountSetupEvent.failed("The verification is no longer valid"));
+                .thenReturn(ValidatedAccountSetupEvent.expired("The verification expired"));
 
         this.mockMvc.perform(post("/verifications/validate")
                 .content(TestUtil.stringify(accountValidation()))

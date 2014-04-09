@@ -1,12 +1,11 @@
 package org.inbloom.gateway.persistence.service;
 
 import org.inbloom.gateway.core.domain.Operator;
-import org.inbloom.gateway.core.event.*;
+import org.inbloom.gateway.core.event.operator.*;
 import org.inbloom.gateway.persistence.domain.OperatorEntity;
 import org.inbloom.gateway.persistence.repository.OperatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 /**

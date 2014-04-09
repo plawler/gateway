@@ -1,10 +1,10 @@
 package org.inbloom.gateway.core.service;
 
 import org.inbloom.gateway.Gateway;
-import org.inbloom.gateway.core.event.CreateVerificationEvent;
-import org.inbloom.gateway.core.event.RegisterApplicationProviderEvent;
-import org.inbloom.gateway.core.event.RegisteredApplicationProviderEvent;
-import org.inbloom.gateway.core.event.ResponseEvent;
+import org.inbloom.gateway.core.event.verification.CreateVerificationEvent;
+import org.inbloom.gateway.core.event.provider.RegisterApplicationProviderEvent;
+import org.inbloom.gateway.core.event.provider.RegisteredApplicationProviderEvent;
+import org.inbloom.gateway.common.status.ApplicationProviderStatus;
 import org.inbloom.gateway.fixture.ApplicationProviderEventFixtures;
 import org.inbloom.gateway.fixture.VerificationEventFixtures;
 import org.inbloom.gateway.persistence.domain.UserEntity;
@@ -75,7 +75,7 @@ public class ApplicationProviderServiceTest {
         RegisteredApplicationProviderEvent registeredEvent = appProviderService.registerApplicationProvider(ApplicationProviderEventFixtures.buildRegisterAppProviderEvent());
 
         assertNotNull(registeredEvent);
-        assertEquals(registeredEvent.status(), ResponseEvent.Status.SUCCESS);
+        assertEquals(registeredEvent.status(), ApplicationProviderStatus.SUCCESS);
     }
 
     @Test
@@ -86,7 +86,7 @@ public class ApplicationProviderServiceTest {
         RegisteredApplicationProviderEvent registeredEvent = appProviderService.registerApplicationProvider(ApplicationProviderEventFixtures.buildRegisterAppProviderEvent());
 
         assertNotNull(registeredEvent);
-        assertEquals(registeredEvent.status(), ResponseEvent.Status.FAILED);
+        assertEquals(registeredEvent.status(), ApplicationProviderStatus.ACCOUNT_EXISTS);
     }
 
 }

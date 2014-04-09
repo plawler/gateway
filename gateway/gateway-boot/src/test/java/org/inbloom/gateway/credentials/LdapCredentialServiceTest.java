@@ -4,8 +4,9 @@ import com.unboundid.ldap.sdk.AddRequest;
 import com.unboundid.ldap.sdk.LDAPException;
 import com.unboundid.ldap.sdk.ModifyRequest;
 import com.unboundid.ldif.LDIFException;
-import org.inbloom.gateway.core.event.CreateCredentialsEvent;
+import org.inbloom.gateway.core.event.user.CreateCredentialsEvent;
 import org.inbloom.gateway.core.event.ResponseEvent;
+import org.inbloom.gateway.common.status.CredentialStatus;
 import org.inbloom.gateway.credentials.ldap.LdapService;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,7 +42,7 @@ public class LdapCredentialServiceTest {
         verify(ldap).add(any(AddRequest.class));
         verify(ldap, times(2)).modify(any(ModifyRequest.class));
 
-        assertEquals(ResponseEvent.Status.SUCCESS, response.status());
+        assertEquals(CredentialStatus.SUCCESS, response.status());
     }
 
     @Test(expected = Exception.class)
@@ -49,7 +50,7 @@ public class LdapCredentialServiceTest {
         ResponseEvent response = service.createCredentials(malformedCredentialsEvent());
         verify(ldap).add(any(AddRequest.class));
         verify(ldap, times(2)).modify(any(ModifyRequest.class));
-        assertEquals(ResponseEvent.Status.FAILED, response.status());
+        assertEquals(CredentialStatus.ERROR, response.status());
     }
 
     private CreateCredentialsEvent malformedCredentialsEvent() {
