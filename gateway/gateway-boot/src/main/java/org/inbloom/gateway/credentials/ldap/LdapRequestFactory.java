@@ -47,7 +47,7 @@ public class LdapRequestFactory {
         return new ModifyRequest(dn, mod);
     }
 
-    public static ModifyRequest newAddToSanboxAdminRequest(String email) throws LDAPException {
+    public static ModifyRequest newAddToSandboxAdminRequest(String email) throws LDAPException {
         DN dn = new DN("cn=Sandbox Administrator," + GROUP_BASE_DN);
         Modification mod = new Modification(ModificationType.ADD, "memberUid", email);
         return new ModifyRequest(dn, mod);

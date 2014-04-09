@@ -58,9 +58,9 @@ public class RestErrorHandler {
     }
 
     @ExceptionHandler(VerificationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ResponseBody
-    public String handleEvaluationException(VerificationException exception) {
+    public String handleValidationException(VerificationException exception) {
         logger.error(exception.getMessage());
         return exception.getMessage();
     }
