@@ -2,6 +2,8 @@ package org.inbloom.gateway.rest;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+import org.inbloom.gateway.common.status.VerificationStatus;
+import org.inbloom.gateway.common.status.rest.StatusResponse;
 import org.inbloom.gateway.core.domain.AccountValidation;
 import org.inbloom.gateway.core.domain.Verification;
 import org.inbloom.gateway.core.event.verification.RetrieveVerificationEvent;
@@ -9,7 +11,6 @@ import org.inbloom.gateway.core.event.verification.RetrievedVerificationEvent;
 import org.inbloom.gateway.core.event.verification.ValidateAccountSetupEvent;
 import org.inbloom.gateway.core.event.verification.ValidatedAccountSetupEvent;
 import org.inbloom.gateway.core.service.VerificationService;
-import org.inbloom.gateway.common.status.VerificationStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
@@ -44,10 +45,10 @@ public class VerificationController {
         ValidatedAccountSetupEvent validated = verificationService.validateAccountSetup(new ValidateAccountSetupEvent(validation));
         switch((VerificationStatus)validated.status()) {
             case SUCCESS: return new ResponseEntity<Verification>(validated.getData(), HttpStatus.OK);
-            case EXPIRED: return new ResponseEntity(validated.status(), HttpStatus.FORBIDDEN);
-            case NOT_FOUND: return new ResponseEntity(validated.status(), HttpStatus.NOT_FOUND);
-            case REDEEMED: return new ResponseEntity(validated.status(), HttpStatus.FORBIDDEN);
-            default: return new ResponseEntity(validated.status(), HttpStatus.INTERNAL_SERVER_ERROR);
+            case EXPIRED: return new ResponseEntity(new StatusResponse(validated.status()), HttpStatus.FORBIDDEN);
+            case NOT_FOUND: return new ResponseEntity(new StatusResponse(validated.status()), HttpStatus.NOT_FOUND);
+            case REDEEMED: return new ResponseEntity(new StatusResponse(validated.status()), HttpStatus.FORBIDDEN);
+            default: return new ResponseEntity(new StatusResponse(validated.status()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -56,10 +57,10 @@ public class VerificationController {
         RetrievedVerificationEvent retrieved = verificationService.retrieveVerification(new RetrieveVerificationEvent(token));
         switch ((VerificationStatus)retrieved.status()) {
             case SUCCESS: return new ResponseEntity<Verification>(retrieved.getData(), HttpStatus.OK);
-            case EXPIRED: return new ResponseEntity(retrieved.status(), HttpStatus.FORBIDDEN);
-            case NOT_FOUND: return new ResponseEntity(retrieved.status(), HttpStatus.NOT_FOUND);
-            case REDEEMED: return new ResponseEntity(retrieved.status(), HttpStatus.FORBIDDEN);
-            default: return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            case EXPIRED: return new ResponseEntity(new StatusResponse(retrieved.status()), HttpStatus.FORBIDDEN);
+            case NOT_FOUND: return new ResponseEntity(new StatusResponse(retrieved.status()), HttpStatus.NOT_FOUND);
+            case REDEEMED: return new ResponseEntity(new StatusResponse(retrieved.status()), HttpStatus.FORBIDDEN);
+            default: return new ResponseEntity(new StatusResponse(retrieved.status()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
