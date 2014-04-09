@@ -15,4 +15,4 @@ target/
 .rvmrc
 
 lib/*
-gateway-boot/temp/
+gateway/gateway-boot/temp/
