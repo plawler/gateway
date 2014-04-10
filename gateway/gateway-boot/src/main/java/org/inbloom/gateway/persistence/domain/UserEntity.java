@@ -1,6 +1,6 @@
 package org.inbloom.gateway.persistence.domain;
 
-import org.inbloom.gateway.core.domain.ApplicationProvider;
+import org.inbloom.gateway.common.domain.ApplicationProvider;
 
 import javax.persistence.*;
 

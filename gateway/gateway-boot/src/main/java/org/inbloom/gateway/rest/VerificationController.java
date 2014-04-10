@@ -2,10 +2,11 @@ package org.inbloom.gateway.rest;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+
+import org.inbloom.gateway.common.domain.AccountValidation;
+import org.inbloom.gateway.common.domain.Verification;
 import org.inbloom.gateway.common.status.VerificationStatus;
 import org.inbloom.gateway.common.status.rest.StatusResponse;
-import org.inbloom.gateway.core.domain.AccountValidation;
-import org.inbloom.gateway.core.domain.Verification;
 import org.inbloom.gateway.core.event.verification.RetrieveVerificationEvent;
 import org.inbloom.gateway.core.event.verification.RetrievedVerificationEvent;
 import org.inbloom.gateway.core.event.verification.ValidateAccountSetupEvent;

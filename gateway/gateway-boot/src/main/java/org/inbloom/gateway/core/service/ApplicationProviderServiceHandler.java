@@ -1,9 +1,9 @@
 package org.inbloom.gateway.core.service;
 
-import org.inbloom.gateway.core.domain.User;
 import org.inbloom.gateway.core.event.provider.*;
 import org.inbloom.gateway.core.event.verification.CreateVerificationEvent;
 import org.inbloom.gateway.core.event.verification.CreatedVerificationEvent;
+import org.inbloom.gateway.common.domain.User;
 import org.inbloom.gateway.common.status.ApplicationProviderStatus;
 import org.inbloom.gateway.common.status.Status;
 import org.inbloom.gateway.common.status.VerificationStatus;

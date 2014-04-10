@@ -1,6 +1,6 @@
 package org.inbloom.gateway.util.mapper;
 
-import org.inbloom.gateway.core.domain.User;
+import org.inbloom.gateway.common.domain.User;
 import org.inbloom.gateway.persistence.domain.UserEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.core.convert.converter.Converter;

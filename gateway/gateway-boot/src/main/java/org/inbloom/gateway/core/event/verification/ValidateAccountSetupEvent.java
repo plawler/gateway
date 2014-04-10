@@ -1,6 +1,6 @@
 package org.inbloom.gateway.core.event.verification;
 
-import org.inbloom.gateway.core.domain.AccountValidation;
+import org.inbloom.gateway.common.domain.AccountValidation;
 
 import java.util.Date;
 

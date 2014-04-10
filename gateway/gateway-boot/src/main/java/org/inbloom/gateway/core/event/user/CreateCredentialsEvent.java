@@ -1,6 +1,6 @@
 package org.inbloom.gateway.core.event.user;
 
-import org.inbloom.gateway.core.domain.Credentials;
+import org.inbloom.gateway.common.domain.Credentials;
 import org.inbloom.gateway.core.event.RequestEvent;
 
 /**

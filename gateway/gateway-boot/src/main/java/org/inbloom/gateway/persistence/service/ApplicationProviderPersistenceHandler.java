@@ -1,8 +1,8 @@
 package org.inbloom.gateway.persistence.service;
 
 import org.apache.commons.lang.StringUtils;
-import org.inbloom.gateway.core.domain.ApplicationProvider;
-import org.inbloom.gateway.core.domain.User;
+import org.inbloom.gateway.common.domain.ApplicationProvider;
+import org.inbloom.gateway.common.domain.User;
 import org.inbloom.gateway.core.event.provider.*;
 import org.inbloom.gateway.persistence.domain.ApplicationProviderEntity;
 import org.inbloom.gateway.persistence.domain.BaseEntity;

@@ -1,8 +1,8 @@
 package org.inbloom.gateway.fixture;
 
-import org.inbloom.gateway.core.domain.AccountValidation;
-import org.inbloom.gateway.core.domain.User;
-import org.inbloom.gateway.core.domain.Verification;
+import org.inbloom.gateway.common.domain.AccountValidation;
+import org.inbloom.gateway.common.domain.User;
+import org.inbloom.gateway.common.domain.Verification;
 import org.joda.time.DateTime;
 
 import java.util.Date;

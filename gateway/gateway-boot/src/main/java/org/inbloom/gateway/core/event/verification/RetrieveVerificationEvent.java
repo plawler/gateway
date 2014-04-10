@@ -1,6 +1,6 @@
 package org.inbloom.gateway.core.event.verification;
 
-import org.inbloom.gateway.core.domain.Verification;
+import org.inbloom.gateway.common.domain.Verification;
 import org.inbloom.gateway.core.event.RequestEvent;
 
 /**
