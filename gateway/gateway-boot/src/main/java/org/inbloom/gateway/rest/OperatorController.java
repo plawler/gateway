@@ -6,8 +6,6 @@ import com.wordnik.swagger.annotations.ApiErrors;
 import com.wordnik.swagger.annotations.ApiOperation;
 
 import org.inbloom.gateway.common.domain.Operator;
-import org.inbloom.gateway.common.status.rest.StatusResponse;
-import org.inbloom.gateway.core.domain.Operator;
 import org.inbloom.gateway.core.event.operator.*;
 import org.inbloom.gateway.core.service.OperatorService;
 import org.inbloom.gateway.common.status.OperatorStatus;
