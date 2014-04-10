@@ -1,12 +1,3 @@
-def fill_in_password(password)
-  fill_in('Choose a Password', :with => password)
-end
-
-def fill_in_confirm_password(password)
-  fill_in('Confirm Password', :with => password)
-end
-
-
 When(/^I click on the verification link from the e\-mail$/) do
  email = app_provider_resource['user']['email']
  email_link = verification_email_link(email)
@@ -40,7 +31,7 @@ Then(/^the submit button is enabled$/) do
 end
 
 Then(/^the submit button is disabled$/) do
-  page.should have_no_button('submit')
+  page.should have_css('#submit[disabled]')
 end
 
 When(/^I enter a password of (.*)$/) do |password|
@@ -52,9 +43,19 @@ When(/^I enter a different password confirmation$/) do
 end
 
 Then(/^I see a validation error of (.*)$/) do |validation_message|
-  page.should have_selector('p.help-block li',validation_message)
+  page.should have_css('.help-block li',validation_message)
 end
 
 Then(/^I see no validation errors$/) do
-  page.should have_no_selector('p.help-block li')
+  page.has_css?('.help-block li') == false
+end
+
+#methods
+
+def fill_in_password(password)
+  fill_in('Choose a Password', :with => password)
+end
+
+def fill_in_confirm_password(password)
+  fill_in('Confirm Password', :with => password)
 end
