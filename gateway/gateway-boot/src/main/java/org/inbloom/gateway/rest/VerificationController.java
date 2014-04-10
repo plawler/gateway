@@ -3,7 +3,6 @@ package org.inbloom.gateway.rest;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.inbloom.gateway.common.status.VerificationStatus;
-import org.inbloom.gateway.common.status.rest.StatusResponse;
 import org.inbloom.gateway.core.domain.AccountValidation;
 import org.inbloom.gateway.core.domain.Verification;
 import org.inbloom.gateway.core.event.verification.RetrieveVerificationEvent;
@@ -43,25 +42,22 @@ public class VerificationController {
     public ResponseEntity<Verification> validate(@Valid @RequestBody AccountValidation validation, @PathVariable String token) {
         validation.setValidationToken(token);
         ValidatedAccountSetupEvent validated = verificationService.validateAccountSetup(new ValidateAccountSetupEvent(validation));
-        switch((VerificationStatus)validated.status()) {
-            case SUCCESS: return new ResponseEntity<Verification>(validated.getData(), HttpStatus.OK);
-            case EXPIRED: return new ResponseEntity(new StatusResponse(validated.status()), HttpStatus.FORBIDDEN);
-            case NOT_FOUND: return new ResponseEntity(new StatusResponse(validated.status()), HttpStatus.NOT_FOUND);
-            case REDEEMED: return new ResponseEntity(new StatusResponse(validated.status()), HttpStatus.FORBIDDEN);
-            default: return new ResponseEntity(new StatusResponse(validated.status()), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return buildResponse((VerificationStatus)validated.status(), validated.getData());
     }
 
     @RequestMapping(value = "/verifications/{token}", method = RequestMethod.GET)
     public ResponseEntity<Verification> retrieve(@PathVariable String token) {
         RetrievedVerificationEvent retrieved = verificationService.retrieveVerification(new RetrieveVerificationEvent(token));
-        switch ((VerificationStatus)retrieved.status()) {
-            case SUCCESS: return new ResponseEntity<Verification>(retrieved.getData(), HttpStatus.OK);
-            case EXPIRED: return new ResponseEntity(new StatusResponse(retrieved.status()), HttpStatus.FORBIDDEN);
-            case NOT_FOUND: return new ResponseEntity(new StatusResponse(retrieved.status()), HttpStatus.NOT_FOUND);
-            case REDEEMED: return new ResponseEntity(new StatusResponse(retrieved.status()), HttpStatus.FORBIDDEN);
-            default: return new ResponseEntity(new StatusResponse(retrieved.status()), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return buildResponse((VerificationStatus)retrieved.status(), retrieved.getData());
     }
 
+    private ResponseEntity buildResponse(VerificationStatus status, Verification verification) {
+        switch(status) {
+            case SUCCESS: return new ResponseEntity<Verification>(verification, HttpStatus.OK);
+            case NOT_FOUND: return new ResponseEntity(status, HttpStatus.NOT_FOUND);
+            case EXPIRED: ;//fall through to next FORBIDDEN response
+            case REDEEMED: return new ResponseEntity(status, HttpStatus.FORBIDDEN);
+            default: return new ResponseEntity(status, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
