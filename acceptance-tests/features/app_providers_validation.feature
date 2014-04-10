@@ -18,6 +18,7 @@ Feature:
     Given my verification has expired
     When I POST to the verifications resource with a valid token
     Then the response status should be 403 Forbidden
+    And the response body status code should be EXPIRED
 
   Scenario: An application provider validates his account with a bad password
     Given I have a JSON representation of an account validation with an invalid password
@@ -28,4 +29,7 @@ Feature:
     Given my verification has previously been redeemed
     When I POST to the verifications resource with a valid token
     Then the response status should be 403 Forbidden
+    And the response body status code should be REDEEMED
 
+  Scenario: An application provider validates his account with an non-existent token
+    When I POST to the verifications resource with a valid token

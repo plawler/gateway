@@ -4,7 +4,6 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiError;
 import com.wordnik.swagger.annotations.ApiErrors;
 import com.wordnik.swagger.annotations.ApiOperation;
-import org.inbloom.gateway.common.status.rest.StatusResponse;
 import org.inbloom.gateway.core.domain.ApplicationProvider;
 import org.inbloom.gateway.core.event.provider.*;
 import org.inbloom.gateway.core.service.ApplicationProviderService;
@@ -53,7 +52,7 @@ public class ApplicationProviderController {
 
 
             default:
-                return new ResponseEntity(new StatusResponse(createdEvent.status()), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(createdEvent.status(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -71,7 +70,7 @@ public class ApplicationProviderController {
             return new ResponseEntity<ApplicationProvider>(appProvider, HttpStatus.OK);
         }
         else {
-            return new ResponseEntity(new StatusResponse(retrievedEvent.status()), HttpStatus.NOT_FOUND);
+            return new ResponseEntity(retrievedEvent.status(), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -97,9 +96,9 @@ public class ApplicationProviderController {
             case SUCCESS:
                 return new ResponseEntity(HttpStatus.NO_CONTENT);
             case NOT_FOUND:
-                return new ResponseEntity(new StatusResponse(modifiedEvent.status()), HttpStatus.NOT_FOUND);
+                return new ResponseEntity(modifiedEvent.status(), HttpStatus.NOT_FOUND);
             default:
-                return new ResponseEntity(new StatusResponse(modifiedEvent.status()), HttpStatus.INTERNAL_SERVER_ERROR);//throw 500 error if we don't know why this failed
+                return new ResponseEntity(modifiedEvent.status(), HttpStatus.INTERNAL_SERVER_ERROR);//throw 500 error if we don't know why this failed
         }
 
     }
