@@ -43,7 +43,7 @@ When(/^I enter a different password confirmation$/) do
 end
 
 Then(/^I see a validation error of (.*)$/) do |validation_message|
-  page.should have_css('.help-block li',validation_message)
+  expect(page).to have_content(validation_message)
 end
 
 Then(/^I see no validation errors$/) do
