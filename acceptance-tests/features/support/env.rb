@@ -4,6 +4,9 @@ Dotenv.load
 require 'capybara'
 Capybara.default_driver = :selenium
 
+require 'capybara-screenshot'
+require 'capybara-screenshot/cucumber'
+
 require 'webmock/cucumber'
 WebMock.allow_net_connect!
 
