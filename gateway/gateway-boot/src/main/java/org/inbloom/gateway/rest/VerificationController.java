@@ -45,10 +45,10 @@ public class VerificationController {
         ValidatedAccountSetupEvent validated = verificationService.validateAccountSetup(new ValidateAccountSetupEvent(validation));
         switch((VerificationStatus)validated.status()) {
             case SUCCESS: return new ResponseEntity<Verification>(validated.getData(), HttpStatus.OK);
-            case EXPIRED: return new ResponseEntity(new StatusResponse(validated.status()), HttpStatus.FORBIDDEN);
-            case NOT_FOUND: return new ResponseEntity(new StatusResponse(validated.status()), HttpStatus.NOT_FOUND);
-            case REDEEMED: return new ResponseEntity(new StatusResponse(validated.status()), HttpStatus.FORBIDDEN);
-            default: return new ResponseEntity(new StatusResponse(validated.status()), HttpStatus.INTERNAL_SERVER_ERROR);
+            case EXPIRED: return new ResponseEntity(validated.status(), HttpStatus.FORBIDDEN);
+            case NOT_FOUND: return new ResponseEntity(validated.status(), HttpStatus.NOT_FOUND);
+            case REDEEMED: return new ResponseEntity(validated.status(), HttpStatus.FORBIDDEN);
+            default: return new ResponseEntity(validated.status(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -57,10 +57,10 @@ public class VerificationController {
         RetrievedVerificationEvent retrieved = verificationService.retrieveVerification(new RetrieveVerificationEvent(token));
         switch ((VerificationStatus)retrieved.status()) {
             case SUCCESS: return new ResponseEntity<Verification>(retrieved.getData(), HttpStatus.OK);
-            case EXPIRED: return new ResponseEntity(new StatusResponse(retrieved.status()), HttpStatus.FORBIDDEN);
-            case NOT_FOUND: return new ResponseEntity(new StatusResponse(retrieved.status()), HttpStatus.NOT_FOUND);
-            case REDEEMED: return new ResponseEntity(new StatusResponse(retrieved.status()), HttpStatus.FORBIDDEN);
-            default: return new ResponseEntity(new StatusResponse(retrieved.status()), HttpStatus.INTERNAL_SERVER_ERROR);
+            case EXPIRED: return new ResponseEntity(retrieved.status(), HttpStatus.FORBIDDEN);
+            case NOT_FOUND: return new ResponseEntity(retrieved.status(), HttpStatus.NOT_FOUND);
+            case REDEEMED: return new ResponseEntity(retrieved.status(), HttpStatus.FORBIDDEN);
+            default: return new ResponseEntity(retrieved.status(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
