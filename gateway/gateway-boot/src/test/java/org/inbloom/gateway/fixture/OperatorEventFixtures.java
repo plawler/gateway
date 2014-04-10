@@ -1,9 +1,9 @@
 package org.inbloom.gateway.fixture;
 
 import org.inbloom.gateway.core.domain.Operator;
-import org.inbloom.gateway.core.event.ModifiedOperatorEvent;
-import org.inbloom.gateway.core.event.RegisteredOperatorEvent;
-import org.inbloom.gateway.core.event.RetrievedOperatorEvent;
+import org.inbloom.gateway.core.event.operator.ModifiedOperatorEvent;
+import org.inbloom.gateway.core.event.operator.RegisteredOperatorEvent;
+import org.inbloom.gateway.core.event.operator.RetrievedOperatorEvent;
 
 /**
  * Created by lloydengebretsen on 2/26/14.

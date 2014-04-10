@@ -1,7 +1,7 @@
 package org.inbloom.gateway.persistence.service;
 
 
-import org.inbloom.gateway.core.event.*;
+import org.inbloom.gateway.core.event.operator.*;
 
 /**
  * Created by lloydengebretsen on 2/20/14.

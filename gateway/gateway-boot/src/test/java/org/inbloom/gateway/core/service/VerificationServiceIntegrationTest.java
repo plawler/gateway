@@ -8,8 +8,8 @@ import org.inbloom.gateway.credentials.CredentialService;
 import org.junit.runner.RunWith;
 
 import org.inbloom.gateway.Gateway;
-import org.inbloom.gateway.core.event.CreateVerificationEvent;
-import org.inbloom.gateway.core.event.CreatedVerificationEvent;
+import org.inbloom.gateway.core.event.verification.CreateVerificationEvent;
+import org.inbloom.gateway.core.event.verification.CreatedVerificationEvent;
 import org.inbloom.gateway.fixture.VerificationEventFixtures;
 import org.inbloom.gateway.persistence.service.VerificationPersistenceService;
 import org.inbloom.gateway.rest.util.TestUtil;
@@ -34,8 +34,7 @@ import javax.mail.internet.AddressException;
 
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 

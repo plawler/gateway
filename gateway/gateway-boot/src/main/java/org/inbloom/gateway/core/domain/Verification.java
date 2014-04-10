@@ -32,7 +32,7 @@ public class Verification {
         this.userId = userId;
     }
 
-    public Boolean getVerified() {
+    public Boolean isVerified() {
         return verified;
     }
 
@@ -80,16 +80,23 @@ public class Verification {
         this.user = user;
     }
 
+    public void activate(Integer timeout) {
+        Date now = new Date();
+        Date until = new Date(now.getTime() + timeout);
+        setValidFrom(now);
+        setValidUntil(until);
+    }
+
     public boolean isExpired() {
-        return !verified && new Date().after(validUntil);
+        return new Date().after(validUntil);
     }
 
     public Credentials createCredentials(String password) {
         return new Credentials(getUser().getFirstName(), getUser().getLastName(), getUser().getEmail(), password);
     }
 
-    public boolean invalid() {
-        return isExpired() || getVerified();
+    public void validate() {
+        setVerified(true);
     }
 
 }

@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created By: paullawler
  */
-@ControllerAdvice // this works because we are using <mvc:annotation-driven/>
+@ControllerAdvice
 public class RestErrorHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(RestErrorHandler.class);
@@ -41,7 +41,6 @@ public class RestErrorHandler {
         return validationError;
     }
 
-
     /**
      * this consumes errors from the api, logs them
      * and prevents the stack trace from showing up
@@ -56,6 +55,14 @@ public class RestErrorHandler {
     {
         logger.error("Bad News Api Exception:", error);
         return error.getMessage();
+    }
+
+    @ExceptionHandler(VerificationException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseBody
+    public String handleValidationException(VerificationException exception) {
+        logger.error(exception.getMessage());
+        return exception.getMessage();
     }
 
 }

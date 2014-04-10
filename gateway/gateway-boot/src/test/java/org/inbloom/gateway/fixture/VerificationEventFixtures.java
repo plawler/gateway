@@ -1,7 +1,7 @@
 package org.inbloom.gateway.fixture;
 
 import org.inbloom.gateway.core.domain.Verification;
-import org.inbloom.gateway.core.event.*;
+import org.inbloom.gateway.core.event.verification.*;
 
 /**
  * @author benjaminmorgan
@@ -14,15 +14,9 @@ public class VerificationEventFixtures {
         return new CreateVerificationEvent(UserFixture.buildUser());
     }
 
-    /**modify**/
-    public static VerifyEmailEvent buildModifyVerificationEvent() {
-        return null; //TODO:
-    }
-
-
     /**retrieve**/
     public static RetrieveVerificationEvent buildRetrieveVerificationEvent(String token) {
-        return new RetrieveVerificationEvent(null, token); // todo: fix this after merge
+        return new RetrieveVerificationEvent(token); // todo: fix this after merge
     }
 
     /**created**/
@@ -34,6 +28,11 @@ public class VerificationEventFixtures {
         return CreatedVerificationEvent.notFound();
     }
 
+    /**modify**/
+    public static ModifyVerificationEvent buildModifyVerificationEvent() {
+        return null; //TODO:
+    }
+
     /**modified**/
     //TODO:
 
@@ -43,7 +42,7 @@ public class VerificationEventFixtures {
     }
 
     public static RetrievedVerificationEvent buildNotFoundRetrievedVerificationEvent() {
-        return RetrievedVerificationEvent.notFound();
+        return RetrievedVerificationEvent.newNotFound();
     }
 
 }

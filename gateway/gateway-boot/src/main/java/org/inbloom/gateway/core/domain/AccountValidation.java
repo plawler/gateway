@@ -1,5 +1,8 @@
 package org.inbloom.gateway.core.domain;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 /**
@@ -7,14 +10,19 @@ import java.util.Date;
  */
 public class AccountValidation {
 
+    @NotEmpty
+    @Pattern(regexp = "^(?=.*\\d+)(?=.*[a-zA-Z]{2,})(?=.*[0-9]{1,})(?=.*[!@#$%^*+?\\x26\\x2D]{1,})[0-9a-zA-Z!@#$%^*+?\\x26\\x2D]{8,}$")
+    private String password; // magic...seriously, here are the rules - 2 upper, 2 lower, 1 numeric, 1 special character
+
     private String validationToken;
-    private String password;
     private Date validationDate;
 
-    public AccountValidation(String validationToken, String password, Date validationDate) {
+    private AccountValidation() {}
+
+    public AccountValidation(String validationToken, String password) {
         this.validationToken = validationToken;
         this.password = password;
-        this.validationDate = validationDate;
+        this.validationDate = new Date();
     }
 
     public String getValidationToken() {
@@ -29,15 +37,18 @@ public class AccountValidation {
         return password;
     }
 
-    public void setPassword(String password) {
+    private void setPassword(String password) {
         this.password = password;
     }
 
     public Date getValidationDate() {
+        if (validationDate == null) {
+            validationDate = new Date();
+        }
         return validationDate;
     }
 
-    public void setValidationDate(Date validationDate) {
+    private void setValidationDate(Date validationDate) {
         this.validationDate = validationDate;
     }
 

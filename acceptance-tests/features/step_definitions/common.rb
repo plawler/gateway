@@ -1,4 +1,7 @@
-Given /^I have a JSON representation of an (.*)$/ do |resource_type|
+require 'net/ldap'
+
+Given /^I have a JSON representation of a(?:n?) (.*)$/ do |resource_type|
+  resource_type.gsub!(' ','_')
   @request_json = send("#{resource_type}_resource").to_json
 end
 
@@ -22,20 +25,19 @@ When /^I POST to the (.*?) resource$/ do |resource|
   end
 end
 
-#methods
 def db_client
   @db_client ||= Mysql2::Client.new(:host => 'localhost', :username => ENV['DB_USERNAME'], :database => "#{ENV['DB_NAME']}_test")
 end
 
-def appProvider_resource
+def app_provider_resource
   {
-      'applicationProviderName' => 'Math Cats LLC',
-      'organizationName' => 'Learning Kitties Holdings Inc',
-      'user' => {
-          'email' => 'john.smith@inbloom.org',
-          'firstName' => 'John',
-          'lastName' => 'Smith'
-      }
+    'applicationProviderName' => 'Math Cats LLC',
+    'organizationName' => 'Learning Kitties Holdings Inc',
+    'user' => {
+      'email' => 'john.smith@inbloom.org',
+      'firstName' => 'John',
+      'lastName' => 'Smith'
+    }
   }
 end
 
@@ -51,4 +53,15 @@ def operator_resource
   }
 end
 
+def account_validation_resource
+  {
+      'password' => 'P@5Sw0rd'
+  }
+end
+
+def account_validation_with_an_invalid_password_resource
+  {
+      'password' => 'password'
+  }
+end
 

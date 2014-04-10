@@ -2,8 +2,9 @@ package org.inbloom.gateway.persistence.service;
 
 import org.inbloom.gateway.core.domain.User;
 import org.inbloom.gateway.core.domain.Verification;
-import org.inbloom.gateway.core.event.*;
+import org.inbloom.gateway.core.event.verification.*;
 import org.inbloom.gateway.persistence.domain.VerificationEntity;
+import org.inbloom.gateway.persistence.repository.UserRepository;
 import org.inbloom.gateway.persistence.repository.VerificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
@@ -17,6 +18,9 @@ public class VerificationPersistenceHandler implements VerificationPersistenceSe
 
     @Autowired
     private VerificationRepository verificationRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private ConversionService conversionService;
@@ -38,28 +42,36 @@ public class VerificationPersistenceHandler implements VerificationPersistenceSe
 
     @Override
     public RetrievedVerificationEvent retrieveForAccountValidation(ValidateAccountSetupEvent validateAccountSetupEvent) {
-        throw new UnsupportedOperationException();
+        VerificationEntity verificationEntity = verificationRepository.findByToken(validateAccountSetupEvent.getValidationToken());
+        if (verificationEntity == null) {
+            return RetrievedVerificationEvent.newNotFound();
+        }
+
+        Verification verification = conversionService.convert(verificationEntity, Verification.class);
+        User user = conversionService.convert(userRepository.findOne(verification.getUserId()), User.class);
+        verification.setUser(user); // todo: CODE REVIEW!!
+
+        return RetrievedVerificationEvent.success(verification);
     }
 
     @Override
     public ModifiedVerificationEvent modifyVerification(ModifyVerificationEvent modifyVerificationEvent) {
-        throw new UnsupportedOperationException("You are not quite done with the conflict merge");
-    }
-
-    public VerifiedEmailEvent modifyVerification(VerifyEmailEvent modifyVerificationEvent) {
-        VerificationEntity verificationEntity = verificationRepository.findByToken(modifyVerificationEvent.getVerificationToken());
+        VerificationEntity verificationEntity = verificationRepository.findByToken(modifyVerificationEvent.getToken());
         if(verificationEntity == null){
-            return VerifiedEmailEvent.notFound();
+            return ModifiedVerificationEvent.notFound();
         }
-        verificationEntity.setVerified(true);
         verificationEntity.setClientIpAddress(modifyVerificationEvent.getClientIpAddress());
+        verificationEntity.setVerified(modifyVerificationEvent.getVerified());
         verificationRepository.save(verificationEntity);
-        return VerifiedEmailEvent.success(conversionService.convert(verificationEntity, Verification.class));
+        return ModifiedVerificationEvent.success(conversionService.convert(verificationEntity, Verification.class));
     }
 
     @Override
     public RetrievedVerificationEvent retrieveVerification(RetrieveVerificationEvent retrieveVerificationEvent) {
-        VerificationEntity verificationEntity = verificationRepository.findOne(retrieveVerificationEvent.getVerificationId());
+        VerificationEntity verificationEntity = verificationRepository.findByToken(retrieveVerificationEvent.getVerificationToken());
+        if (verificationEntity == null)
+            return RetrievedVerificationEvent.newNotFound();
+
         return RetrievedVerificationEvent.success(conversionService.convert(verificationEntity, Verification.class));
     }
 }

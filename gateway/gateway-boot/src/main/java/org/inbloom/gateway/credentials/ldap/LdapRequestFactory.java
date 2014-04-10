@@ -1,10 +1,6 @@
 package org.inbloom.gateway.credentials.ldap;
 
 import com.unboundid.ldap.sdk.*;
-import com.unboundid.ldif.LDIFException;
-import org.inbloom.gateway.core.event.CreateCredentialsEvent;
-
-import java.util.Map;
 
 /**
  * Created By: paullawler
@@ -47,10 +43,9 @@ public class LdapRequestFactory {
         return new ModifyRequest(dn, mod);
     }
 
-    public static ModifyRequest newAddToSanboxAdminRequest(String email) throws LDAPException {
+    public static ModifyRequest newAddToSandboxAdminRequest(String email) throws LDAPException {
         DN dn = new DN("cn=Sandbox Administrator," + GROUP_BASE_DN);
         Modification mod = new Modification(ModificationType.ADD, "memberUid", email);
         return new ModifyRequest(dn, mod);
     }
-
 }

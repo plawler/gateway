@@ -1,6 +1,6 @@
 package org.inbloom.gateway.fixture;
 
-import org.inbloom.gateway.core.event.*;
+import org.inbloom.gateway.core.event.provider.*;
 
 /**
  * Created by lloydengebretsen on 3/24/14.

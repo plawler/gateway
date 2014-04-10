@@ -3,7 +3,10 @@ package org.inbloom.gateway.core.service;
 import org.inbloom.gateway.core.domain.Credentials;
 import org.inbloom.gateway.core.domain.User;
 import org.inbloom.gateway.core.domain.Verification;
-import org.inbloom.gateway.core.event.*;
+import org.inbloom.gateway.core.event.user.CreateCredentialsEvent;
+import org.inbloom.gateway.core.event.user.CreatedCredentialsEvent;
+import org.inbloom.gateway.core.event.verification.*;
+import org.inbloom.gateway.common.status.VerificationStatus;
 import org.inbloom.gateway.credentials.CredentialService;
 import org.inbloom.gateway.persistence.service.VerificationPersistenceService;
 import org.inbloom.gateway.util.keyService.KeyGenerator;
@@ -16,7 +19,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -35,8 +37,6 @@ public class VerificationServiceHandler implements VerificationService{
     private final CredentialService credentialService;
     private final KeyGenerator keyGenerator;
     private final Environment env;
-
-    static final int VERIFICATION_TIMEOUT = 4*24*60*60*1000; //4 days
 
     @Autowired
     public VerificationServiceHandler(VerificationPersistenceService persistenceService, CredentialService credentialService,
@@ -65,22 +65,16 @@ public class VerificationServiceHandler implements VerificationService{
         verification.setToken(token);
 
         //set valid time range
-        Date now = new Date();
-        Date until = new Date(now.getTime() + VERIFICATION_TIMEOUT);
-        verification.setValidFrom(now);
-        verification.setValidUntil(until);
+        verification.activate(VERIFICATION_TIMEOUT);
 
         //persist verification
         CreatedVerificationEvent createdEvent = persistenceService.createVerification(createEvent);
 
-        if(createdEvent.status() == ResponseEvent.Status.SUCCESS) {
-
-            //send email verification
-            String confirmationLink = getEmailTarget() + "?token="+token;
+        if(createdEvent.successful()) {
             try {
-                NotificationClient.getInstance().sendAccountRegistrationConfirmation(NotificationTypeEnum.EMAIL, user.getFirstName(), user.getEmail(), confirmationLink, Locale.ENGLISH);
+                sendNotification(user, token); //send email verification
             } catch (NotificationException e) {
-                return CreatedVerificationEvent.fail("Notification Client failed to send email: " + e.getMessage());
+                return CreatedVerificationEvent.notificationFail("Notification Client failed to send email: " + e.getMessage());
             }
         }
         return createdEvent;
@@ -89,34 +83,37 @@ public class VerificationServiceHandler implements VerificationService{
     @Override
     public ValidatedAccountSetupEvent validateAccountSetup(ValidateAccountSetupEvent validateEvent) {
         RetrievedVerificationEvent retrieved = persistenceService.retrieveForAccountValidation(validateEvent);
-        if (retrieved.status().equals(ResponseEvent.Status.NOT_FOUND)) {
-            return ValidatedAccountSetupEvent.failed("The verification could not be found. Either an invalid token was supplied or the account does not exist.");
+        if (retrieved.status().equals(VerificationStatus.NOT_FOUND)) {
+            return ValidatedAccountSetupEvent.notFound("The verification could not be found. Either an invalid token was supplied or the account does not exist.");
         }
 
         Verification verification = retrieved.getData();
-        if (verification.invalid()) {
-            return ValidatedAccountSetupEvent.failed("The verification is no longer valid");
+        if (verification.isExpired()) {
+            return ValidatedAccountSetupEvent.expired("The verification is no longer valid");
+        }
+        if(verification.isVerified()) {
+            return ValidatedAccountSetupEvent.redeemed("The verification token has already been redeemed");
         }
 
         if (!processCredentials(verification.createCredentials(validateEvent.getPassword())))
             return ValidatedAccountSetupEvent.failed("Storing the user credentials failed.");
 
-        // bootstrap step
+        verification.validate();
+        if (!modifyVerification(new ModifyVerificationEvent(verification)).successful()) {
+            return ValidatedAccountSetupEvent.failed("Updating the verification failed.");
+        }
 
-        return ValidatedAccountSetupEvent.success();
-
+        return ValidatedAccountSetupEvent.success(verification);
     }
 
     @Override
     public ModifiedVerificationEvent modifyVerification(ModifyVerificationEvent modifyEvent) {
+        return persistenceService.modifyVerification(modifyEvent);
+    }
 
-        //TODO: update verification status to set "is_verified" to true
-
-        //TODO: add user to LDAP
-
-        //TODO: provision sandbox tenant
-
-        return null;
+    private void sendNotification(User user, String token) throws NotificationException {
+        String confirmationLink = getEmailTarget() + "?token="+token;
+        NotificationClient.getInstance().sendAccountRegistrationConfirmation(NotificationTypeEnum.EMAIL, user.getFirstName(), user.getEmail(), confirmationLink, Locale.ENGLISH);
     }
 
     @Override

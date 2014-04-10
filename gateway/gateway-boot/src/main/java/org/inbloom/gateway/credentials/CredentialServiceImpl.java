@@ -2,10 +2,9 @@ package org.inbloom.gateway.credentials;
 
 import com.unboundid.ldap.sdk.LDAPConnection;
 import com.unboundid.ldap.sdk.LDAPException;
-import com.unboundid.ldif.LDIFException;
-import org.inbloom.gateway.core.event.AuthenticateUserEvent;
-import org.inbloom.gateway.core.event.CreateCredentialsEvent;
-import org.inbloom.gateway.core.event.CreatedCredentialsEvent;
+import org.inbloom.gateway.core.event.user.AuthenticateUserEvent;
+import org.inbloom.gateway.core.event.user.CreateCredentialsEvent;
+import org.inbloom.gateway.core.event.user.CreatedCredentialsEvent;
 import org.inbloom.gateway.credentials.ldap.LdapRequestFactory;
 import org.inbloom.gateway.credentials.ldap.LdapService;
 import org.slf4j.Logger;
@@ -35,7 +34,7 @@ public class CredentialServiceImpl implements CredentialService {
             ldapService.add(LdapRequestFactory.newPersonRequest(event.getFirstName(), event.getLastName(),
                     event.getEmailAddress(), event.getPassword()));
             ldapService.modify(LdapRequestFactory.newAddToAppDeveloperGroupRequest(event.getEmailAddress()));
-            ldapService.modify(LdapRequestFactory.newAddToSanboxAdminRequest(event.getEmailAddress()));
+            ldapService.modify(LdapRequestFactory.newAddToSandboxAdminRequest(event.getEmailAddress()));
         } catch (LDAPException e) {
             logger.error("Adding credentials failed:" + e.getExceptionMessage());
             return CreatedCredentialsEvent.failed("An LDAPException was thrown most likely due to a malformed request");

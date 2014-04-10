@@ -5,14 +5,14 @@ Feature:
   so that I can start creating apps.
 
   Background:
-    Given I have a JSON representation of an appProvider
+    Given I have a JSON representation of an app provider
 
   Scenario: An Application Provider registers for an account
     When I POST to the applicationProviders resource
     Then the response status should be 201 Created
     And the response contains a representation of the app provider
     And the response contains a location header for the app provider
-    And the app provider receives an email with a verification link
+    And the app provider receives an email with a verification link that is good for 3 days
 
   Scenario: An App Provider cannot register twice
     Given I have already registered as an app provider

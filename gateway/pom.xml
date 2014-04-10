@@ -51,9 +51,11 @@ mvn dependency:analyze
         <swagger.version>0.6.5</swagger.version>
         <thymeleaf.version>2.1.2.RELEASE</thymeleaf.version>
         <unbounded.ldap.version>2.3.5</unbounded.ldap.version>
+        <jqbootstrapvalidation.version>1.3.6</jqbootstrapvalidation.version>
     </properties>
 
     <modules>
+       <module>gateway-common</module>
        <module>inbloom-notifications-client</module>
        <module>gateway-boot</module>
        <module>gateway-portal</module>
