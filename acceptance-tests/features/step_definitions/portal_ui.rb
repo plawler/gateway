@@ -50,6 +50,19 @@ Then(/^I see no validation errors$/) do
   page.should have_no_css('.help-block li')
 end
 
+When (/^I click on cancel button$/) do
+  page.should have_css('#cancel')
+  click_button('Cancel')
+end
+
+Then (/^I should be redirected to Sign in screen$/) do
+  pending
+end
+
+Given (/^I have already created the account$/) do
+  pending
+end
+
 #methods
 
 def fill_in_password(password)

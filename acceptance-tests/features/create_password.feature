@@ -41,3 +41,12 @@ Background:
     When I enter a valid password
      And I enter a different password confirmation
     Then I see a validation error of passwords must match
+
+ Scenario: User cancels the Create Password process
+     When I click on cancel button
+     Then I should be redirected to Sign in screen
+
+ Scenario: User clicks validation link after account has already been created
+    Given I have already created the account
+     When I click on the verification link from the e-mail
+     Then I should be redirected to Sign in screen
