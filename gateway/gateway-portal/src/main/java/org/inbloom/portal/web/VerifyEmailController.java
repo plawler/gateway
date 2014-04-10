@@ -1,13 +1,13 @@
 package org.inbloom.portal.web;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.inbloom.gateway.common.status.VerificationStatus;
 import org.inbloom.portal.forms.SignupCompletion;
 import org.inbloom.portal.response.Verification;
+import org.inbloom.portal.util.RestTemplateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
+import java.io.IOException;
 
 /**
  * @author benjaminmorgan
@@ -42,15 +42,41 @@ public class VerifyEmailController {
     @RequestMapping(method=RequestMethod.GET)
     public String get(Model model, @RequestParam("token") String token) {
 
-        //check that token is valid
-        RestTemplate getToken = new RestTemplate();
-        ResponseEntity response = getToken.getForEntity(getApiHost() + "/gateway/api/verifications/{token}", Object.class, token);
+        //check that supplied token is valid before redirecting to "create password" page
 
-        if(response.getStatusCode().value()/100 == 2) {
-            model.addAttribute("validationToken", token);
-            return "setPassword";
-        } else {
-            model.addAttribute("message", "That token is not valid!");
+        RestTemplate rest = RestTemplateUtil.noErrorHandlers();
+        ObjectMapper mapper = new ObjectMapper();
+
+        ResponseEntity<String> response =  rest.getForEntity(getApiHost() + "/gateway/api/verifications/{token}", String.class, token);
+
+        try {
+            if(response.getStatusCode().is2xxSuccessful()) {
+                Verification verification = mapper.readValue(response.getBody(), Verification.class);
+                model.addAttribute("validationToken", token);
+                return "setPassword";
+            }
+            else {
+                VerificationStatus status = mapper.readValue(response.getBody(), VerificationStatus.class);
+
+                switch(status)
+                {
+                    case NOT_FOUND:
+                        model.addAttribute("message", "Couldn't find the token. Make sure you follow the link sent in the verification email, or try signing up for an account");
+                        return "error";
+                    case ERROR:
+                        model.addAttribute("message", status.getStatusMessage());
+                        return "error";
+                    case EXPIRED:
+                        model.addAttribute("message", "Your email validation has expired. TODO: redirect to \"resend validation email\" page");
+                        return "error";
+                    case REDEEMED:
+                        model.addAttribute("errorMessage", "Your email has already been validated. Please sign in");
+                        return "login";
+                    default:
+                        return "error";
+                }
+            }
+        } catch(IOException e) {
             return "error";
         }
     }
@@ -59,32 +85,39 @@ public class VerifyEmailController {
     @RequestMapping(method=RequestMethod.POST)
     public String post(Model model, @ModelAttribute SignupCompletion passwordAndToken) {
 
-        RestTemplate rest = new RestTemplate();
+        RestTemplate rest = RestTemplateUtil.noErrorHandlers();
+        ObjectMapper mapper = new ObjectMapper();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        headers.setContentType(MediaType.APPLICATION_JSON);
+        String token = passwordAndToken.getValidationToken();
 
-        HttpEntity<SignupCompletion> entity = new HttpEntity<SignupCompletion>(passwordAndToken, headers);
+        ResponseEntity<String> response =  rest.postForEntity(getApiHost() + "/gateway/api/verifications/{token}", passwordAndToken, String.class, token);
+
+
+
 
         try {
 
-            Verification response = rest.postForObject(getApiHost() + "/gateway/api/verifications/{token}", entity, Verification.class, passwordAndToken.getValidationToken());
-
-            if(response.getVerified()!= null && response.getVerified()) {
+            if(response.getStatusCode().is2xxSuccessful()) {
+                Verification verification = mapper.readValue(response.getBody(), Verification.class);
                 model.addAttribute("successMessage", "Congratulations! You have succesfully validated your email and created a password");
                 return "login";
             } else {
-                model.addAttribute("errorMessage", "Danger danger!!!");
-                model.addAttribute("validationToken", passwordAndToken.getValidationToken());
-                return "setPassword";
+                VerificationStatus status = mapper.readValue(response.getBody(), VerificationStatus.class);
+
+                switch(status)
+                {
+                    case SUCCESS:
+                        model.addAttribute("successMessage", "Congratulations! You have succesfully validated your email and created a password");
+                        return "login";
+                    default:
+                        model.addAttribute("errorMessage", status.getStatusMessage());
+                        model.addAttribute("validationToken", token);
+                        return "setPassword";
+
+                }
             }
-
-        } catch(Exception e) {
-
-            e.printStackTrace();
+        } catch(IOException e) {
             return "error";
         }
-
     }
 }
