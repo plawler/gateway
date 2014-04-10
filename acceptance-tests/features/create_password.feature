@@ -32,7 +32,7 @@ Background:
    Examples:
    | password | message |
    | AA!aaaa  | 1 digit |
-   | AA1aaaa  | 1 special symbol |
+   | AA1aaaa  | 1 special character |
    | !1aaaa   | 2 upper case     |
    | AA!1     | 2 lower case     |
    | AA!1aaa  | 8 character minimum length|

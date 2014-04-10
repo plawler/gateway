@@ -47,7 +47,7 @@ Then(/^I see a validation error of (.*)$/) do |validation_message|
 end
 
 Then(/^I see no validation errors$/) do
-  page.has_css?('.help-block li') == false
+  page.should have_no_css('.help-block li')
 end
 
 #methods
