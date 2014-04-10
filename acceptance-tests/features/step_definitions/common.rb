@@ -23,6 +23,11 @@ Then /^the response status should be (\d+)/ do |code|
   @response.code.should == code.to_i
 end
 
+Then /^the response body status code should be (.*)$/ do |code|
+  status_code = @response.body.gsub /"/, '' #strip extra quotes from response
+  status_code.should == code
+end
+
 When /^I POST to the (.*?) resource$/ do |resource|
   RestClient.post(path_for(resource), @request_json, :content_type => :json) do |response, request, result|
     @response = response

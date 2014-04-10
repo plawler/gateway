@@ -7,6 +7,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 
 import org.inbloom.gateway.common.domain.ApplicationProvider;
 import org.inbloom.gateway.common.status.rest.StatusResponse;
+import org.inbloom.gateway.core.domain.ApplicationProvider;
 import org.inbloom.gateway.core.event.provider.*;
 import org.inbloom.gateway.core.service.ApplicationProviderService;
 import org.inbloom.gateway.common.status.ApplicationProviderStatus;
