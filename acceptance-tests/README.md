@@ -12,7 +12,7 @@ The tests make use of the following environment variables for parameterizing ext
 the tests are specified in the `.env` file.
 
 - **GATEWAY_API_URL** - the full URL to the gateway API (e.g. `http://localhost:9001/gateway`)
-- **GATEWAY_PORTAL_URL** - the full URL to the gateway portal (e.g. `http://localhost:9001/gateway`)
+- **GATEWAY_PORTAL_URL** - the full URL to the gateway portal (e.g. `http://localhost:9000`)
 - **DB_USERNAME** - the MySQL database username (e.g. `root`)
 - **DB_NAME**     - the name of the development database (e.g. `gateway`); the test datbase name is derived by adding `_test`
 
