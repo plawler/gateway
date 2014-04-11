@@ -10,8 +10,6 @@ import org.inbloom.gateway.core.event.GatewayRequest;
 import org.inbloom.gateway.core.event.GatewayResponse;
 import org.inbloom.gateway.core.event.operator.ModifiedOperatorEvent;
 import org.inbloom.gateway.core.event.operator.ModifyOperatorEvent;
-import org.inbloom.gateway.core.event.operator.RetrieveOperatorEvent;
-import org.inbloom.gateway.core.event.operator.RetrievedOperatorEvent;
 import org.inbloom.gateway.core.service.OperatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -56,14 +54,16 @@ public class OperatorController {
     @ApiOperation(value = "Retrieve an operator by id.", notes = "Look up an operator based on operatorId value.")
     @ApiErrors(value = { @ApiError(code = 404, reason = "Operator not found") })
     public ResponseEntity<Operator> retrieve(@PathVariable Long id) {
-        RetrievedOperatorEvent retrievedEvent = operatorService.retrieveOperator(new RetrieveOperatorEvent(id));
-        Operator operator = retrievedEvent.getData();
+        Operator operator = new Operator();
+        operator.setOperatorId(id);
+        GatewayResponse<Operator> retrievedEvent = operatorService.retrieveOperator(new GatewayRequest<Operator>(GatewayAction.RETRIEVE, operator));
+        operator = retrievedEvent.getPayload();
 
         if(operator != null) {
             return new ResponseEntity<Operator>(operator, HttpStatus.OK);
         }
         else {
-            return new ResponseEntity(retrievedEvent.status(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity(retrievedEvent.getStatus().getStatus(), HttpStatus.NOT_FOUND);
         }
     }
 

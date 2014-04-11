@@ -54,12 +54,12 @@ public class OperatorPersistenceServiceTest {
         assertNotNull(registeredEvent);
         assertNotNull(registeredEvent.getPayload().getOperatorId());
 
-        Long id = registeredEvent.getPayload().getOperatorId();
-        RetrievedOperatorEvent retrievedEvent = operatorPersistenceService.retrieveOperator(new RetrieveOperatorEvent(id));
+        Operator operator = registeredEvent.getPayload();
+        GatewayResponse<Operator> retrievedEvent = operatorPersistenceService.retrieveOperator(new GatewayRequest<Operator>(GatewayAction.RETRIEVE, operator));
 
         assertNotNull(retrievedEvent);
-        assertEquals(id, retrievedEvent.getData().getOperatorId());
-        assertEquals(operatorName, retrievedEvent.getData().getOperatorName());
+        assertEquals(operator.getOperatorId(), retrievedEvent.getPayload().getOperatorId());
+        assertEquals(operator.getOperatorName(), retrievedEvent.getPayload().getOperatorName());
 
     }
 
@@ -76,7 +76,10 @@ public class OperatorPersistenceServiceTest {
 
         Long id = registeredEvent.getPayload().getOperatorId();
         Long modifiedId = new Long(id + 1);
-        Operator retrievedOperator = operatorPersistenceService.retrieveOperator(new RetrieveOperatorEvent(id)).getData();
+        Operator testOperator = new Operator();
+        testOperator.setOperatorId(id);
+
+        Operator retrievedOperator = operatorPersistenceService.retrieveOperator(new GatewayRequest<Operator>(GatewayAction.RETRIEVE, testOperator)).getPayload();
         assertEquals(operatorName, retrievedOperator.getOperatorName());
 
         retrievedOperator.setOperatorName(modifiedName);
@@ -87,7 +90,7 @@ public class OperatorPersistenceServiceTest {
 
 
 
-        Operator modified = operatorPersistenceService.retrieveOperator(new RetrieveOperatorEvent(id)).getData();
+        Operator modified = operatorPersistenceService.retrieveOperator(new GatewayRequest<Operator>(GatewayAction.RETRIEVE, testOperator)).getPayload();
         assertEquals(modifiedName, modified.getOperatorName());
         assertNotEquals(modifiedId, modified.getOperatorId());
     }

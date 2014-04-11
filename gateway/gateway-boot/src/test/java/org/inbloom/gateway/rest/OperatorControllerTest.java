@@ -1,9 +1,13 @@
 package org.inbloom.gateway.rest;
 
 import org.inbloom.gateway.Gateway;
+import org.inbloom.gateway.common.domain.Operator;
+import org.inbloom.gateway.common.status.GatewayStatus;
+import org.inbloom.gateway.common.status.Status;
+import org.inbloom.gateway.core.event.GatewayAction;
 import org.inbloom.gateway.core.event.GatewayRequest;
+import org.inbloom.gateway.core.event.GatewayResponse;
 import org.inbloom.gateway.core.event.operator.ModifyOperatorEvent;
-import org.inbloom.gateway.core.event.operator.RetrieveOperatorEvent;
 import org.inbloom.gateway.core.service.OperatorService;
 import org.inbloom.gateway.rest.util.TestUtil;
 import org.junit.Before;
@@ -83,7 +87,10 @@ public class OperatorControllerTest {
     @Test
     public void shouldRetrieveAnOperator() throws Exception {
         Long operatorId = new Long(1L);
-        when(operatorService.retrieveOperator(any(RetrieveOperatorEvent.class))).thenReturn(operatorRetrieved(operatorId));
+        Operator operator = new Operator();
+        operator.setOperatorId(operatorId);
+        when(operatorService.retrieveOperator(any(GatewayRequest.class))).
+                thenReturn(new GatewayResponse<Operator>(GatewayAction.RETRIEVE, operator, new GatewayStatus(Status.SUCCESS)));
 
         this.mockMvc.perform(get("/operators/{id}", operatorId.toString())
                 .content(buildOperatorJson())
@@ -96,7 +103,8 @@ public class OperatorControllerTest {
     @Test
     public void shouldHandleRetrieveOperatorNotFound() throws Exception {
         Long operatorId = new Long(1L);
-        when(operatorService.retrieveOperator(any(RetrieveOperatorEvent.class))).thenReturn(operatorNotFound());
+        when(operatorService.retrieveOperator(any(GatewayRequest.class)))
+                .thenReturn(new GatewayResponse<Operator>(GatewayAction.RETRIEVE, null, new GatewayStatus(Status.NOT_FOUND)));
 
         this.mockMvc.perform(get("/operators/{id}", operatorId.toString())
                 .content(buildOperatorJson())

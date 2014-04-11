@@ -8,8 +8,6 @@ import org.inbloom.gateway.core.event.GatewayRequest;
 import org.inbloom.gateway.core.event.GatewayResponse;
 import org.inbloom.gateway.core.event.operator.ModifiedOperatorEvent;
 import org.inbloom.gateway.core.event.operator.ModifyOperatorEvent;
-import org.inbloom.gateway.core.event.operator.RetrieveOperatorEvent;
-import org.inbloom.gateway.core.event.operator.RetrievedOperatorEvent;
 import org.inbloom.gateway.persistence.domain.OperatorEntity;
 import org.inbloom.gateway.persistence.repository.OperatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,14 +35,13 @@ public class OperatorPersistenceHandler implements OperatorPersistenceService {
     }
 
     @Override
-    public RetrievedOperatorEvent retrieveOperator(RetrieveOperatorEvent retrieveOperatorEvent) {
-        OperatorEntity retrieved = operatorRepository.findOne(retrieveOperatorEvent.getId());
+    public GatewayResponse<Operator> retrieveOperator(GatewayRequest<Operator> retrieveOperatorEvent) {
+        OperatorEntity retrieved = operatorRepository.findOne(retrieveOperatorEvent.getPayload().getOperatorId());
         if(retrieved == null) {
-            return RetrievedOperatorEvent.notFound();
+            return new GatewayResponse<Operator>(GatewayAction.RETRIEVE, null, new GatewayStatus(Status.NOT_FOUND));
         }
         else {
-            return RetrievedOperatorEvent.success(conversionService.convert(retrieved,
-                Operator.class));
+            return new GatewayResponse<Operator>(GatewayAction.RETRIEVE, conversionService.convert(retrieved, Operator.class), new GatewayStatus(Status.SUCCESS));
         }
     }
 
