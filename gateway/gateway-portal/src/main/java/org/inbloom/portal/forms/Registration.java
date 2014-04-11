@@ -1,5 +1,7 @@
 package org.inbloom.portal.forms;
 
+import org.inbloom.gateway.common.domain.ApplicationProvider;
+import org.inbloom.gateway.common.domain.User;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -13,8 +15,18 @@ public class Registration {
 	String company;
 	String email;
 
-	public void doRegister() {
-		RestTemplate rtRestTemplate = new RestTemplate();
+	public void doRegister(String apiHost) {
+		User user = new User();
+		ApplicationProvider applicationProvider = new ApplicationProvider();
+		
+		user.setFirstName(firstname);
+		user.setLastName(lastname);
+		user.setEmail(email);
+		applicationProvider.setUser(user);
+		applicationProvider.setApplicationProviderName(company);
+		
+		RestTemplate rt = new RestTemplate();
+		rt.postForLocation(apiHost + "/gateway/api/applicationProviders", applicationProvider);
 	}
 	
 	public String getFirstname() {
@@ -28,7 +40,7 @@ public class Registration {
 	public String getLastname() {
 		return lastname;
 	}
-	
+
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
 	}

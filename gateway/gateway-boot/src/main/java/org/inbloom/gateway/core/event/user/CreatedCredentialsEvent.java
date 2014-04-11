@@ -1,42 +1,32 @@
 package org.inbloom.gateway.core.event.user;
 
+import org.inbloom.gateway.common.status.GatewayStatus;
+import org.inbloom.gateway.core.event.BaseResponseEvent;
 import org.inbloom.gateway.core.event.VerboseResponseEvent;
-import org.inbloom.gateway.common.status.CredentialStatus;
 import org.inbloom.gateway.common.status.Status;
 
 /**
  * Created By: paullawler
  */
-public class CreatedCredentialsEvent implements VerboseResponseEvent {
+public class CreatedCredentialsEvent extends BaseResponseEvent {
 
-    private final CredentialStatus status;
     private final String message;
 
-    private CreatedCredentialsEvent(CredentialStatus status, String message) {
-        this.status = status;
+    private CreatedCredentialsEvent(Status status, String message) {
+        this.setStatus(new GatewayStatus(status, null));
         this.message = message;
     }
 
-    @Override
-    public Status status() {
-        return status;
-    }
-
-    @Override
-    public String message() {
-        return message;
-    }
-
     public static CreatedCredentialsEvent failed(String message) {
-        return new CreatedCredentialsEvent(CredentialStatus.ERROR, message);
+        return new CreatedCredentialsEvent(Status.ERROR, message);
     }
 
     public static CreatedCredentialsEvent success() {
-        return new CreatedCredentialsEvent(CredentialStatus.SUCCESS, null);
+        return new CreatedCredentialsEvent(Status.SUCCESS, null);
     }
 
     public boolean successful() {
-        return status.equals(CredentialStatus.SUCCESS);
+        return Status.SUCCESS.equals(statusCode());
     }
 
 }

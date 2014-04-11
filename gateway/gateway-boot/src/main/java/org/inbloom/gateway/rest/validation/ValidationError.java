@@ -1,6 +1,7 @@
 package org.inbloom.gateway.rest.validation;
 
 import com.google.common.collect.Lists;
+import org.inbloom.gateway.common.status.FieldValidationError;
 
 import java.util.List;
 
@@ -13,17 +14,17 @@ import java.util.List;
  */
 public class ValidationError {
 
-    private List<FieldError> errors;
+    private List<FieldValidationError> errors;
 
     public ValidationError() {
         errors = Lists.newArrayList();
     }
 
     public void addFieldError(String field, String message) {
-        errors.add(new FieldError(field, message));
+        errors.add(new FieldValidationError(field, message));
     }
 
-    public List<FieldError> getErrors() {
+    public List<FieldValidationError> getErrors() {
         return errors;
     }
 

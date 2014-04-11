@@ -1,21 +1,21 @@
 package org.inbloom.gateway.core.event.operator;
 
+import org.inbloom.gateway.common.status.GatewayStatus;
+import org.inbloom.gateway.core.event.BaseResponseEvent;
 import org.inbloom.gateway.core.event.ResponseEvent;
 import org.inbloom.gateway.common.domain.Operator;
-import org.inbloom.gateway.common.status.OperatorStatus;
 import org.inbloom.gateway.common.status.Status;
 
 /**
  * Created by lloydengebretsen on 2/26/14.
  */
-public class RetrievedOperatorEvent implements ResponseEvent {
+public class RetrievedOperatorEvent extends BaseResponseEvent {
 
     private final Operator data;
-    private final OperatorStatus status;
 
-    private RetrievedOperatorEvent(Operator data, OperatorStatus status) {
+    private RetrievedOperatorEvent(Operator data, Status status) {
         this.data = data;
-        this.status = status;
+        this.setStatus(new GatewayStatus(status, null));
     }
 
     public Operator getData() {
@@ -23,15 +23,11 @@ public class RetrievedOperatorEvent implements ResponseEvent {
     }
 
     public static RetrievedOperatorEvent success(Operator data) {
-        return new RetrievedOperatorEvent(data, OperatorStatus.SUCCESS);
+        return new RetrievedOperatorEvent(data, Status.SUCCESS);
     }
 
     public static RetrievedOperatorEvent notFound() {
-        return new RetrievedOperatorEvent(null, OperatorStatus.NOT_FOUND);
+        return new RetrievedOperatorEvent(null, Status.NOT_FOUND);
     }
 
-    @Override
-    public Status status() {
-        return status;
-    }
 }

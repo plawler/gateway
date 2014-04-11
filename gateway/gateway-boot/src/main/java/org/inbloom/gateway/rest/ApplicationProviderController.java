@@ -8,7 +8,6 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import org.inbloom.gateway.common.domain.ApplicationProvider;
 import org.inbloom.gateway.core.event.provider.*;
 import org.inbloom.gateway.core.service.ApplicationProviderService;
-import org.inbloom.gateway.common.status.ApplicationProviderStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpHeaders;
@@ -41,7 +40,7 @@ public class ApplicationProviderController {
     {
         RegisteredApplicationProviderEvent createdEvent = appProviderService.registerApplicationProvider(new RegisterApplicationProviderEvent(appProvider));
 
-        switch((ApplicationProviderStatus)createdEvent.status()) {
+        switch(createdEvent.statusCode()) {
             case SUCCESS:
                 ApplicationProvider newAppProvider = createdEvent.getApplicationProvider();
 
@@ -92,7 +91,7 @@ public class ApplicationProviderController {
 
         ModifiedApplicationProviderEvent modifiedEvent = appProviderService.modifyApplicationProvider(new ModifyApplicationProviderEvent(id, appProvider));
 
-        switch ((ApplicationProviderStatus)modifiedEvent.status())
+        switch (modifiedEvent.statusCode())
         {
             case SUCCESS:
                 return new ResponseEntity(HttpStatus.NO_CONTENT);

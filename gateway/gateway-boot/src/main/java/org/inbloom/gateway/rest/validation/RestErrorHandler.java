@@ -1,5 +1,8 @@
 package org.inbloom.gateway.rest.validation;
 
+import org.inbloom.gateway.common.status.FieldValidationError;
+import org.inbloom.gateway.common.status.GatewayStatus;
+import org.inbloom.gateway.common.status.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,18 +31,20 @@ public class RestErrorHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ValidationError handleValidationException(MethodArgumentNotValidException exception) {
+    public GatewayStatus handleValidationException(MethodArgumentNotValidException exception) {
         logger.debug("handling validation errors");
         BindingResult result = exception.getBindingResult();
         return processFieldErrors(result.getFieldErrors());
     }
 
-    private ValidationError processFieldErrors(List<FieldError> fieldErrors) {
-        ValidationError validationError = new ValidationError();
+    private GatewayStatus processFieldErrors(List<FieldError> fieldErrors) {
+        List<FieldValidationError> fieldValidationErrors = new ArrayList<FieldValidationError>();
         for (FieldError error : fieldErrors) {
-            validationError.addFieldError(error.getField(), error.getDefaultMessage());
+            FieldValidationError fieldValidationError = new FieldValidationError(error.getField(), error.getDefaultMessage());
+            fieldValidationErrors.add(fieldValidationError);
         }
-        return validationError;
+
+        return new GatewayStatus(Status.VALIDATION_ERROR, "Field validation errors", fieldValidationErrors);
     }
 
     /**
@@ -55,14 +61,6 @@ public class RestErrorHandler {
     {
         logger.error("Bad News Api Exception:", error);
         return error.getMessage();
-    }
-
-    @ExceptionHandler(VerificationException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    @ResponseBody
-    public String handleValidationException(VerificationException exception) {
-        logger.error(exception.getMessage());
-        return exception.getMessage();
     }
 
 }

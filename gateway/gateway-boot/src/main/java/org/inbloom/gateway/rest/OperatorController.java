@@ -8,7 +8,6 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import org.inbloom.gateway.common.domain.Operator;
 import org.inbloom.gateway.core.event.operator.*;
 import org.inbloom.gateway.core.service.OperatorService;
-import org.inbloom.gateway.common.status.OperatorStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpHeaders;
@@ -78,7 +77,7 @@ public class OperatorController {
 
         ModifiedOperatorEvent modifiedEvent = operatorService.modifyOperator(new ModifyOperatorEvent(id, operator));
 
-        switch ((OperatorStatus)modifiedEvent.status())
+        switch (modifiedEvent.statusCode())
         {
             case SUCCESS:
                 return new ResponseEntity(HttpStatus.NO_CONTENT);
