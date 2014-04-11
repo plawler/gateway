@@ -1,14 +1,15 @@
 package org.inbloom.portal.web;
 
 import org.inbloom.portal.forms.Registration;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
 
 /**
  * Created By: paullawler
@@ -16,7 +17,19 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 @RequestMapping("/registration")
+@PropertySource("classpath:application.properties")
 public class RegistrationController {
+
+    private final Environment env;
+
+    @Autowired
+    public RegistrationController(Environment environment) {
+        this.env = environment;
+    }
+
+    public String getApiHost() {
+        return env.getProperty("apiHost", "http://localhost:9001");
+    }
 
     @RequestMapping(method=RequestMethod.GET)
     public String get(Model model) {
@@ -35,6 +48,7 @@ public class RegistrationController {
         registration.setEmail(email);
         
         //submit the registration to the API...
+        registration.doRegister(getApiHost());
         
         return "registration2";
     }

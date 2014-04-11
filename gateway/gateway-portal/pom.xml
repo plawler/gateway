@@ -16,6 +16,12 @@
     </parent>
 
     <dependencies>
+        <!-- gateway commons -->
+        <dependency>
+            <groupId>${parent.groupId}</groupId>
+            <artifactId>gateway-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
 
         <!-- Spring Boot Dependencies -->
         <dependency>
