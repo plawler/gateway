@@ -30,7 +30,7 @@ public class OperatorTableMappingTest {
     public void shouldSupportCustomMapping() {
 
         JPAAssertions.assertTableExists(entityManager, "operators");
-        JPAAssertions.assertTableHasColumn(entityManager, "operators", "operator_id");
+        //JPAAssertions.assertTableHasColumn(entityManager, "operators", "operator_id");
         JPAAssertions.assertTableHasColumn(entityManager, "operators", "operator_name");
         JPAAssertions.assertTableHasColumn(entityManager, "operators", "api_uri");
         JPAAssertions.assertTableHasColumn(entityManager, "operators", "operator_id");

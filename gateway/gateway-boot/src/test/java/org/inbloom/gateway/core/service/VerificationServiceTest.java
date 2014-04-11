@@ -1,10 +1,10 @@
 package org.inbloom.gateway.core.service;
 
 
-import org.inbloom.gateway.core.domain.Verification;
 import org.inbloom.gateway.core.event.user.CreateCredentialsEvent;
 import org.inbloom.gateway.core.event.user.CreatedCredentialsEvent;
 import org.inbloom.gateway.core.event.verification.*;
+import org.inbloom.gateway.common.domain.Verification;
 import org.inbloom.gateway.common.status.VerificationStatus;
 import org.inbloom.gateway.credentials.CredentialService;
 import org.inbloom.gateway.persistence.service.VerificationPersistenceService;
@@ -20,7 +20,6 @@ import org.springframework.core.env.Environment;
 import java.util.Date;
 
 import static org.inbloom.gateway.fixture.VerificationFixture.*;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;

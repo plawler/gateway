@@ -1,6 +1,6 @@
 package org.inbloom.gateway.persistence.service;
 
-import org.inbloom.gateway.core.domain.Operator;
+import org.inbloom.gateway.common.domain.Operator;
 import org.inbloom.gateway.core.event.operator.*;
 import org.inbloom.gateway.persistence.domain.OperatorEntity;
 import org.inbloom.gateway.persistence.repository.OperatorRepository;

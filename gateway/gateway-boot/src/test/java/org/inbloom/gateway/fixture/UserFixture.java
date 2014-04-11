@@ -1,6 +1,6 @@
 package org.inbloom.gateway.fixture;
 
-import org.inbloom.gateway.core.domain.User;
+import org.inbloom.gateway.common.domain.User;
 
 /**
  * Created by lloydengebretsen on 3/24/14.

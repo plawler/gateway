@@ -123,3 +123,14 @@ end
 Given /^my verification has previously been redeemed/ do
   db_client.query("UPDATE verifications SET is_verified=1")
 end
+
+When(/^I fill in registration fields with valid information$/) do
+  fill_in 'First Name', :with => 'Mary'
+  fill_in 'Last Name', :with => 'Jane'
+  fill_in 'Company', :with => "Learning 'R' Us"
+  fill_in 'Email', :with => 'mary.jane@learningrus.com'
+end
+
+Then(/^I should be presented with the EULA$/) do
+  page.should have_title('inBloom EULA')
+end

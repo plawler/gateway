@@ -1,7 +1,7 @@
 package org.inbloom.gateway.core.event.provider;
 
-import org.inbloom.gateway.core.domain.ApplicationProvider;
 import org.inbloom.gateway.core.event.ResponseEvent;
+import org.inbloom.gateway.common.domain.ApplicationProvider;
 import org.inbloom.gateway.common.status.ApplicationProviderStatus;
 import org.inbloom.gateway.common.status.Status;
 
