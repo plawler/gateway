@@ -8,3 +8,7 @@ Feature:
      When I fill in registration fields with valid information
       And I submit the form
      Then I should be presented with the EULA
+
+  Scenario: App Provider registers for an account with missing information
+     When I am on the registration page
+     Then I should see some fields are required

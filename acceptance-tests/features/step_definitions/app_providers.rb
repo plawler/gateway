@@ -132,5 +132,12 @@ When(/^I fill in registration fields with valid information$/) do
 end
 
 Then(/^I should be presented with the EULA$/) do
-  page.should have_title('inBloom EULA')
+  pending
+  # page.should have_title('inBloom EULA')
+end
+
+Then(/^I should see some fields are required$/) do
+  page.should have_css('#firstname[required]')
+  page.should have_css('#lastname[required]')
+  page.should have_css('#email[required]')
 end
