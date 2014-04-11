@@ -24,8 +24,8 @@ Then /^the response status should be (\d+)/ do |code|
 end
 
 Then /^the response body status code should be (.*)$/ do |code|
-  status_code = @response.body.gsub /"/, '' #strip extra quotes from response
-  status_code.should == code
+  body = JSON.parse(@response)
+  body['status'].should == code
 end
 
 When /^I POST to the (.*?) resource$/ do |resource|

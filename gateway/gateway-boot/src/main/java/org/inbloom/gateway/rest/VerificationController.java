@@ -5,7 +5,6 @@ import com.wordnik.swagger.annotations.ApiOperation;
 
 import org.inbloom.gateway.common.domain.AccountValidation;
 import org.inbloom.gateway.common.domain.Verification;
-import org.inbloom.gateway.common.status.VerificationStatus;
 import org.inbloom.gateway.core.event.verification.RetrieveVerificationEvent;
 import org.inbloom.gateway.core.event.verification.RetrievedVerificationEvent;
 import org.inbloom.gateway.core.event.verification.ValidateAccountSetupEvent;
@@ -43,7 +42,7 @@ public class VerificationController {
     public ResponseEntity<Verification> validate(@Valid @RequestBody AccountValidation validation, @PathVariable String token) {
         validation.setValidationToken(token);
         ValidatedAccountSetupEvent validated = verificationService.validateAccountSetup(new ValidateAccountSetupEvent(validation));
-        switch((VerificationStatus)validated.status()) {
+        switch(validated.statusCode()) {
             case SUCCESS: return new ResponseEntity<Verification>(validated.getData(), HttpStatus.OK);
             case EXPIRED: return new ResponseEntity(validated.status(), HttpStatus.FORBIDDEN);
             case NOT_FOUND: return new ResponseEntity(validated.status(), HttpStatus.NOT_FOUND);
@@ -55,7 +54,7 @@ public class VerificationController {
     @RequestMapping(value = "/verifications/{token}", method = RequestMethod.GET)
     public ResponseEntity<Verification> retrieve(@PathVariable String token) {
         RetrievedVerificationEvent retrieved = verificationService.retrieveVerification(new RetrieveVerificationEvent(token));
-        switch ((VerificationStatus)retrieved.status()) {
+        switch (retrieved.statusCode()) {
             case SUCCESS: return new ResponseEntity<Verification>(retrieved.getData(), HttpStatus.OK);
             case EXPIRED: return new ResponseEntity(retrieved.status(), HttpStatus.FORBIDDEN);
             case NOT_FOUND: return new ResponseEntity(retrieved.status(), HttpStatus.NOT_FOUND);

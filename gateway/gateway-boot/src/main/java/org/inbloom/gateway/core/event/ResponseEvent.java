@@ -1,5 +1,6 @@
 package org.inbloom.gateway.core.event;
 
+import org.inbloom.gateway.common.status.GatewayStatus;
 import org.inbloom.gateway.common.status.Status;
 
 /**
@@ -7,6 +8,7 @@ import org.inbloom.gateway.common.status.Status;
  */
 public interface ResponseEvent {
 
-    Status status();
-
+    GatewayStatus status();
+    Status statusCode();
+    String message();
 }

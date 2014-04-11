@@ -1,4 +1,4 @@
-package org.inbloom.gateway.rest.validation;
+package org.inbloom.gateway.common.status;
 
 /**
  * Created with IntelliJ IDEA.
@@ -7,13 +7,13 @@ package org.inbloom.gateway.rest.validation;
  * Time: 9:19 AM
  * To change this template use File | Settings | File Templates.
  */
-public class FieldError {
+public class FieldValidationError {
 
     private final String field;
     private final String message;
 
 
-    public FieldError(String field, String message) {
+    public FieldValidationError(String field, String message) {
         this.field = field;
         this.message = message;
     }

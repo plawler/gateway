@@ -1,11 +1,11 @@
 package org.inbloom.gateway.core.service;
 
 
+import org.inbloom.gateway.common.status.Status;
 import org.inbloom.gateway.core.event.user.CreateCredentialsEvent;
 import org.inbloom.gateway.core.event.user.CreatedCredentialsEvent;
 import org.inbloom.gateway.core.event.verification.*;
 import org.inbloom.gateway.common.domain.Verification;
-import org.inbloom.gateway.common.status.VerificationStatus;
 import org.inbloom.gateway.credentials.CredentialService;
 import org.inbloom.gateway.persistence.service.VerificationPersistenceService;
 import org.inbloom.gateway.util.keyService.KeyGenerator;
@@ -57,7 +57,7 @@ public class VerificationServiceTest {
                 .thenReturn(expiredVerificationEvent(validate.getValidationDate()));
 
         ValidatedAccountSetupEvent validated = verificationService.validateAccountSetup(validate);
-        assertEquals(VerificationStatus.EXPIRED, validated.status());
+        assertEquals(Status.EXPIRED, validated.statusCode());
     }
 
     @Test

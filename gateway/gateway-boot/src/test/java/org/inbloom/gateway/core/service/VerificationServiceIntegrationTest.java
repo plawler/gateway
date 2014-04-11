@@ -96,7 +96,7 @@ public class VerificationServiceIntegrationTest {
 
         //check that in-memory email server received email
         List<Message> inbox = Mailbox.get(createdEvent.getData().getUser().getEmail());
-        assertEquals(inbox.size(), 1);
+        assertEquals(1, inbox.size());
     }
 
 

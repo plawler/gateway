@@ -1,7 +1,7 @@
 package org.inbloom.gateway.core.service;
 
+import org.inbloom.gateway.common.status.Status;
 import org.inbloom.gateway.core.event.operator.*;
-import org.inbloom.gateway.common.status.OperatorStatus;
 import org.inbloom.gateway.persistence.service.OperatorPersistenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class OperatorServiceHandler implements OperatorService {
     public ModifiedOperatorEvent modifyOperator(ModifyOperatorEvent modifyOperatorEvent) {
 
         RetrievedOperatorEvent retrievedOperatorEvent = retrieveOperator(new RetrieveOperatorEvent(modifyOperatorEvent.getId()));
-        if(retrievedOperatorEvent.status() == OperatorStatus.NOT_FOUND) {
+        if(retrievedOperatorEvent.statusCode() == Status.NOT_FOUND) {
              //could not find entity by id
             return ModifiedOperatorEvent.notFound(modifyOperatorEvent.getId());
         }
