@@ -3,9 +3,11 @@ package org.inbloom.gateway.persistence.service;
 
 import org.inbloom.gateway.Gateway;
 import org.inbloom.gateway.common.domain.AccountValidation;
+import org.inbloom.gateway.common.domain.ApplicationProvider;
 import org.inbloom.gateway.common.domain.Verification;
-import org.inbloom.gateway.core.event.provider.RegisterApplicationProviderEvent;
-import org.inbloom.gateway.core.event.provider.RegisteredApplicationProviderEvent;
+import org.inbloom.gateway.core.event.GatewayAction;
+import org.inbloom.gateway.core.event.GatewayRequest;
+import org.inbloom.gateway.core.event.GatewayResponse;
 import org.inbloom.gateway.core.event.verification.*;
 import org.inbloom.gateway.core.service.VerificationService;
 import org.inbloom.gateway.fixture.ApplicationProviderFixture;
@@ -41,9 +43,9 @@ public class VerificationPersistenceTest {
 
     @Before
     public void setUp() {
-        RegisterApplicationProviderEvent register = new RegisterApplicationProviderEvent(ApplicationProviderFixture.buildAppProvider1(null));
-        RegisteredApplicationProviderEvent registered = providerService.createApplicationProvider(register);
-        created = verificationService.createVerification(new CreateVerificationEvent(registered.getData().getUser()));
+        GatewayRequest<ApplicationProvider> register = new GatewayRequest<ApplicationProvider>(GatewayAction.CREATE, ApplicationProviderFixture.buildAppProvider1(null));
+        GatewayResponse<ApplicationProvider> registered = providerService.createApplicationProvider(register);
+        created = verificationService.createVerification(new CreateVerificationEvent(registered.getPayload().getUser()));
     }
 
     @Test

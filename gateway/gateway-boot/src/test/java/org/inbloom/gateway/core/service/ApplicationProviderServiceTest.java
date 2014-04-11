@@ -1,10 +1,11 @@
 package org.inbloom.gateway.core.service;
 
 import org.inbloom.gateway.Gateway;
+import org.inbloom.gateway.common.domain.ApplicationProvider;
 import org.inbloom.gateway.common.status.Status;
+import org.inbloom.gateway.core.event.GatewayRequest;
+import org.inbloom.gateway.core.event.GatewayResponse;
 import org.inbloom.gateway.core.event.verification.CreateVerificationEvent;
-import org.inbloom.gateway.core.event.provider.RegisterApplicationProviderEvent;
-import org.inbloom.gateway.core.event.provider.RegisteredApplicationProviderEvent;
 import org.inbloom.gateway.fixture.ApplicationProviderEventFixtures;
 import org.inbloom.gateway.fixture.VerificationEventFixtures;
 import org.inbloom.gateway.persistence.domain.UserEntity;
@@ -64,7 +65,7 @@ public class ApplicationProviderServiceTest {
     @Test
     public void testRegisterAppProvider()
     {
-        when(appProviderPersistenceService.createApplicationProvider(any(RegisterApplicationProviderEvent.class)))
+        when(appProviderPersistenceService.createApplicationProvider(any(GatewayRequest.class)))
                 .thenReturn(ApplicationProviderEventFixtures.buildSuccessRegisteredAppProviderEvent(1l));
 
         when(appProviderPersistenceService.getUserByEmail(any(String.class))).thenReturn(null);
@@ -72,10 +73,10 @@ public class ApplicationProviderServiceTest {
         when(verificationService.createVerification(any(CreateVerificationEvent.class)))
                 .thenReturn(VerificationEventFixtures.buildSuccessCreatedVerificationEvent(1l, 1l));
 
-        RegisteredApplicationProviderEvent registeredEvent = appProviderService.registerApplicationProvider(ApplicationProviderEventFixtures.buildRegisterAppProviderEvent());
+        GatewayResponse<ApplicationProvider> registeredEvent = appProviderService.registerApplicationProvider(ApplicationProviderEventFixtures.buildRegisterAppProviderEvent());
 
         assertNotNull(registeredEvent);
-        assertEquals(registeredEvent.statusCode(), Status.SUCCESS);
+        assertEquals(registeredEvent.getStatus().getStatus(), Status.SUCCESS);
     }
 
     @Test
@@ -83,10 +84,10 @@ public class ApplicationProviderServiceTest {
     {
         when(appProviderPersistenceService.getUserByEmail(any(String.class))).thenReturn(new UserEntity());
 
-        RegisteredApplicationProviderEvent registeredEvent = appProviderService.registerApplicationProvider(ApplicationProviderEventFixtures.buildRegisterAppProviderEvent());
+        GatewayResponse<ApplicationProvider> registeredEvent = appProviderService.registerApplicationProvider(ApplicationProviderEventFixtures.buildRegisterAppProviderEvent());
 
         assertNotNull(registeredEvent);
-        assertEquals(registeredEvent.statusCode(), Status.CONFLICT);
+        assertEquals(registeredEvent.getStatus().getStatus(), Status.CONFLICT);
     }
 
 }

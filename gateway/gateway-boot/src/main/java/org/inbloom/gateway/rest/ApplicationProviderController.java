@@ -6,7 +6,9 @@ import com.wordnik.swagger.annotations.ApiErrors;
 import com.wordnik.swagger.annotations.ApiOperation;
 
 import org.inbloom.gateway.common.domain.ApplicationProvider;
-import org.inbloom.gateway.core.event.provider.*;
+import org.inbloom.gateway.core.event.GatewayAction;
+import org.inbloom.gateway.core.event.GatewayRequest;
+import org.inbloom.gateway.core.event.GatewayResponse;
 import org.inbloom.gateway.core.service.ApplicationProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -38,11 +40,11 @@ public class ApplicationProviderController {
     @ApiOperation(value = "Register a new application provider.")
     public ResponseEntity<ApplicationProvider> register(@Valid @RequestBody ApplicationProvider appProvider, UriComponentsBuilder componentsBuilder)
     {
-        RegisteredApplicationProviderEvent createdEvent = appProviderService.registerApplicationProvider(new RegisterApplicationProviderEvent(appProvider));
+        GatewayResponse<ApplicationProvider> createdEvent = appProviderService.registerApplicationProvider(new GatewayRequest<ApplicationProvider>(GatewayAction.CREATE, appProvider));
 
-        switch(createdEvent.statusCode()) {
+        switch(createdEvent.getStatus().getStatus()) {
             case SUCCESS:
-                ApplicationProvider newAppProvider = createdEvent.getApplicationProvider();
+                ApplicationProvider newAppProvider = createdEvent.getPayload();
 
                 HttpHeaders headers = new HttpHeaders();
                 headers.setLocation(componentsBuilder.path("/applicationProviders/{id}")
@@ -52,7 +54,7 @@ public class ApplicationProviderController {
 
 
             default:
-                return new ResponseEntity(createdEvent.status(), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(createdEvent.getStatus(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -61,16 +63,17 @@ public class ApplicationProviderController {
     @ApiOperation(value = "Retrieve an Application Provider by id.", notes = "Look up an Application Provider based on applicationProviderId value.")
     @ApiErrors(value = { @ApiError(code = 404, reason = "Application Provider not found") })
     public ResponseEntity<ApplicationProvider> retrieve(@PathVariable Long id) {
+        ApplicationProvider template = new ApplicationProvider();
+        template.setApplicationProviderId(id);
+        GatewayResponse<ApplicationProvider> retrievedEvent = appProviderService.retrieveApplicationProvider(new GatewayRequest<ApplicationProvider>(GatewayAction.RETRIEVE, template));
 
-        RetrievedApplicationProviderEvent retrievedEvent = appProviderService.retrieveApplicationProvider(new RetrieveApplicationProviderEvent(id));
-
-        ApplicationProvider appProvider = retrievedEvent.getData();
+        ApplicationProvider appProvider = retrievedEvent.getPayload();
 
         if(appProvider != null) {
             return new ResponseEntity<ApplicationProvider>(appProvider, HttpStatus.OK);
         }
         else {
-            return new ResponseEntity(retrievedEvent.status(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity(retrievedEvent.getStatus(), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -89,16 +92,16 @@ public class ApplicationProviderController {
             return new ResponseEntity<ApplicationProvider>(appProvider, HttpStatus.CONFLICT);
         }
 
-        ModifiedApplicationProviderEvent modifiedEvent = appProviderService.modifyApplicationProvider(new ModifyApplicationProviderEvent(id, appProvider));
+        GatewayResponse<ApplicationProvider> modifiedEvent = appProviderService.modifyApplicationProvider(new GatewayRequest<ApplicationProvider>(GatewayAction.MODIFY, appProvider));
 
-        switch (modifiedEvent.statusCode())
+        switch (modifiedEvent.getStatus().getStatus())
         {
             case SUCCESS:
                 return new ResponseEntity(HttpStatus.NO_CONTENT);
             case NOT_FOUND:
-                return new ResponseEntity(modifiedEvent.status(), HttpStatus.NOT_FOUND);
+                return new ResponseEntity(modifiedEvent.getStatus(), HttpStatus.NOT_FOUND);
             default:
-                return new ResponseEntity(modifiedEvent.status(), HttpStatus.INTERNAL_SERVER_ERROR);//throw 500 error if we don't know why this failed
+                return new ResponseEntity(modifiedEvent.getStatus(), HttpStatus.INTERNAL_SERVER_ERROR);//throw 500 error if we don't know why this failed
         }
 
     }

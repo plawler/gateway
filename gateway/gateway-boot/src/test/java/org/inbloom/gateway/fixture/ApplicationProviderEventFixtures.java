@@ -1,6 +1,11 @@
 package org.inbloom.gateway.fixture;
 
-import org.inbloom.gateway.core.event.provider.*;
+import org.inbloom.gateway.common.domain.ApplicationProvider;
+import org.inbloom.gateway.common.status.GatewayStatus;
+import org.inbloom.gateway.common.status.Status;
+import org.inbloom.gateway.core.event.GatewayAction;
+import org.inbloom.gateway.core.event.GatewayRequest;
+import org.inbloom.gateway.core.event.GatewayResponse;
 
 /**
  * Created by lloydengebretsen on 3/24/14.
@@ -8,45 +13,47 @@ import org.inbloom.gateway.core.event.provider.*;
 public class ApplicationProviderEventFixtures {
 
     /**register**/
-    public static RegisterApplicationProviderEvent buildRegisterAppProviderEvent() {
-        return new RegisterApplicationProviderEvent(ApplicationProviderFixture.buildAppProvider1(null));
+    public static GatewayRequest<ApplicationProvider> buildRegisterAppProviderEvent() {
+        return new GatewayRequest<ApplicationProvider>(GatewayAction.CREATE, ApplicationProviderFixture.buildAppProvider1(null));
     }
 
     /**modify**/
-    public static ModifyApplicationProviderEvent buildModifyAppProviderEvent(Long id) {
-        return new ModifyApplicationProviderEvent(id, ApplicationProviderFixture.buildAppProvider2(id));
+    public static GatewayRequest<ApplicationProvider> buildModifyAppProviderEvent(Long id) {
+        return new GatewayRequest<ApplicationProvider>(GatewayAction.MODIFY, ApplicationProviderFixture.buildAppProvider2(id));
     }
 
     /**retrieve**/
-    public static RetrieveApplicationProviderEvent buildRetrieveAppProviderEvent(Long id) {
-        return new RetrieveApplicationProviderEvent(id);
+    public static GatewayRequest<ApplicationProvider> buildRetrieveAppProviderEvent(Long id) {
+        ApplicationProvider applicationProvider = new ApplicationProvider();
+        applicationProvider.setApplicationProviderId(id);
+        return new GatewayRequest<ApplicationProvider>(GatewayAction.RETRIEVE, applicationProvider);
     }
 
     /**registered**/
-    public static RegisteredApplicationProviderEvent buildSuccessRegisteredAppProviderEvent(Long id){
-        return RegisteredApplicationProviderEvent.success(ApplicationProviderFixture.buildAppProvider1(id));
+    public static GatewayResponse<ApplicationProvider> buildSuccessRegisteredAppProviderEvent(Long id){
+        return new GatewayResponse<ApplicationProvider>(GatewayAction.CREATE, ApplicationProviderFixture.buildAppProvider1(id), new GatewayStatus(Status.SUCCESS));
     }
 
-    public static RegisteredApplicationProviderEvent buildFailRegisteredAppProviderEvent() {
-        return RegisteredApplicationProviderEvent.fail("fail");
+    public static GatewayResponse<ApplicationProvider> buildFailRegisteredAppProviderEvent() {
+        return new GatewayResponse<ApplicationProvider>(GatewayAction.CREATE, null, new GatewayStatus(Status.ERROR, "fail"));
     }
 
     /**modified**/
-    public static ModifiedApplicationProviderEvent buildSuccessModifiedAppProviderEvent(Long id) {
-        return ModifiedApplicationProviderEvent.success(ApplicationProviderFixture.buildAppProvider2(id));
+    public static GatewayResponse<ApplicationProvider> buildSuccessModifiedAppProviderEvent(Long id) {
+        return new GatewayResponse<ApplicationProvider>(GatewayAction.MODIFY, ApplicationProviderFixture.buildAppProvider2(id), new GatewayStatus(Status.SUCCESS));
     }
 
-    public static ModifiedApplicationProviderEvent buildNotFoundModifiedApplicationProviderEvent() {
-        return ModifiedApplicationProviderEvent.notFound();
+    public static GatewayResponse<ApplicationProvider> buildNotFoundModifiedApplicationProviderEvent() {
+        return new GatewayResponse<ApplicationProvider>(GatewayAction.MODIFY, null, new GatewayStatus(Status.NOT_FOUND));
     }
 
     /**retrieved**/
-    public static RetrievedApplicationProviderEvent buildSuccessRetrievedAppProviderEvent(Long id) {
-        return RetrievedApplicationProviderEvent.success(ApplicationProviderFixture.buildAppProvider2(id));
+    public static GatewayResponse<ApplicationProvider> buildSuccessRetrievedAppProviderEvent(Long id) {
+        return new GatewayResponse<ApplicationProvider>(GatewayAction.RETRIEVE, ApplicationProviderFixture.buildAppProvider2(id), new GatewayStatus(Status.SUCCESS));
     }
 
-    public static RetrievedApplicationProviderEvent buildNotFoundRetrievedAppProviderEvent() {
-        return RetrievedApplicationProviderEvent.notFound();
+    public static GatewayResponse<ApplicationProvider> buildNotFoundRetrievedAppProviderEvent() {
+        return new GatewayResponse<ApplicationProvider>(GatewayAction.RETRIEVE, null, new GatewayStatus(Status.NOT_FOUND));
     }
 
 

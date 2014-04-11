@@ -1,7 +1,11 @@
 package org.inbloom.gateway.core.service;
 
+import org.inbloom.gateway.common.domain.ApplicationProvider;
+import org.inbloom.gateway.common.status.GatewayStatus;
 import org.inbloom.gateway.common.status.Status;
-import org.inbloom.gateway.core.event.provider.*;
+import org.inbloom.gateway.core.event.GatewayAction;
+import org.inbloom.gateway.core.event.GatewayRequest;
+import org.inbloom.gateway.core.event.GatewayResponse;
 import org.inbloom.gateway.core.event.verification.CreateVerificationEvent;
 import org.inbloom.gateway.core.event.verification.CreatedVerificationEvent;
 import org.inbloom.gateway.common.domain.User;
@@ -25,41 +29,41 @@ public class ApplicationProviderServiceHandler implements ApplicationProviderSer
     VerificationService verificationService;
 
     @Override
-    public RegisteredApplicationProviderEvent registerApplicationProvider(RegisterApplicationProviderEvent registerAppProviderEvent) {
+    public GatewayResponse<ApplicationProvider> registerApplicationProvider(GatewayRequest<ApplicationProvider> registerAppProviderEvent) {
 
         //validate unique email
-        String email = registerAppProviderEvent.getData().getUser().getEmail();
+        String email = registerAppProviderEvent.getPayload().getUser().getEmail();
         UserEntity dbUser = appProviderPersistenceService.getUserByEmail(email);
 
         if(dbUser != null) {
-            return RegisteredApplicationProviderEvent.accountExists("A User with that email has already registered");
+            return new GatewayResponse<ApplicationProvider>(GatewayAction.CREATE, null, new GatewayStatus(Status.CONFLICT, "A User with that email has already registered"));
         }
 
         //persist the User and AppProvider
-        RegisteredApplicationProviderEvent registeredEvent = appProviderPersistenceService.createApplicationProvider(registerAppProviderEvent);
-        User user = registeredEvent.getData().getUser();
+        GatewayResponse<ApplicationProvider> registeredEvent = appProviderPersistenceService.createApplicationProvider(registerAppProviderEvent);
+        User user = registeredEvent.getPayload().getUser();
 
         //if we successfully created the user, create a verification
-        if(registeredEvent.statusCode() == Status.SUCCESS && user != null) {
+        if(Status.SUCCESS.equals(registeredEvent.getStatus().getStatus()) && user != null) {
             CreateVerificationEvent createEvent = new CreateVerificationEvent(user);
             CreatedVerificationEvent createdVerificationEvent = verificationService.createVerification(createEvent);
 
             if(!createdVerificationEvent.statusCode().equals(Status.SUCCESS))
-                return RegisteredApplicationProviderEvent.fail("Failed to Create Verification when registering App Provider");
+                return new GatewayResponse<ApplicationProvider>(GatewayAction.CREATE, null, new GatewayStatus(Status.ERROR, "Failed to Create Verification when registering App Provider"));
         }
 
         return registeredEvent;
     }
 
     @Override
-    public ModifiedApplicationProviderEvent modifyApplicationProvider(ModifyApplicationProviderEvent modifyAppProviderEvent) {
+    public GatewayResponse<ApplicationProvider> modifyApplicationProvider(GatewayRequest<ApplicationProvider> modifyAppProviderEvent) {
 
         return appProviderPersistenceService.modifyApplicationProvider(modifyAppProviderEvent);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public RetrievedApplicationProviderEvent retrieveApplicationProvider(RetrieveApplicationProviderEvent retrieveAppProviderEvent) {
+    public GatewayResponse<ApplicationProvider> retrieveApplicationProvider(GatewayRequest<ApplicationProvider> retrieveAppProviderEvent) {
 
         return appProviderPersistenceService.retrieveApplicationProvider(retrieveAppProviderEvent);
     }
