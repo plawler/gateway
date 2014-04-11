@@ -5,7 +5,7 @@ When(/^I click on the verification link from the e\-mail$/) do
 end
 
 Then(/^I should be on the create password page$/) do
- page.should have_title('Create a Password')
+ page.should have_title('Create your Password')
 end
 
 Given(/^I am on the validation page$/) do
