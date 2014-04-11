@@ -23,6 +23,10 @@ public class GatewayStatus {
         this.status = status;
     }
 
+    public GatewayStatus(Status status) {
+        this.status = status;
+    }
+
     public Status getStatus() {
         return status;
     }

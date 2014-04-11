@@ -1,9 +1,12 @@
 package org.inbloom.gateway.persistence.service;
 
 import org.inbloom.gateway.Gateway;
-import org.inbloom.gateway.common.status.Status;
-import org.inbloom.gateway.core.event.operator.*;
 import org.inbloom.gateway.common.domain.Operator;
+import org.inbloom.gateway.common.status.Status;
+import org.inbloom.gateway.core.event.GatewayAction;
+import org.inbloom.gateway.core.event.GatewayRequest;
+import org.inbloom.gateway.core.event.GatewayResponse;
+import org.inbloom.gateway.core.event.operator.*;
 import org.inbloom.gateway.fixture.OperatorFixture;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,21 +40,21 @@ public class OperatorPersistenceServiceTest {
     @Test
     public void shouldRegisterAnOperator() {
         String operatorName = "Illini Cloud";
-        RegisteredOperatorEvent event = operatorPersistenceService.registerOperator(new RegisterOperatorEvent(OperatorFixture.buildOperator(operatorName)));
+        GatewayResponse<Operator> event = operatorPersistenceService.registerOperator(new GatewayRequest<Operator>(GatewayAction.CREATE, OperatorFixture.buildOperator(operatorName)));
 
         assertNotNull(event);
-        assertNotNull(event.getOperatorId());
+        assertNotNull(event.getPayload().getOperatorId());
     }
 
     @Test
     public void shouldRetrieveAnOperator() {
         String operatorName = "My Operator";
-        RegisteredOperatorEvent registeredEvent = operatorPersistenceService.registerOperator(new RegisterOperatorEvent(OperatorFixture.buildOperator(operatorName)));
+        GatewayResponse<Operator> registeredEvent = operatorPersistenceService.registerOperator(new GatewayRequest<Operator>(GatewayAction.CREATE, OperatorFixture.buildOperator(operatorName)));
 
         assertNotNull(registeredEvent);
-        assertNotNull(registeredEvent.getOperatorId());
+        assertNotNull(registeredEvent.getPayload().getOperatorId());
 
-        Long id = registeredEvent.getOperatorId();
+        Long id = registeredEvent.getPayload().getOperatorId();
         RetrievedOperatorEvent retrievedEvent = operatorPersistenceService.retrieveOperator(new RetrieveOperatorEvent(id));
 
         assertNotNull(retrievedEvent);
@@ -66,12 +69,12 @@ public class OperatorPersistenceServiceTest {
         String modifiedName = "Your Operator";
 
 
-        RegisteredOperatorEvent registeredEvent = operatorPersistenceService.registerOperator(new RegisterOperatorEvent(OperatorFixture.buildOperator(operatorName)));
+        GatewayResponse<Operator> registeredEvent = operatorPersistenceService.registerOperator(new GatewayRequest<Operator>(GatewayAction.CREATE, OperatorFixture.buildOperator(operatorName)));
 
         assertNotNull(registeredEvent);
-        assertNotNull(registeredEvent.getOperatorId());
+        assertNotNull(registeredEvent.getPayload().getOperatorId());
 
-        Long id = registeredEvent.getOperatorId();
+        Long id = registeredEvent.getPayload().getOperatorId();
         Long modifiedId = new Long(id + 1);
         Operator retrievedOperator = operatorPersistenceService.retrieveOperator(new RetrieveOperatorEvent(id)).getData();
         assertEquals(operatorName, retrievedOperator.getOperatorName());

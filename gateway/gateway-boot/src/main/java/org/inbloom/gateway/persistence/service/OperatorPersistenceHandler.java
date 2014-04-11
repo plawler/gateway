@@ -1,7 +1,15 @@
 package org.inbloom.gateway.persistence.service;
 
 import org.inbloom.gateway.common.domain.Operator;
-import org.inbloom.gateway.core.event.operator.*;
+import org.inbloom.gateway.common.status.GatewayStatus;
+import org.inbloom.gateway.common.status.Status;
+import org.inbloom.gateway.core.event.GatewayAction;
+import org.inbloom.gateway.core.event.GatewayRequest;
+import org.inbloom.gateway.core.event.GatewayResponse;
+import org.inbloom.gateway.core.event.operator.ModifiedOperatorEvent;
+import org.inbloom.gateway.core.event.operator.ModifyOperatorEvent;
+import org.inbloom.gateway.core.event.operator.RetrieveOperatorEvent;
+import org.inbloom.gateway.core.event.operator.RetrievedOperatorEvent;
 import org.inbloom.gateway.persistence.domain.OperatorEntity;
 import org.inbloom.gateway.persistence.repository.OperatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +29,11 @@ public class OperatorPersistenceHandler implements OperatorPersistenceService {
     private ConversionService conversionService;
 
     @Override
-    public RegisteredOperatorEvent registerOperator(RegisterOperatorEvent registerOperatorEvent) {
-        OperatorEntity operatorEntity = conversionService.convert(registerOperatorEvent.getData(), OperatorEntity.class);
+    public GatewayResponse<Operator> registerOperator(GatewayRequest<Operator> registerOperatorEvent) {
+        OperatorEntity operatorEntity = conversionService.convert(registerOperatorEvent.getPayload(), OperatorEntity.class);
         operatorRepository.save(operatorEntity);
-        return RegisteredOperatorEvent.success(conversionService.convert(operatorEntity,
-                Operator.class));
+
+        return new GatewayResponse<Operator>(GatewayAction.CREATE, conversionService.convert(operatorEntity, Operator.class), new GatewayStatus(Status.SUCCESS));
     }
 
     @Override

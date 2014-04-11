@@ -4,9 +4,14 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiError;
 import com.wordnik.swagger.annotations.ApiErrors;
 import com.wordnik.swagger.annotations.ApiOperation;
-
 import org.inbloom.gateway.common.domain.Operator;
-import org.inbloom.gateway.core.event.operator.*;
+import org.inbloom.gateway.core.event.GatewayAction;
+import org.inbloom.gateway.core.event.GatewayRequest;
+import org.inbloom.gateway.core.event.GatewayResponse;
+import org.inbloom.gateway.core.event.operator.ModifiedOperatorEvent;
+import org.inbloom.gateway.core.event.operator.ModifyOperatorEvent;
+import org.inbloom.gateway.core.event.operator.RetrieveOperatorEvent;
+import org.inbloom.gateway.core.event.operator.RetrievedOperatorEvent;
 import org.inbloom.gateway.core.service.OperatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -14,7 +19,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -33,13 +41,13 @@ public class OperatorController {
     @RequestMapping(value = "/operators", method = RequestMethod.POST)
     @ApiOperation(value = "Register a new operator.")
     public ResponseEntity<Operator> register(@Valid @RequestBody Operator operator, UriComponentsBuilder componentsBuilder) {
-        RegisteredOperatorEvent registeredEvent = operatorService.registerOperator(new RegisterOperatorEvent(operator));
+        GatewayResponse<Operator> registeredEvent = operatorService.registerOperator(new GatewayRequest<Operator>(GatewayAction.CREATE, operator));
 
-        Operator newOperator = registeredEvent.getData();
+        Operator newOperator = registeredEvent.getPayload();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(componentsBuilder.path("/operators/{id}")
-                .buildAndExpand(registeredEvent.getOperatorId().toString()).toUri());
+                .buildAndExpand(newOperator.getOperatorId()).toUri());
 
         return new ResponseEntity<Operator>(newOperator, headers, HttpStatus.CREATED);
     }

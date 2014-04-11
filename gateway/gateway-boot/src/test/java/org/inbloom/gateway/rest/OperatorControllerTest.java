@@ -1,8 +1,8 @@
 package org.inbloom.gateway.rest;
 
 import org.inbloom.gateway.Gateway;
+import org.inbloom.gateway.core.event.GatewayRequest;
 import org.inbloom.gateway.core.event.operator.ModifyOperatorEvent;
-import org.inbloom.gateway.core.event.operator.RegisterOperatorEvent;
 import org.inbloom.gateway.core.event.operator.RetrieveOperatorEvent;
 import org.inbloom.gateway.core.service.OperatorService;
 import org.inbloom.gateway.rest.util.TestUtil;
@@ -20,16 +20,15 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static org.inbloom.gateway.fixture.OperatorEventFixtures.*;
 import static org.inbloom.gateway.fixture.OperatorFixture.buildOperatorJson;
+import static org.inbloom.gateway.fixture.OperatorFixture.invalidOperatorJson;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import static org.inbloom.gateway.fixture.OperatorEventFixtures.*;
-import static org.inbloom.gateway.fixture.OperatorFixture.*;
 
 /**
  * Created by lloydengebretsen on 2/26/14.
@@ -58,7 +57,7 @@ public class OperatorControllerTest {
 
     @Test
     public void shouldRegisterAnOperator() throws Exception {
-        when(operatorService.registerOperator(any(RegisterOperatorEvent.class))).thenReturn(operatorRegistered(1L));
+        when(operatorService.registerOperator(any(GatewayRequest.class))).thenReturn(operatorRegistered(1L));
 
         this.mockMvc.perform(post("/operators")
                 .content(buildOperatorJson())

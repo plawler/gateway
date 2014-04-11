@@ -1,7 +1,13 @@
 package org.inbloom.gateway.core.service;
 
+import org.inbloom.gateway.common.domain.Operator;
 import org.inbloom.gateway.common.status.Status;
-import org.inbloom.gateway.core.event.operator.*;
+import org.inbloom.gateway.core.event.GatewayRequest;
+import org.inbloom.gateway.core.event.GatewayResponse;
+import org.inbloom.gateway.core.event.operator.ModifiedOperatorEvent;
+import org.inbloom.gateway.core.event.operator.ModifyOperatorEvent;
+import org.inbloom.gateway.core.event.operator.RetrieveOperatorEvent;
+import org.inbloom.gateway.core.event.operator.RetrievedOperatorEvent;
 import org.inbloom.gateway.persistence.service.OperatorPersistenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +24,7 @@ public class OperatorServiceHandler implements OperatorService {
     private OperatorPersistenceService operatorPersistenceService;
 
     @Override
-    public RegisteredOperatorEvent registerOperator(RegisterOperatorEvent registerOperatorEvent) {
+    public GatewayResponse<Operator> registerOperator(GatewayRequest<Operator> registerOperatorEvent) {
        return operatorPersistenceService.registerOperator(registerOperatorEvent);
     }
 

@@ -2,8 +2,9 @@ package org.inbloom.gateway.core.service;
 
 import org.inbloom.gateway.Gateway;
 import org.inbloom.gateway.common.domain.Operator;
-import org.inbloom.gateway.core.event.operator.RegisterOperatorEvent;
-import org.inbloom.gateway.core.event.operator.RegisteredOperatorEvent;
+import org.inbloom.gateway.core.event.GatewayAction;
+import org.inbloom.gateway.core.event.GatewayRequest;
+import org.inbloom.gateway.core.event.GatewayResponse;
 import org.inbloom.gateway.core.event.operator.RetrieveOperatorEvent;
 import org.inbloom.gateway.core.event.operator.RetrievedOperatorEvent;
 import org.junit.Test;
@@ -15,8 +16,9 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import static org.inbloom.gateway.fixture.OperatorFixture.buildOperator;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * Created By: paullawler
@@ -35,9 +37,9 @@ public class OperatorServiceIntegrationTest {
     @Test
     public void shouldRegisterAnOperatorWithATransaction() {
         Operator operator = buildOperator();
-        RegisteredOperatorEvent registered = operatorService.registerOperator(new RegisterOperatorEvent(operator));
-        RetrievedOperatorEvent retrieved = operatorService.retrieveOperator(new RetrieveOperatorEvent(registered.getOperatorId()));
-        assertEquals(retrieved.getData().getOperatorId(), registered.getOperatorId());
+        GatewayResponse<Operator> registered = operatorService.registerOperator(new GatewayRequest<Operator>(GatewayAction.CREATE, operator));
+        RetrievedOperatorEvent retrieved = operatorService.retrieveOperator(new RetrieveOperatorEvent(registered.getPayload().getOperatorId()));
+        assertEquals(retrieved.getData().getOperatorId(), registered.getPayload().getOperatorId());
     }
 
 }
