@@ -1,7 +1,7 @@
 package org.inbloom.gateway.core.event.verification;
 
-import org.inbloom.gateway.core.domain.Verification;
 import org.inbloom.gateway.core.event.VerboseResponseEvent;
+import org.inbloom.gateway.common.domain.Verification;
 import org.inbloom.gateway.common.status.Status;
 import org.inbloom.gateway.common.status.VerificationStatus;
 

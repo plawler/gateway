@@ -1,7 +1,7 @@
 package org.inbloom.gateway.core.event.operator;
 
-import org.inbloom.gateway.core.domain.Operator;
 import org.inbloom.gateway.core.event.ResponseEvent;
+import org.inbloom.gateway.common.domain.Operator;
 import org.inbloom.gateway.common.status.OperatorStatus;
 import org.inbloom.gateway.common.status.Status;
 

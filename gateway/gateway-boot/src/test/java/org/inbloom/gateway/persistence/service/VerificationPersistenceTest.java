@@ -2,8 +2,8 @@ package org.inbloom.gateway.persistence.service;
 
 
 import org.inbloom.gateway.Gateway;
-import org.inbloom.gateway.core.domain.AccountValidation;
-import org.inbloom.gateway.core.domain.Verification;
+import org.inbloom.gateway.common.domain.AccountValidation;
+import org.inbloom.gateway.common.domain.Verification;
 import org.inbloom.gateway.core.event.provider.RegisterApplicationProviderEvent;
 import org.inbloom.gateway.core.event.provider.RegisteredApplicationProviderEvent;
 import org.inbloom.gateway.core.event.verification.*;

@@ -1,11 +1,11 @@
 package org.inbloom.gateway.core.service;
 
-import org.inbloom.gateway.core.domain.Credentials;
-import org.inbloom.gateway.core.domain.User;
-import org.inbloom.gateway.core.domain.Verification;
 import org.inbloom.gateway.core.event.user.CreateCredentialsEvent;
 import org.inbloom.gateway.core.event.user.CreatedCredentialsEvent;
 import org.inbloom.gateway.core.event.verification.*;
+import org.inbloom.gateway.common.domain.Credentials;
+import org.inbloom.gateway.common.domain.User;
+import org.inbloom.gateway.common.domain.Verification;
 import org.inbloom.gateway.common.status.VerificationStatus;
 import org.inbloom.gateway.credentials.CredentialService;
 import org.inbloom.gateway.persistence.service.VerificationPersistenceService;

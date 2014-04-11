@@ -1,4 +1,4 @@
-package org.inbloom.gateway.core.domain;
+package org.inbloom.gateway.common.domain;
 
 /**
  * Created By: paullawler

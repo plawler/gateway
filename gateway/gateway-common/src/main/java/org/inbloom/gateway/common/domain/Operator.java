@@ -1,4 +1,4 @@
-package org.inbloom.gateway.core.domain;
+package org.inbloom.gateway.common.domain;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;

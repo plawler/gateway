@@ -5,6 +5,10 @@ Given /^I have a JSON representation of a(?:n?) (.*)$/ do |resource_type|
   @request_json = send("#{resource_type}_resource").to_json
 end
 
+Given(/^I am on the (.*) page$/) do |page|
+  visit portal_path_for(page)
+end
+
 When /^I GET the (.*) resource$/ do |resource_type|
   @response = RestClient.get(path_for(resource_type)) { |response, request, results| response }
 end
@@ -28,6 +32,10 @@ When /^I POST to the (.*?) resource$/ do |resource|
   RestClient.post(path_for(resource), @request_json, :content_type => :json) do |response, request, result|
     @response = response
   end
+end
+
+When(/^I submit the form$/) do
+  click_button 'Submit'
 end
 
 def db_client
