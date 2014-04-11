@@ -2,7 +2,7 @@ package org.inbloom.portal.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.inbloom.gateway.common.domain.Verification;
-import org.inbloom.gateway.common.status.VerificationStatus;
+import org.inbloom.gateway.common.status.GatewayStatus;
 import org.inbloom.portal.forms.SignupCompletion;
 import org.inbloom.portal.util.RestTemplateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,14 +70,14 @@ public class VerifyEmailController {
                 return "setPassword";
             }
             else {
-                VerificationStatus status = mapper.readValue(response.getBody(), VerificationStatus.class);
+                GatewayStatus status = mapper.readValue(response.getBody(), GatewayStatus.class);
 
-                switch(status) {
+                switch(status.getStatus()) {
                     case NOT_FOUND:
                         model.addAttribute("message", "Couldn't find the token. Make sure you follow the link sent in the verification email, or try signing up for an account");
                         return "error";
                     case ERROR:
-                        model.addAttribute("message", status.getStatusMessage());
+                        model.addAttribute("message", status.getMessage());
                         return "error";
                     case EXPIRED:
                         model.addAttribute("message", "Your email validation has expired. TODO: redirect to \"resend validation email\" page");
@@ -114,14 +114,14 @@ public class VerifyEmailController {
                 model.addAttribute("successMessage", "Congratulations! You have succesfully validated your email and created a password");
                 return "login";
             } else {
-                VerificationStatus status = mapper.readValue(response.getBody(), VerificationStatus.class);
+                GatewayStatus status = mapper.readValue(response.getBody(), GatewayStatus.class);
 
-                switch(status) {
+                switch(status.getStatus()) {
                     case SUCCESS:
                         model.addAttribute("successMessage", "Congratulations! You have succesfully validated your email and created a password");
                         return "login";
                     default:
-                        model.addAttribute("errorMessage", status.getStatusMessage());
+                        model.addAttribute("errorMessage", status.getMessage());
                         model.addAttribute("validationToken", token);
                         return "setPassword";
 
