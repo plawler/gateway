@@ -8,8 +8,6 @@ import org.inbloom.gateway.common.domain.Operator;
 import org.inbloom.gateway.core.event.GatewayAction;
 import org.inbloom.gateway.core.event.GatewayRequest;
 import org.inbloom.gateway.core.event.GatewayResponse;
-import org.inbloom.gateway.core.event.operator.ModifiedOperatorEvent;
-import org.inbloom.gateway.core.event.operator.ModifyOperatorEvent;
 import org.inbloom.gateway.core.service.OperatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -83,16 +81,16 @@ public class OperatorController {
             return new ResponseEntity<Operator>(operator, HttpStatus.CONFLICT);
         }
 
-        ModifiedOperatorEvent modifiedEvent = operatorService.modifyOperator(new ModifyOperatorEvent(id, operator));
+        GatewayResponse<Operator> modifiedEvent = operatorService.modifyOperator(new GatewayRequest<Operator>(GatewayAction.MODIFY, operator));
 
-        switch (modifiedEvent.statusCode())
+        switch (modifiedEvent.getStatus().getStatus())
         {
             case SUCCESS:
                 return new ResponseEntity(HttpStatus.NO_CONTENT);
             case NOT_FOUND:
-                return new ResponseEntity(modifiedEvent.status(), HttpStatus.NOT_FOUND);
+                return new ResponseEntity(modifiedEvent.getStatus(), HttpStatus.NOT_FOUND);
             default:
-                return new ResponseEntity(modifiedEvent.status(), HttpStatus.INTERNAL_SERVER_ERROR);//throw 500 error if we don't know why this failed
+                return new ResponseEntity(modifiedEvent.getStatus(), HttpStatus.INTERNAL_SERVER_ERROR);//throw 500 error if we don't know why this failed
         }
     }
 }

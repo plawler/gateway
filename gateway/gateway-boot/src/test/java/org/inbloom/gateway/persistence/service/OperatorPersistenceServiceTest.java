@@ -6,7 +6,6 @@ import org.inbloom.gateway.common.status.Status;
 import org.inbloom.gateway.core.event.GatewayAction;
 import org.inbloom.gateway.core.event.GatewayRequest;
 import org.inbloom.gateway.core.event.GatewayResponse;
-import org.inbloom.gateway.core.event.operator.*;
 import org.inbloom.gateway.fixture.OperatorFixture;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -75,7 +74,6 @@ public class OperatorPersistenceServiceTest {
         assertNotNull(registeredEvent.getPayload().getOperatorId());
 
         Long id = registeredEvent.getPayload().getOperatorId();
-        Long modifiedId = new Long(id + 1);
         Operator testOperator = new Operator();
         testOperator.setOperatorId(id);
 
@@ -83,15 +81,13 @@ public class OperatorPersistenceServiceTest {
         assertEquals(operatorName, retrievedOperator.getOperatorName());
 
         retrievedOperator.setOperatorName(modifiedName);
-        retrievedOperator.setOperatorId(modifiedId); //This should not persist to the database
 
-        ModifiedOperatorEvent modifiedEvent = operatorPersistenceService.modifyOperator(new ModifyOperatorEvent(id, retrievedOperator));
-        assertEquals(Status.SUCCESS, modifiedEvent.statusCode());
-
+        GatewayResponse<Operator> modifiedEvent = operatorPersistenceService.modifyOperator(new GatewayRequest<Operator>(GatewayAction.MODIFY, retrievedOperator));
+        assertEquals(Status.SUCCESS, modifiedEvent.getStatus().getStatus());
 
 
-        Operator modified = operatorPersistenceService.retrieveOperator(new GatewayRequest<Operator>(GatewayAction.RETRIEVE, testOperator)).getPayload();
+        Operator modified = modifiedEvent.getPayload();
         assertEquals(modifiedName, modified.getOperatorName());
-        assertNotEquals(modifiedId, modified.getOperatorId());
+        assertEquals(modified.getOperatorId(), modified.getOperatorId());
     }
 }

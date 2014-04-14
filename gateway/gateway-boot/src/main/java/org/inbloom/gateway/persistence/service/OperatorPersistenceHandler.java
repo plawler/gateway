@@ -6,13 +6,14 @@ import org.inbloom.gateway.common.status.Status;
 import org.inbloom.gateway.core.event.GatewayAction;
 import org.inbloom.gateway.core.event.GatewayRequest;
 import org.inbloom.gateway.core.event.GatewayResponse;
-import org.inbloom.gateway.core.event.operator.ModifiedOperatorEvent;
-import org.inbloom.gateway.core.event.operator.ModifyOperatorEvent;
+import org.inbloom.gateway.persistence.domain.BaseEntity;
 import org.inbloom.gateway.persistence.domain.OperatorEntity;
 import org.inbloom.gateway.persistence.repository.OperatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 /**
  * Created by lloydengebretsen on 2/20/14.
@@ -46,19 +47,21 @@ public class OperatorPersistenceHandler implements OperatorPersistenceService {
     }
 
     @Override
-    public ModifiedOperatorEvent modifyOperator(ModifyOperatorEvent modifyOperatorEvent) {
-        OperatorEntity entity = operatorRepository.findOne(modifyOperatorEvent.getId());
+    public GatewayResponse<Operator> modifyOperator(GatewayRequest<Operator> modifyOperatorEvent) {
+        OperatorEntity modified = conversionService.convert(modifyOperatorEvent.getPayload(), OperatorEntity.class);
+        OperatorEntity original = conversionService.convert(operatorRepository.findOne(modified.getOperatorId()), OperatorEntity.class);
 
-        entity.setOperatorName(modifyOperatorEvent.getOperatorName());
-        entity.setApiUri(modifyOperatorEvent.getApiUri());
-        entity.setConnectorUri(modifyOperatorEvent.getConnectorUri());
-        entity.setEnabled(modifyOperatorEvent.isEnabled());
-        entity.setPrimaryContactEmail(modifyOperatorEvent.getPrimaryContactEmail());
-        entity.setPrimaryContactName(modifyOperatorEvent.getPrimaryContactName());
-        entity.setPrimaryContactPhone(modifyOperatorEvent.getPrimaryContactPhone());
+        if(original == null){
+            return new GatewayResponse<Operator>(GatewayAction.MODIFY, null, new GatewayStatus(Status.NOT_FOUND));
+        }
+        setUpdateData(modified);
+        OperatorEntity modifiedEntity = operatorRepository.save(modified);
 
-        operatorRepository.save(entity);
+        return new GatewayResponse<Operator>(GatewayAction.MODIFY, conversionService.convert(modifiedEntity, Operator.class), new GatewayStatus(Status.SUCCESS));
+    }
 
-        return ModifiedOperatorEvent.success(modifyOperatorEvent.getId(), conversionService.convert(entity, Operator.class));
+    private void setUpdateData(BaseEntity entity){
+        entity.setUpdatedAt(new Date());
+        entity.setUpdatedBy("System"); //TODO replace with actual user info after security model is implemented
     }
 }

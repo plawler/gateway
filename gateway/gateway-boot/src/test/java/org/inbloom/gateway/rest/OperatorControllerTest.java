@@ -7,8 +7,8 @@ import org.inbloom.gateway.common.status.Status;
 import org.inbloom.gateway.core.event.GatewayAction;
 import org.inbloom.gateway.core.event.GatewayRequest;
 import org.inbloom.gateway.core.event.GatewayResponse;
-import org.inbloom.gateway.core.event.operator.ModifyOperatorEvent;
 import org.inbloom.gateway.core.service.OperatorService;
+import org.inbloom.gateway.fixture.OperatorFixture;
 import org.inbloom.gateway.rest.util.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +24,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.inbloom.gateway.fixture.OperatorEventFixtures.*;
 import static org.inbloom.gateway.fixture.OperatorFixture.buildOperatorJson;
 import static org.inbloom.gateway.fixture.OperatorFixture.invalidOperatorJson;
 import static org.mockito.Matchers.any;
@@ -61,7 +60,10 @@ public class OperatorControllerTest {
 
     @Test
     public void shouldRegisterAnOperator() throws Exception {
-        when(operatorService.registerOperator(any(GatewayRequest.class))).thenReturn(operatorRegistered(1L));
+
+        Operator operator = OperatorFixture.buildOperator();
+        operator.setOperatorId(1l);
+        when(operatorService.registerOperator(any(GatewayRequest.class))).thenReturn(new GatewayResponse<Operator>(GatewayAction.CREATE, operator, new GatewayStatus(Status.SUCCESS)));
 
         this.mockMvc.perform(post("/operators")
                 .content(buildOperatorJson())
@@ -117,7 +119,9 @@ public class OperatorControllerTest {
     @Test
     public void shouldModifyAnOperator() throws Exception {
         Long operatorId = new Long(1L);
-        when(operatorService.modifyOperator(any(ModifyOperatorEvent.class))).thenReturn(operatorModified(1L));
+        Operator operator = new Operator();
+        operator.setOperatorId(operatorId);
+        when(operatorService.modifyOperator(any(GatewayRequest.class))).thenReturn(new GatewayResponse(GatewayAction.MODIFY, operator, new GatewayStatus(Status.SUCCESS)));
 
         this.mockMvc.perform(put("/operators/{id}", operatorId.toString())
                 .content(buildOperatorJson(1l))
@@ -130,7 +134,7 @@ public class OperatorControllerTest {
     @Test
     public void shouldHandleModifyOperatorNotFound() throws Exception {
         Long operatorId = new Long(1L);
-        when(operatorService.modifyOperator(any(ModifyOperatorEvent.class))).thenReturn(operatorModifiedNotFound(operatorId));
+        when(operatorService.modifyOperator(any(GatewayRequest.class))).thenReturn(new GatewayResponse(GatewayAction.MODIFY, null, new GatewayStatus(Status.NOT_FOUND)));
 
         this.mockMvc.perform(put("/operators/{id}", operatorId.toString())
                 .content(buildOperatorJson(1l))
