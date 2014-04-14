@@ -9,7 +9,6 @@ import org.inbloom.gateway.common.status.Status;
 import org.inbloom.gateway.core.event.GatewayAction;
 import org.inbloom.gateway.core.event.GatewayRequest;
 import org.inbloom.gateway.core.event.GatewayResponse;
-import org.inbloom.gateway.core.event.verification.*;
 import org.inbloom.gateway.core.service.VerificationService;
 import org.inbloom.gateway.fixture.ApplicationProviderFixture;
 import org.junit.Before;

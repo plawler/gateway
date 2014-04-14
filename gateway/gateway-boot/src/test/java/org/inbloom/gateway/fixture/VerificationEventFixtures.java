@@ -7,7 +7,6 @@ import org.inbloom.gateway.common.status.Status;
 import org.inbloom.gateway.core.event.GatewayAction;
 import org.inbloom.gateway.core.event.GatewayRequest;
 import org.inbloom.gateway.core.event.GatewayResponse;
-import org.inbloom.gateway.core.event.verification.*;
 
 /**
  * @author benjaminmorgan

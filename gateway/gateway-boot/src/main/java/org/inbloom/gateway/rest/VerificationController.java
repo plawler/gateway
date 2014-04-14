@@ -43,10 +43,10 @@ public class VerificationController {
         GatewayResponse<Verification> validated = verificationService.validateAccountSetup(new GatewayRequest<AccountValidation>(GatewayAction.MODIFY, validation));
         switch(validated.getStatus().getStatus()) {
             case SUCCESS: return new ResponseEntity<Verification>(validated.getPayload(), HttpStatus.OK);
-            case EXPIRED: return new ResponseEntity(validated.getStatus().getStatus(), HttpStatus.FORBIDDEN);
-            case NOT_FOUND: return new ResponseEntity(validated.getStatus().getStatus(), HttpStatus.NOT_FOUND);
-            case REDEEMED: return new ResponseEntity(validated.getStatus().getStatus(), HttpStatus.FORBIDDEN);
-            default: return new ResponseEntity(validated.getStatus().getStatus(), HttpStatus.INTERNAL_SERVER_ERROR);
+            case EXPIRED: return new ResponseEntity(validated.getStatus(), HttpStatus.FORBIDDEN);
+            case NOT_FOUND: return new ResponseEntity(validated.getStatus(), HttpStatus.NOT_FOUND);
+            case REDEEMED: return new ResponseEntity(validated.getStatus(), HttpStatus.FORBIDDEN);
+            default: return new ResponseEntity(validated.getStatus(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -57,10 +57,10 @@ public class VerificationController {
         GatewayResponse<Verification> retrieved = verificationService.retrieveVerification(new GatewayRequest<Verification>(GatewayAction.MODIFY, payload));
         switch (retrieved.getStatus().getStatus()) {
             case SUCCESS: return new ResponseEntity<Verification>(retrieved.getPayload(), HttpStatus.OK);
-            case EXPIRED: return new ResponseEntity(retrieved.getStatus().getStatus(), HttpStatus.FORBIDDEN);
-            case NOT_FOUND: return new ResponseEntity(retrieved.getStatus().getStatus(), HttpStatus.NOT_FOUND);
-            case REDEEMED: return new ResponseEntity(retrieved.getStatus().getStatus(), HttpStatus.FORBIDDEN);
-            default: return new ResponseEntity(retrieved.getStatus().getStatus(), HttpStatus.INTERNAL_SERVER_ERROR);
+            case EXPIRED: return new ResponseEntity(retrieved.getStatus(), HttpStatus.FORBIDDEN);
+            case NOT_FOUND: return new ResponseEntity(retrieved.getStatus(), HttpStatus.NOT_FOUND);
+            case REDEEMED: return new ResponseEntity(retrieved.getStatus(), HttpStatus.FORBIDDEN);
+            default: return new ResponseEntity(retrieved.getStatus(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
