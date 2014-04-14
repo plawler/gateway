@@ -1,13 +1,14 @@
 package org.inbloom.gateway.core.service;
 
+import org.inbloom.gateway.common.domain.AccountValidation;
 import org.inbloom.gateway.common.domain.Credentials;
 import org.inbloom.gateway.common.domain.User;
 import org.inbloom.gateway.common.domain.Verification;
+import org.inbloom.gateway.common.status.GatewayStatus;
 import org.inbloom.gateway.common.status.Status;
 import org.inbloom.gateway.core.event.GatewayAction;
 import org.inbloom.gateway.core.event.GatewayRequest;
 import org.inbloom.gateway.core.event.GatewayResponse;
-import org.inbloom.gateway.core.event.verification.*;
 import org.inbloom.gateway.credentials.CredentialService;
 import org.inbloom.gateway.persistence.service.VerificationPersistenceService;
 import org.inbloom.gateway.util.keyService.KeyGenerator;
@@ -53,9 +54,9 @@ public class VerificationServiceHandler implements VerificationService{
     }
 
     @Override
-    public CreatedVerificationEvent createVerification(CreateVerificationEvent createEvent) {
+    public GatewayResponse<Verification> createVerification(GatewayRequest<Verification> createEvent) {
 
-        Verification verification = createEvent.getData();
+        Verification verification = createEvent.getPayload();
 
         User user = verification.getUser();
 
@@ -69,46 +70,54 @@ public class VerificationServiceHandler implements VerificationService{
         verification.activate(VERIFICATION_TIMEOUT);
 
         //persist verification
-        CreatedVerificationEvent createdEvent = persistenceService.createVerification(createEvent);
+        GatewayResponse<Verification> createdEvent = persistenceService.createVerification(createEvent);
 
-        if(createdEvent.successful()) {
+        if(Status.SUCCESS.equals(createdEvent.getStatus().getStatus())) {
             try {
                 sendNotification(user, token); //send email verification
             } catch (NotificationException e) {
-                return CreatedVerificationEvent.notificationFail("Notification Client failed to send email: " + e.getMessage());
+                return new GatewayResponse<Verification>(GatewayAction.CREATE,
+                        null, new GatewayStatus(Status.ERROR, "Notification Client failed to send email: " + e.getMessage()));
+
             }
         }
         return createdEvent;
     }
 
     @Override
-    public ValidatedAccountSetupEvent validateAccountSetup(ValidateAccountSetupEvent validateEvent) {
-        RetrievedVerificationEvent retrieved = persistenceService.retrieveForAccountValidation(validateEvent);
-        if (retrieved.statusCode().equals(Status.NOT_FOUND)) {
-            return ValidatedAccountSetupEvent.notFound("The verification could not be found. Either an invalid token was supplied or the account does not exist.");
+    public GatewayResponse<Verification> validateAccountSetup(GatewayRequest<AccountValidation> validateEvent) {
+        GatewayResponse<Verification> retrieved = persistenceService.retrieveForAccountValidation(validateEvent);
+        if (Status.NOT_FOUND.equals(retrieved.getStatus().getStatus())) {
+            return new GatewayResponse<Verification>(GatewayAction.RETRIEVE,
+                    null, new GatewayStatus(Status.NOT_FOUND, "The verification could not be found. Either an invalid token was supplied or the account does not exist."));
         }
 
-        Verification verification = retrieved.getData();
+        Verification verification = retrieved.getPayload();
         if (verification.isExpired()) {
-            return ValidatedAccountSetupEvent.expired("The verification is no longer valid");
+            return new GatewayResponse<Verification>(GatewayAction.RETRIEVE,
+                    null, new GatewayStatus(Status.EXPIRED, "The verification is no longer valid"));
         }
         if(verification.isVerified()) {
-            return ValidatedAccountSetupEvent.redeemed("The verification token has already been redeemed");
+            return new GatewayResponse<Verification>(GatewayAction.RETRIEVE,
+                    null, new GatewayStatus(Status.REDEEMED, "The verification token has already been redeemed"));
         }
 
-        if (!processCredentials(verification.createCredentials(validateEvent.getPassword())))
-            return ValidatedAccountSetupEvent.failed("Storing the user credentials failed.");
+        if (!processCredentials(verification.createCredentials(validateEvent.getPayload().getPassword())))
+            return new GatewayResponse<Verification>(GatewayAction.RETRIEVE,
+                null, new GatewayStatus(Status.ERROR, "Storing the user credentials failed."));
 
         verification.validate();
-        if (!modifyVerification(new ModifyVerificationEvent(verification)).successful()) {
-            return ValidatedAccountSetupEvent.failed("Updating the verification failed.");
+        GatewayResponse<Verification> modifiedResponse = modifyVerification(new GatewayRequest<Verification>(GatewayAction.MODIFY, verification));
+        if (!Status.SUCCESS.equals(modifiedResponse.getStatus().getStatus())) {
+            return new GatewayResponse<Verification>(GatewayAction.RETRIEVE,
+                    null, new GatewayStatus(Status.ERROR, "Updating the verification failed."));
         }
 
-        return ValidatedAccountSetupEvent.success(verification);
+        return new GatewayResponse<Verification>(GatewayAction.RETRIEVE, verification, new GatewayStatus(Status.SUCCESS));
     }
 
     @Override
-    public ModifiedVerificationEvent modifyVerification(ModifyVerificationEvent modifyEvent) {
+    public GatewayResponse<Verification> modifyVerification(GatewayRequest<Verification> modifyEvent) {
         return persistenceService.modifyVerification(modifyEvent);
     }
 
@@ -119,7 +128,7 @@ public class VerificationServiceHandler implements VerificationService{
 
     @Override
     @Transactional(readOnly = true)
-    public RetrievedVerificationEvent retrieveVerification(RetrieveVerificationEvent retrieveEvent) {
+    public GatewayResponse<Verification> retrieveVerification(GatewayRequest<Verification> retrieveEvent) {
         return persistenceService.retrieveVerification(retrieveEvent);
     }
 

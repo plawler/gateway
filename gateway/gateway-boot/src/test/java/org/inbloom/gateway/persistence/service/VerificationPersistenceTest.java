@@ -5,6 +5,7 @@ import org.inbloom.gateway.Gateway;
 import org.inbloom.gateway.common.domain.AccountValidation;
 import org.inbloom.gateway.common.domain.ApplicationProvider;
 import org.inbloom.gateway.common.domain.Verification;
+import org.inbloom.gateway.common.status.Status;
 import org.inbloom.gateway.core.event.GatewayAction;
 import org.inbloom.gateway.core.event.GatewayRequest;
 import org.inbloom.gateway.core.event.GatewayResponse;
@@ -39,34 +40,39 @@ public class VerificationPersistenceTest {
     @Autowired
     private VerificationPersistenceService verificationService;
 
-    private CreatedVerificationEvent created;
+    private GatewayResponse<Verification> created;
 
     @Before
     public void setUp() {
         GatewayRequest<ApplicationProvider> register = new GatewayRequest<ApplicationProvider>(GatewayAction.CREATE, ApplicationProviderFixture.buildAppProvider1(null));
         GatewayResponse<ApplicationProvider> registered = providerService.createApplicationProvider(register);
-        created = verificationService.createVerification(new CreateVerificationEvent(registered.getPayload().getUser()));
+        Verification payload = new Verification();
+        payload.setUser(registered.getPayload().getUser());
+        created = verificationService.createVerification(new GatewayRequest<Verification>(GatewayAction.CREATE, payload));
     }
 
     @Test
     public void shouldRetrieveAVerificationForAccountValidation() {
-        AccountValidation accountValidation = new AccountValidation(created.getData().getToken(), "passwerd");
-        RetrievedVerificationEvent retrieved = verificationService.retrieveForAccountValidation(new ValidateAccountSetupEvent(accountValidation));
-        assertNotNull(retrieved.getData().getUser());
+        AccountValidation accountValidation = new AccountValidation(created.getPayload().getToken(), "passwerd");
+        GatewayResponse<Verification> retrieved = verificationService.retrieveForAccountValidation(
+                new GatewayRequest<AccountValidation>(GatewayAction.RETRIEVE, accountValidation));
+        assertNotNull(retrieved.getPayload().getUser());
     }
 
     @Test
     public void shouldReturnNotFoundIfInvalidToken() {
-        RetrievedVerificationEvent retrieved = verificationService.retrieveVerification(new RetrieveVerificationEvent("i-am-an-invalid-token"));
-        assertTrue(retrieved.notFound());
+        Verification payload = new Verification();
+        payload.setToken("i-am-an-invalid-token");
+        GatewayResponse<Verification> retrieved = verificationService.retrieveVerification(new GatewayRequest<Verification>(GatewayAction.RETRIEVE, payload));
+        assertEquals(Status.NOT_FOUND, retrieved.getStatus().getStatus());
     }
 
     @Test
     public void shouldModifyAVerification() {
-        Verification verification = created.getData();
+        Verification verification = created.getPayload();
         verification.activate(VerificationService.VERIFICATION_TIMEOUT);
-        ModifiedVerificationEvent modified = verificationService.modifyVerification(new ModifyVerificationEvent(verification));
-        assertTrue(modified.successful());
+        GatewayResponse<Verification> modified = verificationService.modifyVerification(new GatewayRequest<Verification>(GatewayAction.MODIFY, verification));
+        assertEquals(Status.SUCCESS, modified.getStatus().getStatus());
     }
 
 }

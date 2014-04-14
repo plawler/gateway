@@ -1,6 +1,7 @@
 package org.inbloom.gateway.core.service;
 
 
+import org.inbloom.gateway.common.domain.AccountValidation;
 import org.inbloom.gateway.common.domain.Credentials;
 import org.inbloom.gateway.common.domain.Verification;
 import org.inbloom.gateway.common.status.GatewayStatus;
@@ -23,7 +24,7 @@ import org.springframework.core.env.Environment;
 import java.util.Date;
 
 import static org.inbloom.gateway.fixture.VerificationFixture.*;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 
 /**
@@ -53,48 +54,48 @@ public class VerificationServiceTest {
 
     @Test
     public void shouldFailIfVerificationHasExpired() {
-        ValidateAccountSetupEvent validate = new ValidateAccountSetupEvent(accountValidation());
+        GatewayRequest<AccountValidation> validate = new GatewayRequest<AccountValidation>(GatewayAction.RETRIEVE, accountValidation());
 
         Mockito.when(persistence.retrieveForAccountValidation(validate))
-                .thenReturn(expiredVerificationEvent(validate.getValidationDate()));
+                .thenReturn(expiredVerificationEvent(validate.getPayload().getValidationDate()));
 
-        ValidatedAccountSetupEvent validated = verificationService.validateAccountSetup(validate);
-        assertEquals(Status.EXPIRED, validated.statusCode());
+        GatewayResponse<Verification> validated = verificationService.validateAccountSetup(validate);
+        assertEquals(Status.EXPIRED, validated.getStatus().getStatus());
     }
 
     @Test
     public void shouldValidateAnAppProviderAccount() {
-        ValidateAccountSetupEvent validate = new ValidateAccountSetupEvent(accountValidation());
+        GatewayRequest<AccountValidation> validate = new GatewayRequest<AccountValidation>(GatewayAction.RETRIEVE, accountValidation());
 
         Mockito.when(persistence.retrieveForAccountValidation(validate))
-                .thenReturn(validVerificationEvent(validate.getValidationDate()));
+                .thenReturn(validVerificationEvent(validate.getPayload().getValidationDate()));
 
         Mockito.when(credentialer.createCredentials(any(GatewayRequest.class)))
                 .thenReturn(new GatewayResponse<Credentials>(GatewayAction.CREATE, new Credentials("Santino", "Corleone", "sonny.corleone@mailinator.com", "s@ntin0rul3z") , new GatewayStatus(Status.SUCCESS)));
 
-        Mockito.when(persistence.modifyVerification(any(ModifyVerificationEvent.class)))
-                .thenReturn(modifiedVerificationEvent(validate.getValidationDate()));
+        Mockito.when(persistence.modifyVerification(any(GatewayRequest.class)))
+                .thenReturn(modifiedVerificationEvent(validate.getPayload().getValidationDate()));
 
-//      TODO: resurrect this test
-//        ValidatedAccountSetupEvent validated = verificationService.validateAccountSetup(validate);
-//        assertTrue(validated.successful());
-//        assertTrue(validated.getData().isVerified());
+
+//        GatewayResponse<Verification> validated = verificationService.validateAccountSetup(validate);
+//        assertEquals(Status.SUCCESS, validated.getStatus().getStatus());
+//        assertTrue(validated.getPayload().isVerified());
     }
 
     // FIXTURES
 
-    private RetrievedVerificationEvent expiredVerificationEvent(Date validationDate) {
-        return RetrievedVerificationEvent.success(expiredVerification(validationDate));
+    private GatewayResponse<Verification> expiredVerificationEvent(Date validationDate) {
+        return new GatewayResponse<Verification>(GatewayAction.RETRIEVE, expiredVerification(validationDate), new GatewayStatus(Status.SUCCESS));
     }
 
-    private RetrievedVerificationEvent validVerificationEvent(Date validationDate) {
-        return RetrievedVerificationEvent.success(validVerification(validationDate));
+    private GatewayResponse<Verification> validVerificationEvent(Date validationDate) {
+        return new GatewayResponse<Verification>(GatewayAction.RETRIEVE, validVerification(validationDate), new GatewayStatus(Status.SUCCESS));
     }
 
-    private ModifiedVerificationEvent modifiedVerificationEvent(Date validationDate) {
+    private GatewayResponse<Verification> modifiedVerificationEvent(Date validationDate) {
         Verification v = validVerification(validationDate);
         v.validate();
-        return ModifiedVerificationEvent.success(v);
+        return new GatewayResponse<Verification>(GatewayAction.MODIFY, v, new GatewayStatus(Status.SUCCESS));
     }
 
 }

@@ -4,12 +4,13 @@ package org.inbloom.gateway.core.service;
  * Created By: paullawler
  */
 
+import org.inbloom.gateway.common.domain.Verification;
+import org.inbloom.gateway.core.event.GatewayRequest;
+import org.inbloom.gateway.core.event.GatewayResponse;
 import org.inbloom.gateway.credentials.CredentialService;
 import org.junit.runner.RunWith;
 
 import org.inbloom.gateway.Gateway;
-import org.inbloom.gateway.core.event.verification.CreateVerificationEvent;
-import org.inbloom.gateway.core.event.verification.CreatedVerificationEvent;
 import org.inbloom.gateway.fixture.VerificationEventFixtures;
 import org.inbloom.gateway.persistence.service.VerificationPersistenceService;
 import org.inbloom.gateway.rest.util.TestUtil;
@@ -81,21 +82,21 @@ public class VerificationServiceIntegrationTest {
 
         Mailbox.clearAll();
 
-        when(persistenceService.createVerification(any(CreateVerificationEvent.class)))
+        when(persistenceService.createVerification(any(GatewayRequest.class)))
                 .thenReturn(VerificationEventFixtures.buildSuccessCreatedVerificationEvent(1l, 1l));
 
         when(keyGenerator.generateKey()).thenReturn("XXSecretKeyXX");
 
-        CreatedVerificationEvent createdEvent = verificationService.createVerification(VerificationEventFixtures.buildCreateVerificationEvent());
+        GatewayResponse<Verification> createdEvent = verificationService.createVerification(VerificationEventFixtures.buildCreateVerificationEvent());
 
         assertNotNull(createdEvent);
-        assertNotNull(createdEvent.getData());
-        assertNotNull(createdEvent.getData().getToken());
-        assertNotNull(createdEvent.getData().getValidFrom());
-        assertNotNull(createdEvent.getData().getValidUntil());
+        assertNotNull(createdEvent.getPayload());
+        assertNotNull(createdEvent.getPayload().getToken());
+        assertNotNull(createdEvent.getPayload().getValidFrom());
+        assertNotNull(createdEvent.getPayload().getValidUntil());
 
         //check that in-memory email server received email
-        List<Message> inbox = Mailbox.get(createdEvent.getData().getUser().getEmail());
+        List<Message> inbox = Mailbox.get(createdEvent.getPayload().getUser().getEmail());
         assertEquals(1, inbox.size());
     }
 

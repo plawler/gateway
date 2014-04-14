@@ -5,7 +5,6 @@ import org.inbloom.gateway.common.domain.ApplicationProvider;
 import org.inbloom.gateway.common.status.Status;
 import org.inbloom.gateway.core.event.GatewayRequest;
 import org.inbloom.gateway.core.event.GatewayResponse;
-import org.inbloom.gateway.core.event.verification.CreateVerificationEvent;
 import org.inbloom.gateway.fixture.ApplicationProviderEventFixtures;
 import org.inbloom.gateway.fixture.VerificationEventFixtures;
 import org.inbloom.gateway.persistence.domain.UserEntity;
@@ -70,7 +69,7 @@ public class ApplicationProviderServiceTest {
 
         when(appProviderPersistenceService.getUserByEmail(any(String.class))).thenReturn(null);
 
-        when(verificationService.createVerification(any(CreateVerificationEvent.class)))
+        when(verificationService.createVerification(any(GatewayRequest.class)))
                 .thenReturn(VerificationEventFixtures.buildSuccessCreatedVerificationEvent(1l, 1l));
 
         GatewayResponse<ApplicationProvider> registeredEvent = appProviderService.registerApplicationProvider(ApplicationProviderEventFixtures.buildRegisterAppProviderEvent());

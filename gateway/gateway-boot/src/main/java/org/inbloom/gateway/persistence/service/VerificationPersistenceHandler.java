@@ -1,7 +1,13 @@
 package org.inbloom.gateway.persistence.service;
 
+import org.inbloom.gateway.common.domain.AccountValidation;
 import org.inbloom.gateway.common.domain.User;
 import org.inbloom.gateway.common.domain.Verification;
+import org.inbloom.gateway.common.status.GatewayStatus;
+import org.inbloom.gateway.common.status.Status;
+import org.inbloom.gateway.core.event.GatewayAction;
+import org.inbloom.gateway.core.event.GatewayRequest;
+import org.inbloom.gateway.core.event.GatewayResponse;
 import org.inbloom.gateway.core.event.verification.*;
 import org.inbloom.gateway.persistence.domain.VerificationEntity;
 import org.inbloom.gateway.persistence.repository.UserRepository;
@@ -26,52 +32,53 @@ public class VerificationPersistenceHandler implements VerificationPersistenceSe
     private ConversionService conversionService;
 
     @Override
-    public CreatedVerificationEvent createVerification(CreateVerificationEvent createVerificationEvent) {
+    public GatewayResponse<Verification> createVerification(GatewayRequest<Verification> createVerificationEvent) {
 
-        User user = createVerificationEvent.getData().getUser();
+        User user = createVerificationEvent.getPayload().getUser();
         if(user == null){
             //could not find the user so return not found error
-            return CreatedVerificationEvent.notFound();
+            return new GatewayResponse<Verification>(GatewayAction.CREATE, null, new GatewayStatus(Status.NOT_FOUND));
         }
 
-        VerificationEntity verificationEntity = conversionService.convert(createVerificationEvent.getData(), VerificationEntity.class);
+        VerificationEntity verificationEntity = conversionService.convert(createVerificationEvent.getPayload(), VerificationEntity.class);
         verificationEntity.setUserId(user.getUserId());
         verificationRepository.save(verificationEntity);
-        return CreatedVerificationEvent.success(conversionService.convert(verificationEntity, Verification.class));
+        return new GatewayResponse<Verification>(GatewayAction.CREATE, conversionService.convert(verificationEntity, Verification.class), new GatewayStatus(Status.SUCCESS));
     }
 
     @Override
-    public RetrievedVerificationEvent retrieveForAccountValidation(ValidateAccountSetupEvent validateAccountSetupEvent) {
-        VerificationEntity verificationEntity = verificationRepository.findByToken(validateAccountSetupEvent.getValidationToken());
+    public GatewayResponse<Verification> retrieveForAccountValidation(GatewayRequest<AccountValidation> validateAccountSetupEvent) {
+        VerificationEntity verificationEntity = verificationRepository.findByToken(validateAccountSetupEvent.getPayload().getValidationToken());
         if (verificationEntity == null) {
-            return RetrievedVerificationEvent.newNotFound();
+            return new GatewayResponse<Verification>(GatewayAction.RETRIEVE, null, new GatewayStatus(Status.NOT_FOUND));
         }
 
         Verification verification = conversionService.convert(verificationEntity, Verification.class);
         User user = conversionService.convert(userRepository.findOne(verification.getUserId()), User.class);
         verification.setUser(user); // todo: CODE REVIEW!!
 
-        return RetrievedVerificationEvent.success(verification);
+        return new GatewayResponse<Verification>(GatewayAction.RETRIEVE, verification, new GatewayStatus(Status.SUCCESS));
+
     }
 
     @Override
-    public ModifiedVerificationEvent modifyVerification(ModifyVerificationEvent modifyVerificationEvent) {
-        VerificationEntity verificationEntity = verificationRepository.findByToken(modifyVerificationEvent.getToken());
+    public GatewayResponse<Verification> modifyVerification(GatewayRequest<Verification> modifyVerificationEvent) {
+        VerificationEntity verificationEntity = verificationRepository.findByToken(modifyVerificationEvent.getPayload().getToken());
         if(verificationEntity == null){
-            return ModifiedVerificationEvent.notFound();
+            return new GatewayResponse<Verification>(GatewayAction.MODIFY, null, new GatewayStatus(Status.NOT_FOUND));
         }
-        verificationEntity.setClientIpAddress(modifyVerificationEvent.getClientIpAddress());
-        verificationEntity.setVerified(modifyVerificationEvent.getVerified());
+        verificationEntity.setClientIpAddress(modifyVerificationEvent.getPayload().getClientIpAddress());
+        verificationEntity.setVerified(modifyVerificationEvent.getPayload().isVerified());
         verificationRepository.save(verificationEntity);
-        return ModifiedVerificationEvent.success(conversionService.convert(verificationEntity, Verification.class));
+        return new GatewayResponse<Verification>(GatewayAction.MODIFY, conversionService.convert(verificationEntity, Verification.class), new GatewayStatus(Status.SUCCESS));
     }
 
     @Override
-    public RetrievedVerificationEvent retrieveVerification(RetrieveVerificationEvent retrieveVerificationEvent) {
-        VerificationEntity verificationEntity = verificationRepository.findByToken(retrieveVerificationEvent.getVerificationToken());
+    public GatewayResponse<Verification> retrieveVerification(GatewayRequest<Verification> retrieveVerificationEvent) {
+        VerificationEntity verificationEntity = verificationRepository.findByToken(retrieveVerificationEvent.getPayload().getToken());
         if (verificationEntity == null)
-            return RetrievedVerificationEvent.newNotFound();
+            return new GatewayResponse<Verification>(GatewayAction.RETRIEVE, null, new GatewayStatus(Status.NOT_FOUND));
 
-        return RetrievedVerificationEvent.success(conversionService.convert(verificationEntity, Verification.class));
+        return new GatewayResponse<Verification>(GatewayAction.RETRIEVE, conversionService.convert(verificationEntity, Verification.class), new GatewayStatus(Status.SUCCESS));
     }
 }

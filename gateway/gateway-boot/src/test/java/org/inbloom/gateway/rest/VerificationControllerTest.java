@@ -1,10 +1,12 @@
 package org.inbloom.gateway.rest;
 
 import org.inbloom.gateway.Gateway;
-import org.inbloom.gateway.core.event.verification.RetrieveVerificationEvent;
-import org.inbloom.gateway.core.event.verification.RetrievedVerificationEvent;
-import org.inbloom.gateway.core.event.verification.ValidateAccountSetupEvent;
-import org.inbloom.gateway.core.event.verification.ValidatedAccountSetupEvent;
+import org.inbloom.gateway.common.domain.Verification;
+import org.inbloom.gateway.common.status.GatewayStatus;
+import org.inbloom.gateway.common.status.Status;
+import org.inbloom.gateway.core.event.GatewayAction;
+import org.inbloom.gateway.core.event.GatewayRequest;
+import org.inbloom.gateway.core.event.GatewayResponse;
 import org.inbloom.gateway.core.service.VerificationService;
 import org.inbloom.gateway.fixture.VerificationFixture;
 import org.inbloom.gateway.rest.util.TestUtil;
@@ -59,8 +61,8 @@ public class VerificationControllerTest {
 
     @Test
     public void shouldValidateAnAccount() throws Exception {
-        Mockito.when(verificationService.validateAccountSetup(any(ValidateAccountSetupEvent.class)))
-                .thenReturn(ValidatedAccountSetupEvent.success(VerificationFixture.validVerification(new Date())));
+        Mockito.when(verificationService.validateAccountSetup(any(GatewayRequest.class)))
+                .thenReturn(new GatewayResponse<Verification>(GatewayAction.MODIFY, VerificationFixture.validVerification(new Date()), new GatewayStatus(Status.SUCCESS)));
 
         this.mockMvc.perform(post("/verifications/validate")
                 .content(TestUtil.stringify(accountValidation()))
@@ -72,8 +74,8 @@ public class VerificationControllerTest {
 
     @Test
     public void shouldRetrieveAVerificationForAToken() throws Exception {
-        Mockito.when(verificationService.retrieveVerification(any(RetrieveVerificationEvent.class)))
-                .thenReturn(RetrievedVerificationEvent.success(VerificationFixture.validVerification(new Date())));
+        Mockito.when(verificationService.retrieveVerification(any(GatewayRequest.class)))
+                .thenReturn(new GatewayResponse<Verification>(GatewayAction.RETRIEVE, VerificationFixture.validVerification(new Date()), new GatewayStatus(Status.SUCCESS)));
 
         this.mockMvc.perform(get("/verifications/{token}", "3908092jfojief2309j029")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -84,8 +86,8 @@ public class VerificationControllerTest {
 
     @Test
     public void shouldFailValidationIfTheVerificationIsNotValid() throws Exception {
-        Mockito.when(verificationService.validateAccountSetup(any(ValidateAccountSetupEvent.class)))
-                .thenReturn(ValidatedAccountSetupEvent.expired("The verification expired"));
+        Mockito.when(verificationService.validateAccountSetup(any(GatewayRequest.class)))
+                .thenReturn(new GatewayResponse<Verification>(GatewayAction.MODIFY, VerificationFixture.validVerification(new Date()), new GatewayStatus(Status.EXPIRED,"The verification expired")));
 
         this.mockMvc.perform(post("/verifications/validate")
                 .content(TestUtil.stringify(accountValidation()))

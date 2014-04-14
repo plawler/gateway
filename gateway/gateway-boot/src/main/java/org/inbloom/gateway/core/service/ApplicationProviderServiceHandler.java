@@ -1,13 +1,12 @@
 package org.inbloom.gateway.core.service;
 
 import org.inbloom.gateway.common.domain.ApplicationProvider;
+import org.inbloom.gateway.common.domain.Verification;
 import org.inbloom.gateway.common.status.GatewayStatus;
 import org.inbloom.gateway.common.status.Status;
 import org.inbloom.gateway.core.event.GatewayAction;
 import org.inbloom.gateway.core.event.GatewayRequest;
 import org.inbloom.gateway.core.event.GatewayResponse;
-import org.inbloom.gateway.core.event.verification.CreateVerificationEvent;
-import org.inbloom.gateway.core.event.verification.CreatedVerificationEvent;
 import org.inbloom.gateway.common.domain.User;
 import org.inbloom.gateway.persistence.domain.UserEntity;
 import org.inbloom.gateway.persistence.service.ApplicationProviderPersistenceService;
@@ -45,10 +44,12 @@ public class ApplicationProviderServiceHandler implements ApplicationProviderSer
 
         //if we successfully created the user, create a verification
         if(Status.SUCCESS.equals(registeredEvent.getStatus().getStatus()) && user != null) {
-            CreateVerificationEvent createEvent = new CreateVerificationEvent(user);
-            CreatedVerificationEvent createdVerificationEvent = verificationService.createVerification(createEvent);
+            Verification payload = new Verification();
+            payload.setUser(user);
+            GatewayRequest<Verification> createEvent = new GatewayRequest<Verification>(GatewayAction.CREATE, payload);
+            GatewayResponse<Verification> createdVerificationEvent = verificationService.createVerification(createEvent);
 
-            if(!createdVerificationEvent.statusCode().equals(Status.SUCCESS))
+            if(!Status.SUCCESS.equals(createdVerificationEvent.getStatus().getStatus()))
                 return new GatewayResponse<ApplicationProvider>(GatewayAction.CREATE, null, new GatewayStatus(Status.ERROR, "Failed to Create Verification when registering App Provider"));
         }
 
