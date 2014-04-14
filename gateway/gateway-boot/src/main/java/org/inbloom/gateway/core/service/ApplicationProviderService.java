@@ -1,6 +1,8 @@
 package org.inbloom.gateway.core.service;
 
-import org.inbloom.gateway.core.event.provider.*;
+import org.inbloom.gateway.common.domain.ApplicationProvider;
+import org.inbloom.gateway.core.event.GatewayRequest;
+import org.inbloom.gateway.core.event.GatewayResponse;
 import org.springframework.stereotype.Service;
 
 /**
@@ -9,10 +11,10 @@ import org.springframework.stereotype.Service;
 @Service
 public interface ApplicationProviderService {
 
-    public RegisteredApplicationProviderEvent registerApplicationProvider(RegisterApplicationProviderEvent createAppProviderEvent);
+    public GatewayResponse<ApplicationProvider> registerApplicationProvider(GatewayRequest<ApplicationProvider> createAppProviderEvent);
 
-    public ModifiedApplicationProviderEvent modifyApplicationProvider(ModifyApplicationProviderEvent modifyAppProviderEvent);
+    public GatewayResponse<ApplicationProvider> modifyApplicationProvider(GatewayRequest<ApplicationProvider> modifyAppProviderEvent);
 
-    public RetrievedApplicationProviderEvent retrieveApplicationProvider(RetrieveApplicationProviderEvent retrieveAppProviderEvent);
+    public GatewayResponse<ApplicationProvider> retrieveApplicationProvider(GatewayRequest<ApplicationProvider> retrieveAppProviderEvent);
 
 }

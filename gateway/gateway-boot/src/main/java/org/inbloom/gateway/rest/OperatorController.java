@@ -4,9 +4,10 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiError;
 import com.wordnik.swagger.annotations.ApiErrors;
 import com.wordnik.swagger.annotations.ApiOperation;
-
 import org.inbloom.gateway.common.domain.Operator;
-import org.inbloom.gateway.core.event.operator.*;
+import org.inbloom.gateway.core.event.GatewayAction;
+import org.inbloom.gateway.core.event.GatewayRequest;
+import org.inbloom.gateway.core.event.GatewayResponse;
 import org.inbloom.gateway.core.service.OperatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -14,7 +15,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -33,13 +37,13 @@ public class OperatorController {
     @RequestMapping(value = "/operators", method = RequestMethod.POST)
     @ApiOperation(value = "Register a new operator.")
     public ResponseEntity<Operator> register(@Valid @RequestBody Operator operator, UriComponentsBuilder componentsBuilder) {
-        RegisteredOperatorEvent registeredEvent = operatorService.registerOperator(new RegisterOperatorEvent(operator));
+        GatewayResponse<Operator> registeredEvent = operatorService.registerOperator(new GatewayRequest<Operator>(GatewayAction.CREATE, operator));
 
-        Operator newOperator = registeredEvent.getData();
+        Operator newOperator = registeredEvent.getPayload();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(componentsBuilder.path("/operators/{id}")
-                .buildAndExpand(registeredEvent.getOperatorId().toString()).toUri());
+                .buildAndExpand(newOperator.getOperatorId()).toUri());
 
         return new ResponseEntity<Operator>(newOperator, headers, HttpStatus.CREATED);
     }
@@ -48,14 +52,16 @@ public class OperatorController {
     @ApiOperation(value = "Retrieve an operator by id.", notes = "Look up an operator based on operatorId value.")
     @ApiErrors(value = { @ApiError(code = 404, reason = "Operator not found") })
     public ResponseEntity<Operator> retrieve(@PathVariable Long id) {
-        RetrievedOperatorEvent retrievedEvent = operatorService.retrieveOperator(new RetrieveOperatorEvent(id));
-        Operator operator = retrievedEvent.getData();
+        Operator operator = new Operator();
+        operator.setOperatorId(id);
+        GatewayResponse<Operator> retrievedEvent = operatorService.retrieveOperator(new GatewayRequest<Operator>(GatewayAction.RETRIEVE, operator));
+        operator = retrievedEvent.getPayload();
 
         if(operator != null) {
             return new ResponseEntity<Operator>(operator, HttpStatus.OK);
         }
         else {
-            return new ResponseEntity(retrievedEvent.status(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity(retrievedEvent.getStatus().getStatus(), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -75,16 +81,16 @@ public class OperatorController {
             return new ResponseEntity<Operator>(operator, HttpStatus.CONFLICT);
         }
 
-        ModifiedOperatorEvent modifiedEvent = operatorService.modifyOperator(new ModifyOperatorEvent(id, operator));
+        GatewayResponse<Operator> modifiedEvent = operatorService.modifyOperator(new GatewayRequest<Operator>(GatewayAction.MODIFY, operator));
 
-        switch (modifiedEvent.statusCode())
+        switch (modifiedEvent.getStatus().getStatus())
         {
             case SUCCESS:
                 return new ResponseEntity(HttpStatus.NO_CONTENT);
             case NOT_FOUND:
-                return new ResponseEntity(modifiedEvent.status(), HttpStatus.NOT_FOUND);
+                return new ResponseEntity(modifiedEvent.getStatus(), HttpStatus.NOT_FOUND);
             default:
-                return new ResponseEntity(modifiedEvent.status(), HttpStatus.INTERNAL_SERVER_ERROR);//throw 500 error if we don't know why this failed
+                return new ResponseEntity(modifiedEvent.getStatus(), HttpStatus.INTERNAL_SERVER_ERROR);//throw 500 error if we don't know why this failed
         }
     }
 }

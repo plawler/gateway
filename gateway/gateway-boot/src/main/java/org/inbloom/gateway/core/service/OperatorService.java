@@ -1,6 +1,8 @@
 package org.inbloom.gateway.core.service;
 
-import org.inbloom.gateway.core.event.operator.*;
+import org.inbloom.gateway.common.domain.Operator;
+import org.inbloom.gateway.core.event.GatewayRequest;
+import org.inbloom.gateway.core.event.GatewayResponse;
 import org.springframework.stereotype.Service;
 
 /**
@@ -9,10 +11,10 @@ import org.springframework.stereotype.Service;
 @Service
 public interface OperatorService {
 
-    public RegisteredOperatorEvent registerOperator(RegisterOperatorEvent operatorRegisterEvent);
+    public GatewayResponse<Operator> registerOperator(GatewayRequest<Operator> operatorRegisterEvent);
 
-    public RetrievedOperatorEvent retrieveOperator(RetrieveOperatorEvent retrieveOperatorEvent);
+    public GatewayResponse<Operator> retrieveOperator(GatewayRequest<Operator> retrieveOperatorEvent);
 
-    public ModifiedOperatorEvent modifyOperator(ModifyOperatorEvent modifyOperatorEvent);
+    public GatewayResponse<Operator> modifyOperator(GatewayRequest<Operator> modifyOperatorEvent);
 
 }

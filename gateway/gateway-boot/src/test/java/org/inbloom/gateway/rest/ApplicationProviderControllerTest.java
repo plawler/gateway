@@ -1,9 +1,7 @@
 package org.inbloom.gateway.rest;
 
 import org.inbloom.gateway.Gateway;
-import org.inbloom.gateway.core.event.provider.ModifyApplicationProviderEvent;
-import org.inbloom.gateway.core.event.provider.RegisterApplicationProviderEvent;
-import org.inbloom.gateway.core.event.provider.RetrieveApplicationProviderEvent;
+import org.inbloom.gateway.core.event.GatewayRequest;
 import org.inbloom.gateway.core.service.ApplicationProviderService;
 import org.inbloom.gateway.fixture.ApplicationProviderEventFixtures;
 import org.inbloom.gateway.fixture.ApplicationProviderFixture;
@@ -60,7 +58,7 @@ public class ApplicationProviderControllerTest {
 
     @Test
     public void RegisterAppProvider() throws Exception {
-        when(appProviderService.registerApplicationProvider(any(RegisterApplicationProviderEvent.class)))
+        when(appProviderService.registerApplicationProvider(any(GatewayRequest.class)))
                 .thenReturn(ApplicationProviderEventFixtures.buildSuccessRegisteredAppProviderEvent(1l));
 
         this.mockMvc.perform(post("/applicationProviders")
@@ -74,7 +72,7 @@ public class ApplicationProviderControllerTest {
 
     @Test
     public void RetrieveAppProvider() throws Exception {
-        when(appProviderService.retrieveApplicationProvider(any(RetrieveApplicationProviderEvent.class)))
+        when(appProviderService.retrieveApplicationProvider(any(GatewayRequest.class)))
                 .thenReturn(ApplicationProviderEventFixtures.buildSuccessRetrievedAppProviderEvent(1l));
 
         this.mockMvc.perform(get("/applicationProviders/1")
@@ -86,7 +84,7 @@ public class ApplicationProviderControllerTest {
 
     @Test
     public void ModifyAppProvider() throws Exception{
-        when(appProviderService.modifyApplicationProvider(any(ModifyApplicationProviderEvent.class)))
+        when(appProviderService.modifyApplicationProvider(any(GatewayRequest.class)))
                 .thenReturn(ApplicationProviderEventFixtures.buildSuccessModifiedAppProviderEvent(1l));
 
         this.mockMvc.perform(post("/applicationProviders/1")
@@ -101,7 +99,7 @@ public class ApplicationProviderControllerTest {
 
     @Test
     public void RegisterInvalidAppProvider() throws Exception {
-        when(appProviderService.registerApplicationProvider(any(RegisterApplicationProviderEvent.class)))
+        when(appProviderService.registerApplicationProvider(any(GatewayRequest.class)))
                 .thenReturn(ApplicationProviderEventFixtures.buildFailRegisteredAppProviderEvent());
 
         this.mockMvc.perform(post("/applicationProviders")
@@ -115,7 +113,7 @@ public class ApplicationProviderControllerTest {
 
     @Test
     public void RetrieveInvalidAppProvider() throws Exception {
-        when(appProviderService.retrieveApplicationProvider(any(RetrieveApplicationProviderEvent.class)))
+        when(appProviderService.retrieveApplicationProvider(any(GatewayRequest.class)))
                 .thenReturn(ApplicationProviderEventFixtures.buildNotFoundRetrievedAppProviderEvent());
 
         this.mockMvc.perform(get("/applicationProviders/1")
@@ -127,7 +125,7 @@ public class ApplicationProviderControllerTest {
 
      @Test
     public void ModifyInvalidAppProvider() throws Exception {
-         when(appProviderService.modifyApplicationProvider(any(ModifyApplicationProviderEvent.class)))
+         when(appProviderService.modifyApplicationProvider(any(GatewayRequest.class)))
                  .thenReturn(ApplicationProviderEventFixtures.buildNotFoundModifiedApplicationProviderEvent());
 
          //id missing from content

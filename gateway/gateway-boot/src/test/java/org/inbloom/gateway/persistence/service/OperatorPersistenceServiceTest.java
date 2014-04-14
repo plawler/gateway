@@ -1,9 +1,11 @@
 package org.inbloom.gateway.persistence.service;
 
 import org.inbloom.gateway.Gateway;
-import org.inbloom.gateway.common.status.Status;
-import org.inbloom.gateway.core.event.operator.*;
 import org.inbloom.gateway.common.domain.Operator;
+import org.inbloom.gateway.common.status.Status;
+import org.inbloom.gateway.core.event.GatewayAction;
+import org.inbloom.gateway.core.event.GatewayRequest;
+import org.inbloom.gateway.core.event.GatewayResponse;
 import org.inbloom.gateway.fixture.OperatorFixture;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,26 +39,26 @@ public class OperatorPersistenceServiceTest {
     @Test
     public void shouldRegisterAnOperator() {
         String operatorName = "Illini Cloud";
-        RegisteredOperatorEvent event = operatorPersistenceService.registerOperator(new RegisterOperatorEvent(OperatorFixture.buildOperator(operatorName)));
+        GatewayResponse<Operator> event = operatorPersistenceService.registerOperator(new GatewayRequest<Operator>(GatewayAction.CREATE, OperatorFixture.buildOperator(operatorName)));
 
         assertNotNull(event);
-        assertNotNull(event.getOperatorId());
+        assertNotNull(event.getPayload().getOperatorId());
     }
 
     @Test
     public void shouldRetrieveAnOperator() {
         String operatorName = "My Operator";
-        RegisteredOperatorEvent registeredEvent = operatorPersistenceService.registerOperator(new RegisterOperatorEvent(OperatorFixture.buildOperator(operatorName)));
+        GatewayResponse<Operator> registeredEvent = operatorPersistenceService.registerOperator(new GatewayRequest<Operator>(GatewayAction.CREATE, OperatorFixture.buildOperator(operatorName)));
 
         assertNotNull(registeredEvent);
-        assertNotNull(registeredEvent.getOperatorId());
+        assertNotNull(registeredEvent.getPayload().getOperatorId());
 
-        Long id = registeredEvent.getOperatorId();
-        RetrievedOperatorEvent retrievedEvent = operatorPersistenceService.retrieveOperator(new RetrieveOperatorEvent(id));
+        Operator operator = registeredEvent.getPayload();
+        GatewayResponse<Operator> retrievedEvent = operatorPersistenceService.retrieveOperator(new GatewayRequest<Operator>(GatewayAction.RETRIEVE, operator));
 
         assertNotNull(retrievedEvent);
-        assertEquals(id, retrievedEvent.getData().getOperatorId());
-        assertEquals(operatorName, retrievedEvent.getData().getOperatorName());
+        assertEquals(operator.getOperatorId(), retrievedEvent.getPayload().getOperatorId());
+        assertEquals(operator.getOperatorName(), retrievedEvent.getPayload().getOperatorName());
 
     }
 
@@ -66,26 +68,26 @@ public class OperatorPersistenceServiceTest {
         String modifiedName = "Your Operator";
 
 
-        RegisteredOperatorEvent registeredEvent = operatorPersistenceService.registerOperator(new RegisterOperatorEvent(OperatorFixture.buildOperator(operatorName)));
+        GatewayResponse<Operator> registeredEvent = operatorPersistenceService.registerOperator(new GatewayRequest<Operator>(GatewayAction.CREATE, OperatorFixture.buildOperator(operatorName)));
 
         assertNotNull(registeredEvent);
-        assertNotNull(registeredEvent.getOperatorId());
+        assertNotNull(registeredEvent.getPayload().getOperatorId());
 
-        Long id = registeredEvent.getOperatorId();
-        Long modifiedId = new Long(id + 1);
-        Operator retrievedOperator = operatorPersistenceService.retrieveOperator(new RetrieveOperatorEvent(id)).getData();
+        Long id = registeredEvent.getPayload().getOperatorId();
+        Operator testOperator = new Operator();
+        testOperator.setOperatorId(id);
+
+        Operator retrievedOperator = operatorPersistenceService.retrieveOperator(new GatewayRequest<Operator>(GatewayAction.RETRIEVE, testOperator)).getPayload();
         assertEquals(operatorName, retrievedOperator.getOperatorName());
 
         retrievedOperator.setOperatorName(modifiedName);
-        retrievedOperator.setOperatorId(modifiedId); //This should not persist to the database
 
-        ModifiedOperatorEvent modifiedEvent = operatorPersistenceService.modifyOperator(new ModifyOperatorEvent(id, retrievedOperator));
-        assertEquals(Status.SUCCESS, modifiedEvent.statusCode());
-
+        GatewayResponse<Operator> modifiedEvent = operatorPersistenceService.modifyOperator(new GatewayRequest<Operator>(GatewayAction.MODIFY, retrievedOperator));
+        assertEquals(Status.SUCCESS, modifiedEvent.getStatus().getStatus());
 
 
-        Operator modified = operatorPersistenceService.retrieveOperator(new RetrieveOperatorEvent(id)).getData();
+        Operator modified = modifiedEvent.getPayload();
         assertEquals(modifiedName, modified.getOperatorName());
-        assertNotEquals(modifiedId, modified.getOperatorId());
+        assertEquals(modified.getOperatorId(), modified.getOperatorId());
     }
 }

@@ -1,6 +1,8 @@
 package org.inbloom.gateway.persistence.service;
 
-import org.inbloom.gateway.core.event.provider.*;
+import org.inbloom.gateway.common.domain.ApplicationProvider;
+import org.inbloom.gateway.core.event.GatewayRequest;
+import org.inbloom.gateway.core.event.GatewayResponse;
 import org.inbloom.gateway.persistence.domain.UserEntity;
 
 /**
@@ -8,9 +10,9 @@ import org.inbloom.gateway.persistence.domain.UserEntity;
  */
 public interface ApplicationProviderPersistenceService {
 
-    public RegisteredApplicationProviderEvent createApplicationProvider(RegisterApplicationProviderEvent registerApplicationProviderEvent);
-    public ModifiedApplicationProviderEvent modifyApplicationProvider(ModifyApplicationProviderEvent modifyApplicationProviderEvent);
-    public RetrievedApplicationProviderEvent retrieveApplicationProvider(RetrieveApplicationProviderEvent retrieveApplicationProviderEvent);
+    public GatewayResponse<ApplicationProvider> createApplicationProvider(GatewayRequest<ApplicationProvider> registerApplicationProviderEvent);
+    public GatewayResponse<ApplicationProvider> modifyApplicationProvider(GatewayRequest<ApplicationProvider> modifyApplicationProviderEvent);
+    public GatewayResponse<ApplicationProvider> retrieveApplicationProvider(GatewayRequest<ApplicationProvider> retrieveApplicationProviderEvent);
     public UserEntity getUserByEmail(String email);
 
 }
