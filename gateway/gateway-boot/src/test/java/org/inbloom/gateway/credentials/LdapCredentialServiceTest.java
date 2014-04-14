@@ -44,7 +44,7 @@ public class LdapCredentialServiceTest {
         verify(ldap).add(any(AddRequest.class));
         verify(ldap, times(2)).modify(any(ModifyRequest.class));
 
-        assertEquals(Status.SUCCESS, response.getStatus().getStatus());
+        assertEquals(Status.SUCCESS, response.getStatus());
     }
 
     @Test(expected = Exception.class)
@@ -52,7 +52,7 @@ public class LdapCredentialServiceTest {
         GatewayResponse<Credentials> response = service.createCredentials(malformedCredentialsEvent());
         verify(ldap).add(any(AddRequest.class));
         verify(ldap, times(2)).modify(any(ModifyRequest.class));
-        assertEquals(Status.ERROR, response.getStatus().getStatus());
+        assertEquals(Status.ERROR, response.getStatus());
     }
 
     private GatewayRequest<Credentials> malformedCredentialsEvent() {

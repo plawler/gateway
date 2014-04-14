@@ -83,7 +83,7 @@ public class OperatorPersistenceServiceTest {
         retrievedOperator.setOperatorName(modifiedName);
 
         GatewayResponse<Operator> modifiedEvent = operatorPersistenceService.modifyOperator(new GatewayRequest<Operator>(GatewayAction.MODIFY, retrievedOperator));
-        assertEquals(Status.SUCCESS, modifiedEvent.getStatus().getStatus());
+        assertEquals(Status.SUCCESS, modifiedEvent.getStatus());
 
 
         Operator modified = modifiedEvent.getPayload();

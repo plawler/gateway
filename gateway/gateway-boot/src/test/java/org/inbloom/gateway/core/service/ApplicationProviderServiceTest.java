@@ -75,7 +75,7 @@ public class ApplicationProviderServiceTest {
         GatewayResponse<ApplicationProvider> registeredEvent = appProviderService.registerApplicationProvider(ApplicationProviderEventFixtures.buildRegisterAppProviderEvent());
 
         assertNotNull(registeredEvent);
-        assertEquals(registeredEvent.getStatus().getStatus(), Status.SUCCESS);
+        assertEquals(registeredEvent.getStatus(), Status.SUCCESS);
     }
 
     @Test
@@ -86,7 +86,7 @@ public class ApplicationProviderServiceTest {
         GatewayResponse<ApplicationProvider> registeredEvent = appProviderService.registerApplicationProvider(ApplicationProviderEventFixtures.buildRegisterAppProviderEvent());
 
         assertNotNull(registeredEvent);
-        assertEquals(registeredEvent.getStatus().getStatus(), Status.CONFLICT);
+        assertEquals(registeredEvent.getStatus(), Status.CONFLICT);
     }
 
 }

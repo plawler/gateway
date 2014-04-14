@@ -35,7 +35,7 @@ public class ApplicationProviderServiceHandler implements ApplicationProviderSer
         UserEntity dbUser = appProviderPersistenceService.getUserByEmail(email);
 
         if(dbUser != null) {
-            return new GatewayResponse<ApplicationProvider>(GatewayAction.CREATE, null, new GatewayStatus(Status.CONFLICT, "A User with that email has already registered"));
+            return new GatewayResponse<ApplicationProvider>(GatewayAction.CREATE, null, Status.CONFLICT, "A User with that email has already registered");
         }
 
         //persist the User and AppProvider
@@ -43,14 +43,14 @@ public class ApplicationProviderServiceHandler implements ApplicationProviderSer
         User user = registeredEvent.getPayload().getUser();
 
         //if we successfully created the user, create a verification
-        if(Status.SUCCESS.equals(registeredEvent.getStatus().getStatus()) && user != null) {
+        if(Status.SUCCESS.equals(registeredEvent.getStatus()) && user != null) {
             Verification payload = new Verification();
             payload.setUser(user);
             GatewayRequest<Verification> createEvent = new GatewayRequest<Verification>(GatewayAction.CREATE, payload);
             GatewayResponse<Verification> createdVerificationEvent = verificationService.createVerification(createEvent);
 
-            if(!Status.SUCCESS.equals(createdVerificationEvent.getStatus().getStatus()))
-                return new GatewayResponse<ApplicationProvider>(GatewayAction.CREATE, null, new GatewayStatus(Status.ERROR, "Failed to Create Verification when registering App Provider"));
+            if(!Status.SUCCESS.equals(createdVerificationEvent.getStatus()))
+                return new GatewayResponse<ApplicationProvider>(GatewayAction.CREATE, null, Status.ERROR, "Failed to Create Verification when registering App Provider");
         }
 
         return registeredEvent;

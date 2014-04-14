@@ -63,7 +63,7 @@ public class OperatorControllerTest {
 
         Operator operator = OperatorFixture.buildOperator();
         operator.setOperatorId(1l);
-        when(operatorService.registerOperator(any(GatewayRequest.class))).thenReturn(new GatewayResponse<Operator>(GatewayAction.CREATE, operator, new GatewayStatus(Status.SUCCESS)));
+        when(operatorService.registerOperator(any(GatewayRequest.class))).thenReturn(new GatewayResponse<Operator>(GatewayAction.CREATE, operator, Status.SUCCESS));
 
         this.mockMvc.perform(post("/operators")
                 .content(buildOperatorJson())
@@ -92,7 +92,7 @@ public class OperatorControllerTest {
         Operator operator = new Operator();
         operator.setOperatorId(operatorId);
         when(operatorService.retrieveOperator(any(GatewayRequest.class))).
-                thenReturn(new GatewayResponse<Operator>(GatewayAction.RETRIEVE, operator, new GatewayStatus(Status.SUCCESS)));
+                thenReturn(new GatewayResponse<Operator>(GatewayAction.RETRIEVE, operator, Status.SUCCESS));
 
         this.mockMvc.perform(get("/operators/{id}", operatorId.toString())
                 .content(buildOperatorJson())
@@ -106,7 +106,7 @@ public class OperatorControllerTest {
     public void shouldHandleRetrieveOperatorNotFound() throws Exception {
         Long operatorId = new Long(1L);
         when(operatorService.retrieveOperator(any(GatewayRequest.class)))
-                .thenReturn(new GatewayResponse<Operator>(GatewayAction.RETRIEVE, null, new GatewayStatus(Status.NOT_FOUND)));
+                .thenReturn(new GatewayResponse<Operator>(GatewayAction.RETRIEVE, null, Status.NOT_FOUND));
 
         this.mockMvc.perform(get("/operators/{id}", operatorId.toString())
                 .content(buildOperatorJson())
@@ -121,7 +121,7 @@ public class OperatorControllerTest {
         Long operatorId = new Long(1L);
         Operator operator = new Operator();
         operator.setOperatorId(operatorId);
-        when(operatorService.modifyOperator(any(GatewayRequest.class))).thenReturn(new GatewayResponse(GatewayAction.MODIFY, operator, new GatewayStatus(Status.SUCCESS)));
+        when(operatorService.modifyOperator(any(GatewayRequest.class))).thenReturn(new GatewayResponse(GatewayAction.MODIFY, operator, Status.SUCCESS));
 
         this.mockMvc.perform(put("/operators/{id}", operatorId.toString())
                 .content(buildOperatorJson(1l))
@@ -134,7 +134,7 @@ public class OperatorControllerTest {
     @Test
     public void shouldHandleModifyOperatorNotFound() throws Exception {
         Long operatorId = new Long(1L);
-        when(operatorService.modifyOperator(any(GatewayRequest.class))).thenReturn(new GatewayResponse(GatewayAction.MODIFY, null, new GatewayStatus(Status.NOT_FOUND)));
+        when(operatorService.modifyOperator(any(GatewayRequest.class))).thenReturn(new GatewayResponse(GatewayAction.MODIFY, null, Status.NOT_FOUND));
 
         this.mockMvc.perform(put("/operators/{id}", operatorId.toString())
                 .content(buildOperatorJson(1l))

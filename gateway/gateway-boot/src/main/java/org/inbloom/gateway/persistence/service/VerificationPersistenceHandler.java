@@ -36,27 +36,27 @@ public class VerificationPersistenceHandler implements VerificationPersistenceSe
         User user = createVerificationEvent.getPayload().getUser();
         if(user == null){
             //could not find the user so return not found error
-            return new GatewayResponse<Verification>(GatewayAction.CREATE, null, new GatewayStatus(Status.NOT_FOUND));
+            return new GatewayResponse<Verification>(GatewayAction.CREATE, null, Status.NOT_FOUND);
         }
 
         VerificationEntity verificationEntity = conversionService.convert(createVerificationEvent.getPayload(), VerificationEntity.class);
         verificationEntity.setUserId(user.getUserId());
         verificationRepository.save(verificationEntity);
-        return new GatewayResponse<Verification>(GatewayAction.CREATE, conversionService.convert(verificationEntity, Verification.class), new GatewayStatus(Status.SUCCESS));
+        return new GatewayResponse<Verification>(GatewayAction.CREATE, conversionService.convert(verificationEntity, Verification.class), Status.SUCCESS);
     }
 
     @Override
     public GatewayResponse<Verification> retrieveForAccountValidation(GatewayRequest<AccountValidation> validateAccountSetupEvent) {
         VerificationEntity verificationEntity = verificationRepository.findByToken(validateAccountSetupEvent.getPayload().getValidationToken());
         if (verificationEntity == null) {
-            return new GatewayResponse<Verification>(GatewayAction.RETRIEVE, null, new GatewayStatus(Status.NOT_FOUND));
+            return new GatewayResponse<Verification>(GatewayAction.RETRIEVE, null, Status.NOT_FOUND);
         }
 
         Verification verification = conversionService.convert(verificationEntity, Verification.class);
         User user = conversionService.convert(userRepository.findOne(verification.getUserId()), User.class);
         verification.setUser(user); // todo: CODE REVIEW!!
 
-        return new GatewayResponse<Verification>(GatewayAction.RETRIEVE, verification, new GatewayStatus(Status.SUCCESS));
+        return new GatewayResponse<Verification>(GatewayAction.RETRIEVE, verification, Status.SUCCESS);
 
     }
 
@@ -64,12 +64,12 @@ public class VerificationPersistenceHandler implements VerificationPersistenceSe
     public GatewayResponse<Verification> modifyVerification(GatewayRequest<Verification> modifyVerificationEvent) {
         VerificationEntity verificationEntity = verificationRepository.findByToken(modifyVerificationEvent.getPayload().getToken());
         if(verificationEntity == null){
-            return new GatewayResponse<Verification>(GatewayAction.MODIFY, null, new GatewayStatus(Status.NOT_FOUND));
+            return new GatewayResponse<Verification>(GatewayAction.MODIFY, null, Status.NOT_FOUND);
         }
         verificationEntity.setClientIpAddress(modifyVerificationEvent.getPayload().getClientIpAddress());
         verificationEntity.setVerified(modifyVerificationEvent.getPayload().isVerified());
         verificationRepository.save(verificationEntity);
-        return new GatewayResponse<Verification>(GatewayAction.MODIFY, conversionService.convert(verificationEntity, Verification.class), new GatewayStatus(Status.SUCCESS));
+        return new GatewayResponse<Verification>(GatewayAction.MODIFY, conversionService.convert(verificationEntity, Verification.class), Status.SUCCESS);
     }
 
     @Override
@@ -78,6 +78,6 @@ public class VerificationPersistenceHandler implements VerificationPersistenceSe
         if (verificationEntity == null)
             return new GatewayResponse<Verification>(GatewayAction.RETRIEVE, null, new GatewayStatus(Status.NOT_FOUND));
 
-        return new GatewayResponse<Verification>(GatewayAction.RETRIEVE, conversionService.convert(verificationEntity, Verification.class), new GatewayStatus(Status.SUCCESS));
+        return new GatewayResponse<Verification>(GatewayAction.RETRIEVE, conversionService.convert(verificationEntity, Verification.class), Status.SUCCESS);
     }
 }

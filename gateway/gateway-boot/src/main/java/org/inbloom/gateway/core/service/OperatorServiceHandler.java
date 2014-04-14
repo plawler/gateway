@@ -38,9 +38,9 @@ public class OperatorServiceHandler implements OperatorService {
         Operator operator = new Operator();
         operator.setOperatorId(modifyOperatorEvent.getPayload().getOperatorId());
         GatewayResponse<Operator> retrievedOperatorEvent = retrieveOperator(new GatewayRequest<Operator>(GatewayAction.RETRIEVE, operator));
-        if(retrievedOperatorEvent.getStatus().getStatus() == Status.NOT_FOUND) {
+        if(retrievedOperatorEvent.getStatus() == Status.NOT_FOUND) {
              //could not find entity by id
-            return new GatewayResponse<Operator>(GatewayAction.MODIFY, null, new GatewayStatus(Status.NOT_FOUND));
+            return new GatewayResponse<Operator>(GatewayAction.MODIFY, null, Status.NOT_FOUND);
         }
 
         return operatorPersistenceService.modifyOperator(modifyOperatorEvent);

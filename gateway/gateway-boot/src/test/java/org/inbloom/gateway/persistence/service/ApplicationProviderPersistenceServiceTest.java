@@ -37,7 +37,7 @@ public class ApplicationProviderPersistenceServiceTest {
         GatewayRequest<ApplicationProvider> request = ApplicationProviderEventFixtures.buildRegisterAppProviderEvent();
         GatewayResponse<ApplicationProvider> response = applicationProviderPersistenceService.createApplicationProvider(request);
 
-        assertEquals(Status.SUCCESS, response.getStatus().getStatus());
+        assertEquals(Status.SUCCESS, response.getStatus());
         assertEquals(request.getPayload().getApplicationProviderName(), response.getPayload().getApplicationProviderName());
         assertEquals(request.getPayload().getOrganizationName(), response.getPayload().getOrganizationName());
         assertNotNull(response.getPayload().getApplicationProviderId());
@@ -57,7 +57,7 @@ public class ApplicationProviderPersistenceServiceTest {
         template.setApplicationProviderId(appProviderId);
         GatewayResponse<ApplicationProvider> retrieveResponse = applicationProviderPersistenceService.retrieveApplicationProvider(
                 new GatewayRequest<ApplicationProvider>(GatewayAction.RETRIEVE, template));
-        assertEquals(Status.SUCCESS, retrieveResponse.getStatus().getStatus());
+        assertEquals(Status.SUCCESS, retrieveResponse.getStatus());
         assertEquals(registerRequest.getPayload().getOrganizationName(),retrieveResponse.getPayload().getOrganizationName());
         assertEquals(registerRequest.getPayload().getApplicationProviderName(), retrieveResponse.getPayload().getApplicationProviderName());
 
@@ -74,13 +74,13 @@ public class ApplicationProviderPersistenceServiceTest {
         GatewayRequest<ApplicationProvider> modifyRequest = ApplicationProviderEventFixtures.buildModifyAppProviderEvent(appProviderId);
         GatewayResponse<ApplicationProvider> modifyResponse = applicationProviderPersistenceService.modifyApplicationProvider(modifyRequest);
 
-        assertEquals(Status.SUCCESS, modifyResponse.getStatus().getStatus());
+        assertEquals(Status.SUCCESS, modifyResponse.getStatus());
 
         ApplicationProvider template = new ApplicationProvider();
         template.setApplicationProviderId(appProviderId);
         GatewayResponse<ApplicationProvider> retrieveResponse = applicationProviderPersistenceService.retrieveApplicationProvider(
                 new GatewayRequest<ApplicationProvider>(GatewayAction.RETRIEVE, template));
-        assertEquals(Status.SUCCESS, retrieveResponse.getStatus().getStatus());
+        assertEquals(Status.SUCCESS, retrieveResponse.getStatus());
         assertEquals(modifyRequest.getPayload().getOrganizationName(),retrieveResponse.getPayload().getOrganizationName());
         assertEquals(modifyRequest.getPayload().getApplicationProviderName(), retrieveResponse.getPayload().getApplicationProviderName());
 

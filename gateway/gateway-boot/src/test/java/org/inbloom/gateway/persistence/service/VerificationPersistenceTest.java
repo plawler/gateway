@@ -63,7 +63,7 @@ public class VerificationPersistenceTest {
         Verification payload = new Verification();
         payload.setToken("i-am-an-invalid-token");
         GatewayResponse<Verification> retrieved = verificationService.retrieveVerification(new GatewayRequest<Verification>(GatewayAction.RETRIEVE, payload));
-        assertEquals(Status.NOT_FOUND, retrieved.getStatus().getStatus());
+        assertEquals(Status.NOT_FOUND, retrieved.getStatus());
     }
 
     @Test
@@ -71,7 +71,7 @@ public class VerificationPersistenceTest {
         Verification verification = created.getPayload();
         verification.activate(VerificationService.VERIFICATION_TIMEOUT);
         GatewayResponse<Verification> modified = verificationService.modifyVerification(new GatewayRequest<Verification>(GatewayAction.MODIFY, verification));
-        assertEquals(Status.SUCCESS, modified.getStatus().getStatus());
+        assertEquals(Status.SUCCESS, modified.getStatus());
     }
 
 }

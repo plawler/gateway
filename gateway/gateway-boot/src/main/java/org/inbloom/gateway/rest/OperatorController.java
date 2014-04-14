@@ -61,7 +61,7 @@ public class OperatorController {
             return new ResponseEntity<Operator>(operator, HttpStatus.OK);
         }
         else {
-            return new ResponseEntity(retrievedEvent.getStatus().getStatus(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity(retrievedEvent.getStatus(), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -83,14 +83,14 @@ public class OperatorController {
 
         GatewayResponse<Operator> modifiedEvent = operatorService.modifyOperator(new GatewayRequest<Operator>(GatewayAction.MODIFY, operator));
 
-        switch (modifiedEvent.getStatus().getStatus())
+        switch (modifiedEvent.getStatus())
         {
             case SUCCESS:
                 return new ResponseEntity(HttpStatus.NO_CONTENT);
             case NOT_FOUND:
-                return new ResponseEntity(modifiedEvent.getStatus(), HttpStatus.NOT_FOUND);
+                return new ResponseEntity(modifiedEvent.getStatusContainer(), HttpStatus.NOT_FOUND);
             default:
-                return new ResponseEntity(modifiedEvent.getStatus(), HttpStatus.INTERNAL_SERVER_ERROR);//throw 500 error if we don't know why this failed
+                return new ResponseEntity(modifiedEvent.getStatusContainer(), HttpStatus.INTERNAL_SERVER_ERROR);//throw 500 error if we don't know why this failed
         }
     }
 }

@@ -32,17 +32,17 @@ public class OperatorPersistenceHandler implements OperatorPersistenceService {
         OperatorEntity operatorEntity = conversionService.convert(registerOperatorEvent.getPayload(), OperatorEntity.class);
         operatorRepository.save(operatorEntity);
 
-        return new GatewayResponse<Operator>(GatewayAction.CREATE, conversionService.convert(operatorEntity, Operator.class), new GatewayStatus(Status.SUCCESS));
+        return new GatewayResponse<Operator>(GatewayAction.CREATE, conversionService.convert(operatorEntity, Operator.class), Status.SUCCESS);
     }
 
     @Override
     public GatewayResponse<Operator> retrieveOperator(GatewayRequest<Operator> retrieveOperatorEvent) {
         OperatorEntity retrieved = operatorRepository.findOne(retrieveOperatorEvent.getPayload().getOperatorId());
         if(retrieved == null) {
-            return new GatewayResponse<Operator>(GatewayAction.RETRIEVE, null, new GatewayStatus(Status.NOT_FOUND));
+            return new GatewayResponse<Operator>(GatewayAction.RETRIEVE, null, Status.NOT_FOUND);
         }
         else {
-            return new GatewayResponse<Operator>(GatewayAction.RETRIEVE, conversionService.convert(retrieved, Operator.class), new GatewayStatus(Status.SUCCESS));
+            return new GatewayResponse<Operator>(GatewayAction.RETRIEVE, conversionService.convert(retrieved, Operator.class), Status.SUCCESS);
         }
     }
 
@@ -52,12 +52,12 @@ public class OperatorPersistenceHandler implements OperatorPersistenceService {
         OperatorEntity original = conversionService.convert(operatorRepository.findOne(modified.getOperatorId()), OperatorEntity.class);
 
         if(original == null){
-            return new GatewayResponse<Operator>(GatewayAction.MODIFY, null, new GatewayStatus(Status.NOT_FOUND));
+            return new GatewayResponse<Operator>(GatewayAction.MODIFY, null, Status.NOT_FOUND);
         }
         setUpdateData(modified);
         OperatorEntity modifiedEntity = operatorRepository.save(modified);
 
-        return new GatewayResponse<Operator>(GatewayAction.MODIFY, conversionService.convert(modifiedEntity, Operator.class), new GatewayStatus(Status.SUCCESS));
+        return new GatewayResponse<Operator>(GatewayAction.MODIFY, conversionService.convert(modifiedEntity, Operator.class), Status.SUCCESS);
     }
 
     private void setUpdateData(BaseEntity entity){

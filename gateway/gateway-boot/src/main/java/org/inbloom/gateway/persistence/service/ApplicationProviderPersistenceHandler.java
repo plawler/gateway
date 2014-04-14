@@ -46,14 +46,14 @@ public class ApplicationProviderPersistenceHandler implements ApplicationProvide
 
         ApplicationProvider appProviderDomain = conversionService.convert(appProviderEntity, ApplicationProvider.class);
         appProviderDomain.setUser(conversionService.convert(userEntity, User.class));
-        return new GatewayResponse<ApplicationProvider>(GatewayAction.CREATE, appProviderDomain, new GatewayStatus(Status.SUCCESS));
+        return new GatewayResponse<ApplicationProvider>(GatewayAction.CREATE, appProviderDomain, Status.SUCCESS);
     }
 
     @Override
     public GatewayResponse<ApplicationProvider> modifyApplicationProvider(GatewayRequest<ApplicationProvider> modifyApplicationProviderEvent) {
         ApplicationProviderEntity retrieved = applicationProviderRepository.findOne(modifyApplicationProviderEvent.getPayload().getApplicationProviderId());
         if(retrieved == null){
-            return new GatewayResponse<ApplicationProvider>(GatewayAction.MODIFY, null, new GatewayStatus(Status.NOT_FOUND));
+            return new GatewayResponse<ApplicationProvider>(GatewayAction.MODIFY, null, Status.NOT_FOUND);
         }
 
         retrieved.setApplicationProviderName(modifyApplicationProviderEvent.getPayload().getApplicationProviderName());
@@ -77,20 +77,20 @@ public class ApplicationProviderPersistenceHandler implements ApplicationProvide
         userRepository.save(retrievedUser);
         result.setUser(conversionService.convert(retrievedUser, User.class));
 
-        return new GatewayResponse<ApplicationProvider>(GatewayAction.MODIFY, result, new GatewayStatus(Status.SUCCESS));
+        return new GatewayResponse<ApplicationProvider>(GatewayAction.MODIFY, result,Status.SUCCESS);
     }
 
     @Override
     public GatewayResponse<ApplicationProvider> retrieveApplicationProvider(GatewayRequest<ApplicationProvider> retrieveApplicationProviderEvent) {
         ApplicationProviderEntity retrieved = applicationProviderRepository.findOne(retrieveApplicationProviderEvent.getPayload().getApplicationProviderId());
         if(retrieved == null) {
-            return new GatewayResponse<ApplicationProvider>(GatewayAction.RETRIEVE, null, new GatewayStatus(Status.NOT_FOUND));
+            return new GatewayResponse<ApplicationProvider>(GatewayAction.RETRIEVE, null, Status.NOT_FOUND);
         }
         else {
             UserEntity retrievedUser = userRepository.findByApplicationProviderId(retrieved.getApplicationProviderId());
             ApplicationProvider appProviderDomain = conversionService.convert(retrieved, ApplicationProvider.class);
             appProviderDomain.setUser(conversionService.convert(retrievedUser, User.class));
-            return new GatewayResponse<ApplicationProvider>(GatewayAction.RETRIEVE, appProviderDomain, new GatewayStatus(Status.SUCCESS));
+            return new GatewayResponse<ApplicationProvider>(GatewayAction.RETRIEVE, appProviderDomain, Status.SUCCESS);
         }
     }
 

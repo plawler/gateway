@@ -62,7 +62,7 @@ public class VerificationControllerTest {
     @Test
     public void shouldValidateAnAccount() throws Exception {
         Mockito.when(verificationService.validateAccountSetup(any(GatewayRequest.class)))
-                .thenReturn(new GatewayResponse<Verification>(GatewayAction.MODIFY, VerificationFixture.validVerification(new Date()), new GatewayStatus(Status.SUCCESS)));
+                .thenReturn(new GatewayResponse<Verification>(GatewayAction.MODIFY, VerificationFixture.validVerification(new Date()), Status.SUCCESS));
 
         this.mockMvc.perform(post("/verifications/validate")
                 .content(TestUtil.stringify(accountValidation()))
@@ -75,7 +75,7 @@ public class VerificationControllerTest {
     @Test
     public void shouldRetrieveAVerificationForAToken() throws Exception {
         Mockito.when(verificationService.retrieveVerification(any(GatewayRequest.class)))
-                .thenReturn(new GatewayResponse<Verification>(GatewayAction.RETRIEVE, VerificationFixture.validVerification(new Date()), new GatewayStatus(Status.SUCCESS)));
+                .thenReturn(new GatewayResponse<Verification>(GatewayAction.RETRIEVE, VerificationFixture.validVerification(new Date()), Status.SUCCESS));
 
         this.mockMvc.perform(get("/verifications/{token}", "3908092jfojief2309j029")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -87,7 +87,7 @@ public class VerificationControllerTest {
     @Test
     public void shouldFailValidationIfTheVerificationIsNotValid() throws Exception {
         Mockito.when(verificationService.validateAccountSetup(any(GatewayRequest.class)))
-                .thenReturn(new GatewayResponse<Verification>(GatewayAction.MODIFY, VerificationFixture.validVerification(new Date()), new GatewayStatus(Status.EXPIRED,"The verification expired")));
+                .thenReturn(new GatewayResponse<Verification>(GatewayAction.MODIFY, VerificationFixture.validVerification(new Date()), Status.EXPIRED,"The verification expired"));
 
         this.mockMvc.perform(post("/verifications/validate")
                 .content(TestUtil.stringify(accountValidation()))

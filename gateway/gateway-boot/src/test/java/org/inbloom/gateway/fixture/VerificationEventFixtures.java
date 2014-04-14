@@ -30,11 +30,11 @@ public class VerificationEventFixtures {
 
     /**created**/
     public static GatewayResponse<Verification> buildSuccessCreatedVerificationEvent(Long userId, Long verificationId) {
-        return new GatewayResponse<Verification>(GatewayAction.CREATE, VerificationFixture.buildUnverifiedVerification(1l, 1l), new GatewayStatus(Status.SUCCESS));
+        return new GatewayResponse<Verification>(GatewayAction.CREATE, VerificationFixture.buildUnverifiedVerification(1l, 1l), Status.SUCCESS);
     }
 
     public static GatewayResponse<Verification> buildNotFoundCreatedVerificationEvent() {
-        return new GatewayResponse<Verification>(GatewayAction.CREATE, null, new GatewayStatus(Status.NOT_FOUND));
+        return new GatewayResponse<Verification>(GatewayAction.CREATE, null, Status.NOT_FOUND);
     }
 
     /**modify**/
@@ -47,11 +47,11 @@ public class VerificationEventFixtures {
 
     /**retrieved**/
     public static GatewayResponse<Verification> buildSuccessRetrievedVerificationEvent(Verification verification) {
-        return new GatewayResponse<Verification>(GatewayAction.RETRIEVE, verification, new GatewayStatus(Status.SUCCESS));
+        return new GatewayResponse<Verification>(GatewayAction.RETRIEVE, verification, Status.SUCCESS);
     }
 
     public static GatewayResponse<Verification> buildNotFoundRetrievedVerificationEvent() {
-        return new GatewayResponse<Verification>(GatewayAction.RETRIEVE, null, new GatewayStatus(Status.NOT_FOUND));
+        return new GatewayResponse<Verification>(GatewayAction.RETRIEVE, null, Status.NOT_FOUND);
     }
 
 }

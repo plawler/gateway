@@ -42,7 +42,7 @@ public class ApplicationProviderController {
     {
         GatewayResponse<ApplicationProvider> createdEvent = appProviderService.registerApplicationProvider(new GatewayRequest<ApplicationProvider>(GatewayAction.CREATE, appProvider));
 
-        switch(createdEvent.getStatus().getStatus()) {
+        switch(createdEvent.getStatus()) {
             case SUCCESS:
                 ApplicationProvider newAppProvider = createdEvent.getPayload();
 
@@ -54,7 +54,7 @@ public class ApplicationProviderController {
 
 
             default:
-                return new ResponseEntity(createdEvent.getStatus(), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(createdEvent.getStatusContainer(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -73,7 +73,7 @@ public class ApplicationProviderController {
             return new ResponseEntity<ApplicationProvider>(appProvider, HttpStatus.OK);
         }
         else {
-            return new ResponseEntity(retrievedEvent.getStatus(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity(retrievedEvent.getStatusContainer(), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -94,14 +94,14 @@ public class ApplicationProviderController {
 
         GatewayResponse<ApplicationProvider> modifiedEvent = appProviderService.modifyApplicationProvider(new GatewayRequest<ApplicationProvider>(GatewayAction.MODIFY, appProvider));
 
-        switch (modifiedEvent.getStatus().getStatus())
+        switch (modifiedEvent.getStatus())
         {
             case SUCCESS:
                 return new ResponseEntity(HttpStatus.NO_CONTENT);
             case NOT_FOUND:
-                return new ResponseEntity(modifiedEvent.getStatus(), HttpStatus.NOT_FOUND);
+                return new ResponseEntity(modifiedEvent.getStatusContainer(), HttpStatus.NOT_FOUND);
             default:
-                return new ResponseEntity(modifiedEvent.getStatus(), HttpStatus.INTERNAL_SERVER_ERROR);//throw 500 error if we don't know why this failed
+                return new ResponseEntity(modifiedEvent.getStatusContainer(), HttpStatus.INTERNAL_SERVER_ERROR);//throw 500 error if we don't know why this failed
         }
 
     }

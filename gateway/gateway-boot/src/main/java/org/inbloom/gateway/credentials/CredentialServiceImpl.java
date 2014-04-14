@@ -39,11 +39,11 @@ public class CredentialServiceImpl implements CredentialService {
                     creds.getEmail(), creds.getPassword()));
             ldapService.modify(LdapRequestFactory.newAddToAppDeveloperGroupRequest(creds.getEmail()));
             ldapService.modify(LdapRequestFactory.newAddToSandboxAdminRequest(creds.getEmail()));
-            return new GatewayResponse<Credentials>(GatewayAction.CREATE, creds, new GatewayStatus(Status.SUCCESS));
+            return new GatewayResponse<Credentials>(GatewayAction.CREATE, creds, Status.SUCCESS);
 
         } catch (LDAPException e) {
             logger.error("Adding credentials failed:" + e.getExceptionMessage());
-            return new GatewayResponse<Credentials>(GatewayAction.CREATE, null, new GatewayStatus(Status.ERROR, "An LDAPException was thrown most likely due to a malformed request"));
+            return new GatewayResponse<Credentials>(GatewayAction.CREATE, null, Status.ERROR, "An LDAPException was thrown most likely due to a malformed request");
         }
     }
 
