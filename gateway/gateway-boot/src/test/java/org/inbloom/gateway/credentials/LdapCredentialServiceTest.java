@@ -4,9 +4,11 @@ import com.unboundid.ldap.sdk.AddRequest;
 import com.unboundid.ldap.sdk.LDAPException;
 import com.unboundid.ldap.sdk.ModifyRequest;
 import com.unboundid.ldif.LDIFException;
+import org.inbloom.gateway.common.domain.Credentials;
 import org.inbloom.gateway.common.status.Status;
-import org.inbloom.gateway.core.event.user.CreateCredentialsEvent;
-import org.inbloom.gateway.core.event.ResponseEvent;
+import org.inbloom.gateway.core.event.GatewayAction;
+import org.inbloom.gateway.core.event.GatewayRequest;
+import org.inbloom.gateway.core.event.GatewayResponse;
 import org.inbloom.gateway.credentials.ldap.LdapService;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,28 +39,30 @@ public class LdapCredentialServiceTest {
 
     @Test
     public void shouldCreateCredentials() throws LDAPException, LDIFException {
-        ResponseEvent response = service.createCredentials(sonnysCredentialsEvent());
+        GatewayResponse<Credentials> response = service.createCredentials(sonnysCredentialsEvent());
 
         verify(ldap).add(any(AddRequest.class));
         verify(ldap, times(2)).modify(any(ModifyRequest.class));
 
-        assertEquals(Status.SUCCESS, response.statusCode());
+        assertEquals(Status.SUCCESS, response.getStatus().getStatus());
     }
 
     @Test(expected = Exception.class)
     public void shouldFailOnMalformedRequest() throws LDAPException {
-        ResponseEvent response = service.createCredentials(malformedCredentialsEvent());
+        GatewayResponse<Credentials> response = service.createCredentials(malformedCredentialsEvent());
         verify(ldap).add(any(AddRequest.class));
         verify(ldap, times(2)).modify(any(ModifyRequest.class));
-        assertEquals(Status.ERROR, response.statusCode());
+        assertEquals(Status.ERROR, response.getStatus().getStatus());
     }
 
-    private CreateCredentialsEvent malformedCredentialsEvent() {
-        return new CreateCredentialsEvent("Santino", "Corleone", null, "s@ntin0rul3z");
+    private GatewayRequest<Credentials> malformedCredentialsEvent() {
+        Credentials cred = new Credentials("Santino", "Corleone", null, "s@ntin0rul3z");
+        return new GatewayRequest<Credentials>(GatewayAction.CREATE, cred);
     }
 
-    private CreateCredentialsEvent sonnysCredentialsEvent() {
-        return new CreateCredentialsEvent("Santino", "Corleone", "sonny.corleone@mailinator.com", "s@ntin0rul3z");
+    private GatewayRequest<Credentials> sonnysCredentialsEvent() {
+        Credentials cred = new Credentials("Santino", "Corleone", "sonny.corleone@mailinator.com", "s@ntin0rul3z");
+        return new GatewayRequest<Credentials>(GatewayAction.CREATE, cred);
     }
 
 }

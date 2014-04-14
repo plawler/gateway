@@ -1,12 +1,13 @@
 package org.inbloom.gateway.core.service;
 
-import org.inbloom.gateway.common.status.Status;
-import org.inbloom.gateway.core.event.user.CreateCredentialsEvent;
-import org.inbloom.gateway.core.event.user.CreatedCredentialsEvent;
-import org.inbloom.gateway.core.event.verification.*;
 import org.inbloom.gateway.common.domain.Credentials;
 import org.inbloom.gateway.common.domain.User;
 import org.inbloom.gateway.common.domain.Verification;
+import org.inbloom.gateway.common.status.Status;
+import org.inbloom.gateway.core.event.GatewayAction;
+import org.inbloom.gateway.core.event.GatewayRequest;
+import org.inbloom.gateway.core.event.GatewayResponse;
+import org.inbloom.gateway.core.event.verification.*;
 import org.inbloom.gateway.credentials.CredentialService;
 import org.inbloom.gateway.persistence.service.VerificationPersistenceService;
 import org.inbloom.gateway.util.keyService.KeyGenerator;
@@ -123,8 +124,8 @@ public class VerificationServiceHandler implements VerificationService{
     }
 
     private boolean processCredentials(Credentials credentials) {
-        CreatedCredentialsEvent created = credentialService.createCredentials(new CreateCredentialsEvent(credentials));
-        return created.successful();
+        GatewayResponse<Credentials> created = credentialService.createCredentials(new GatewayRequest<Credentials>(GatewayAction.CREATE, credentials));
+        return created.getStatus().equals(Status.SUCCESS);
     }
 
 }
