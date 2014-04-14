@@ -4,38 +4,34 @@ package org.inbloom.gateway.core.service;
  * Created By: paullawler
  */
 
+import org.inbloom.gateway.Gateway;
 import org.inbloom.gateway.common.domain.Verification;
 import org.inbloom.gateway.core.event.GatewayRequest;
 import org.inbloom.gateway.core.event.GatewayResponse;
 import org.inbloom.gateway.credentials.CredentialService;
-import org.junit.runner.RunWith;
-
-import org.inbloom.gateway.Gateway;
 import org.inbloom.gateway.fixture.VerificationEventFixtures;
 import org.inbloom.gateway.persistence.service.VerificationPersistenceService;
-import org.inbloom.gateway.rest.util.TestUtil;
 import org.inbloom.gateway.util.keyService.KeyGenerator;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.jvnet.mock_javamail.Mailbox;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.core.env.Environment;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.jvnet.mock_javamail.Mailbox;
+
 import javax.mail.Message;
 import javax.mail.internet.AddressException;
-
-
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
@@ -50,8 +46,6 @@ import static org.mockito.Mockito.when;
 @TransactionConfiguration(defaultRollback = true)
 public class VerificationServiceIntegrationTest {
 
-    private MockMvc mockMvc;
-
     @Mock
     KeyGenerator keyGenerator;
 
@@ -64,18 +58,13 @@ public class VerificationServiceIntegrationTest {
     @Mock
     Environment env;
 
-    VerificationService verificationService;
+    @InjectMocks
+    VerificationServiceHandler verificationService;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        verificationService = new VerificationServiceHandler(persistenceService, credentialService, keyGenerator, env);
-
-        this.mockMvc = MockMvcBuilders.standaloneSetup(verificationService)
-                .setMessageConverters(new MappingJackson2HttpMessageConverter())
-                .setHandlerExceptionResolvers(TestUtil.createExceptionResolver())
-                .build();
-    }
+}
 
     @Test
     public void testCreateVerification() throws AddressException {

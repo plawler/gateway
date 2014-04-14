@@ -9,22 +9,24 @@ import org.inbloom.gateway.common.status.Status;
 import org.inbloom.gateway.core.event.GatewayAction;
 import org.inbloom.gateway.core.event.GatewayRequest;
 import org.inbloom.gateway.core.event.GatewayResponse;
-import org.inbloom.gateway.core.event.verification.*;
 import org.inbloom.gateway.credentials.CredentialService;
 import org.inbloom.gateway.persistence.service.VerificationPersistenceService;
 import org.inbloom.gateway.util.keyService.KeyGenerator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.core.env.Environment;
 
 import java.util.Date;
 
 import static org.inbloom.gateway.fixture.VerificationFixture.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 
 /**
@@ -40,16 +42,17 @@ public class VerificationServiceTest {
     private CredentialService credentialer;
 
     @Mock
-    private KeyGenerator keyGenerator;
-
-    @Mock
     private Environment env;
 
+    @Mock
+    private KeyGenerator keyGenerator;
+
+    @InjectMocks
     private VerificationServiceHandler verificationService;
 
     @Before
     public void setUp() {
-        verificationService = new VerificationServiceHandler(persistence, credentialer, keyGenerator, env);
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
@@ -77,9 +80,9 @@ public class VerificationServiceTest {
                 .thenReturn(modifiedVerificationEvent(validate.getPayload().getValidationDate()));
 
 
-//        GatewayResponse<Verification> validated = verificationService.validateAccountSetup(validate);
-//        assertEquals(Status.SUCCESS, validated.getStatus().getStatus());
-//        assertTrue(validated.getPayload().isVerified());
+        GatewayResponse<Verification> validated = verificationService.validateAccountSetup(validate);
+        assertEquals(Status.SUCCESS, validated.getStatus().getStatus());
+        assertTrue(validated.getPayload().isVerified());
     }
 
     // FIXTURES

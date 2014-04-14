@@ -8,7 +8,6 @@ import org.inbloom.gateway.common.status.Status;
 import org.inbloom.gateway.core.event.GatewayAction;
 import org.inbloom.gateway.core.event.GatewayRequest;
 import org.inbloom.gateway.core.event.GatewayResponse;
-import org.inbloom.gateway.core.event.verification.*;
 import org.inbloom.gateway.persistence.domain.VerificationEntity;
 import org.inbloom.gateway.persistence.repository.UserRepository;
 import org.inbloom.gateway.persistence.repository.VerificationRepository;

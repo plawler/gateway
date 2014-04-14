@@ -5,7 +5,6 @@ import org.inbloom.gateway.common.domain.AccountValidation;
 import org.inbloom.gateway.common.domain.Verification;
 import org.inbloom.gateway.core.event.GatewayRequest;
 import org.inbloom.gateway.core.event.GatewayResponse;
-import org.inbloom.gateway.core.event.verification.*;
 
 /**
  * Created by lloydengebretsen on 3/21/14.

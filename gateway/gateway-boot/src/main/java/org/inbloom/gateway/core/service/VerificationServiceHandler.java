@@ -35,19 +35,17 @@ import java.util.Locale;
 @PropertySource("classpath:application.properties")
 public class VerificationServiceHandler implements VerificationService{
 
-    private final VerificationPersistenceService persistenceService;
-    private final CredentialService credentialService;
-    private final KeyGenerator keyGenerator;
-    private final Environment env;
+    @Autowired
+    private VerificationPersistenceService persistenceService;
 
     @Autowired
-    public VerificationServiceHandler(VerificationPersistenceService persistenceService, CredentialService credentialService,
-                                      KeyGenerator keyGenerator, Environment env) {
-        this.persistenceService = persistenceService;
-        this.credentialService = credentialService;
-        this.keyGenerator = keyGenerator;
-        this.env = env;
-    }
+    private CredentialService credentialService;
+
+    @Autowired
+    private KeyGenerator keyGenerator;
+
+    @Autowired
+    private Environment env;
 
     private String getEmailTarget() {
         return env.getProperty("emailVerificationLinkTarget","https://portal.inbloom.org/email_verification");
@@ -134,7 +132,7 @@ public class VerificationServiceHandler implements VerificationService{
 
     private boolean processCredentials(Credentials credentials) {
         GatewayResponse<Credentials> created = credentialService.createCredentials(new GatewayRequest<Credentials>(GatewayAction.CREATE, credentials));
-        return created.getStatus().equals(Status.SUCCESS);
+        return Status.SUCCESS.equals(created.getStatus().getStatus());
     }
 
 }

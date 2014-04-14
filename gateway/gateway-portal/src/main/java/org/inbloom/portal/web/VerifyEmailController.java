@@ -1,9 +1,9 @@
 package org.inbloom.portal.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.inbloom.gateway.common.domain.AccountValidation;
 import org.inbloom.gateway.common.domain.Verification;
 import org.inbloom.gateway.common.status.GatewayStatus;
-import org.inbloom.portal.forms.SignupCompletion;
 import org.inbloom.portal.util.RestTemplateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
@@ -98,14 +98,14 @@ public class VerifyEmailController {
 
 
     @RequestMapping(method=RequestMethod.POST)
-    public String post(Model model, @ModelAttribute SignupCompletion passwordAndToken) {
+    public String post(Model model, @ModelAttribute AccountValidation validation) {
 
         RestTemplate rest = RestTemplateUtil.noErrorHandlers();
         ObjectMapper mapper = RestTemplateUtil.ignoreMissingFieldsMapper();
 
-        String token = passwordAndToken.getValidationToken();
+        String token = validation.getValidationToken();
 
-        ResponseEntity<String> response =  rest.postForEntity(getApiHost() + "/gateway/api/verifications/{token}", passwordAndToken, String.class, token);
+        ResponseEntity<String> response =  rest.postForEntity(getApiHost() + "/gateway/api/verifications/{token}", validation, String.class, token);
 
         try {
 
