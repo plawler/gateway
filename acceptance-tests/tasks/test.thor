@@ -1,5 +1,7 @@
+APP_ROOT = File.expand_path(File.dirname(__FILE__) + "/../")
+require "#{APP_ROOT}/features/support/database_cleaner"
+
 class Test < Thor
-  APP_ROOT = File.expand_path(File.dirname(__FILE__) + "/../")
 
   desc 'features', 'Run all non-wip cucumber features'
   def features
@@ -14,6 +16,11 @@ class Test < Thor
   DESC
   def feature(name='')
     run_command feature_command(name)
+  end
+
+  desc 'db_reset', 'Reset the test database'
+  def db_reset
+    DatabaseCleaner.new(ENV['DB_NAME']).reset_database
   end
 
   private
