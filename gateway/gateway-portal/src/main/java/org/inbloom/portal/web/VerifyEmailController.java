@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**
@@ -42,7 +41,7 @@ public class VerifyEmailController {
     }
 
     @RequestMapping(method=RequestMethod.GET)
-    public String get(HttpServletRequest request, Model model, @RequestParam("token") String token, RedirectAttributes redirectAttributes) {
+    public String get(Model model, @RequestParam("token") String token, RedirectAttributes redirectAttributes) {
 
         //check that supplied token is valid before redirecting to "create password" page
 
@@ -77,24 +76,24 @@ public class VerifyEmailController {
                 switch(status.getStatus()) {
                     case NOT_FOUND:
                         redirectAttributes.addFlashAttribute("errorMessage", "Couldn't find the token. Make sure you follow the link sent in the verification email, or try signing up for an account");
-                        return "/error";
+                        return "redirect:/error";
                     case ERROR:
                         redirectAttributes.addFlashAttribute("errorMessage", status.getMessage());
-                        return "/error";
+                        return "redirect:/error";
                     case EXPIRED:
                         redirectAttributes.addFlashAttribute("errorMessage", "Your email validation has expired. TODO: redirect to \"resend validation email\" page");
-                        return "/error";
+                        return "redirect:/error";
                     case REDEEMED:
                         redirectAttributes.addFlashAttribute("errorMessage", "Your email has already been validated. Please sign in");
-                        return "/login";
+                        return "redirect:/login";
                     default:
                         redirectAttributes.addFlashAttribute("errorMessage", "Unknown response from api");
-                        return "/error";
+                        return "redirect:/error";
                 }
             }
         } catch(IOException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            return "/error";
+            return "redirect:/error";
         }
     }
 
