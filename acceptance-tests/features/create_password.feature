@@ -1,6 +1,8 @@
+@LDAPCleanup
 Feature:
-  Create password
-
+  As an unverified application provider
+  In order to complete my registration on the gateway
+  I need to be able to set the password for my new account
 
 Background:
   Given I have a JSON representation of an app provider

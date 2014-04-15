@@ -6,7 +6,7 @@ module Gateway
   APP_ROOT = File.expand_path(File.dirname(__FILE__) + "/../")
 
   class Api < Thor
-    desc 'start', 'Start the gateway API using the test database'
+    desc 'start', 'Start the Gateway API using the test database'
     def start
       exec start_command
     end
