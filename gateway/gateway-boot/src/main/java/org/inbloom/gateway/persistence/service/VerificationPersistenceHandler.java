@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 /**
  * Created by lloydengebretsen on 3/21/14.
  */
@@ -41,6 +43,7 @@ public class VerificationPersistenceHandler implements VerificationPersistenceSe
 
         VerificationEntity verificationEntity = conversionService.convert(createVerificationEvent.getPayload(), VerificationEntity.class);
         verificationEntity.setUserId(user.getUserId());
+        verificationEntity.setCreatedAt(new Date());
         verificationRepository.save(verificationEntity);
         return new GatewayResponse<Verification>(GatewayAction.CREATE, conversionService.convert(verificationEntity, Verification.class), Status.SUCCESS);
     }
@@ -57,7 +60,6 @@ public class VerificationPersistenceHandler implements VerificationPersistenceSe
         verification.setUser(user); // todo: CODE REVIEW!!
 
         return new GatewayResponse<Verification>(GatewayAction.RETRIEVE, verification, Status.SUCCESS);
-
     }
 
     @Override
@@ -66,9 +68,13 @@ public class VerificationPersistenceHandler implements VerificationPersistenceSe
         if(verificationEntity == null){
             return new GatewayResponse<Verification>(GatewayAction.MODIFY, null, Status.NOT_FOUND);
         }
+
         verificationEntity.setClientIpAddress(modifyVerificationEvent.getPayload().getClientIpAddress());
         verificationEntity.setVerified(modifyVerificationEvent.getPayload().isVerified());
+        verificationEntity.setUpdatedAt(new Date());
+
         verificationRepository.save(verificationEntity);
+
         return new GatewayResponse<Verification>(GatewayAction.MODIFY, conversionService.convert(verificationEntity, Verification.class), Status.SUCCESS);
     }
 
