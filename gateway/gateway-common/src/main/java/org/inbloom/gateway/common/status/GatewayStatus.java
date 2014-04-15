@@ -11,6 +11,9 @@ public class GatewayStatus {
     private String message;
     private List<FieldValidationError> fieldValidationErrors;
 
+    public GatewayStatus() {
+    }
+
     public GatewayStatus(Status status, String message, List<FieldValidationError> fieldValidationErrors){
         this.fieldValidationErrors = fieldValidationErrors;
         this.message = message;
@@ -37,5 +40,17 @@ public class GatewayStatus {
 
     public List<FieldValidationError> getFieldValidationErrors() {
         return fieldValidationErrors;
+    }
+
+    public void setFieldValidationErrors(List<FieldValidationError> fieldValidationErrors) {
+        this.fieldValidationErrors = fieldValidationErrors;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }
