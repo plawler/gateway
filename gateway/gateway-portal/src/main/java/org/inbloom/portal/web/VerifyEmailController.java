@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 
@@ -40,7 +41,7 @@ public class VerifyEmailController {
     }
 
     @RequestMapping(method=RequestMethod.GET)
-    public String get(Model model, @RequestParam("token") String token) {
+    public String get(Model model, @RequestParam("token") String token, RedirectAttributes redirectAttributes) {
 
         //check that supplied token is valid before redirecting to "create password" page
 
@@ -55,44 +56,44 @@ public class VerifyEmailController {
 
                 if(verification.isVerified()) {
                     //email has already been validated
-                    model.addAttribute("errorMessage", "Your email has already been validated. Please sign in");
-                    return "login";
+                    redirectAttributes.addFlashAttribute("errorMessage",  "Your email has already been validated. Please sign in");
+                    return "redirect:/login";
                 }
 
                 if(verification.isExpired()) {
                     //token has expired
-                    model.addAttribute("message", "Your email validation has expired. TODO: redirect to \"resend validation email\" page");
-                    return "error";
+                    redirectAttributes.addFlashAttribute("errorMessage", "Your email validation has expired. TODO: redirect to \"resend validation email\" page");
+                    return "redirect:/error";
                 }
 
                 //redirect to create password page
                 model.addAttribute("validationToken", token);
-                return "setPassword";
+                return "/setPassword";
             }
             else {
                 GatewayStatus status = mapper.readValue(response.getBody(), GatewayStatus.class);
 
                 switch(status.getStatus()) {
                     case NOT_FOUND:
-                        model.addAttribute("message", "Couldn't find the token. Make sure you follow the link sent in the verification email, or try signing up for an account");
-                        return "error";
+                        redirectAttributes.addFlashAttribute("errorMessage", "Couldn't find the token. Make sure you follow the link sent in the verification email, or try signing up for an account");
+                        return "redirect:/error";
                     case ERROR:
-                        model.addAttribute("message", status.getMessage());
-                        return "error";
+                        redirectAttributes.addFlashAttribute("errorMessage", status.getMessage());
+                        return "redirect:/error";
                     case EXPIRED:
-                        model.addAttribute("message", "Your email validation has expired. TODO: redirect to \"resend validation email\" page");
-                        return "error";
+                        redirectAttributes.addFlashAttribute("errorMessage", "Your email validation has expired. TODO: redirect to \"resend validation email\" page");
+                        return "redirect:/error";
                     case REDEEMED:
-                        model.addAttribute("errorMessage", "Your email has already been validated. Please sign in");
-                        return "login";
+                        redirectAttributes.addFlashAttribute("errorMessage", "Your email has already been validated. Please sign in");
+                        return "redirect:/login";
                     default:
-                        model.addAttribute("message", "Unknown response from api");
-                        return "error";
+                        redirectAttributes.addFlashAttribute("errorMessage", "Unknown response from api");
+                        return "redirect:/error";
                 }
             }
         } catch(IOException e) {
-            model.addAttribute("message", e.getMessage());
-            return "error";
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/error";
         }
     }
 
